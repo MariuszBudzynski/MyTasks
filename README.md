@@ -15,6 +15,8 @@ A modern, secure web application that allows users to manage their personal task
 * **JWT Authentication**
 * **Reflection** (e.g., model mapping)
 * **Abstraction** via interfaces (`ITaskService`, `IUserService`)
+* *Local function/functions*
+* *Web API*
 
 ### Frontend (SPA)
 

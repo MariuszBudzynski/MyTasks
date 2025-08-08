@@ -87,7 +87,7 @@ A modern, secure web application that allows users to manage their personal task
 
 ---
 
-## 📁 Folder Structure
+## 📁 Folder Structure (concept)
 
 ### Backend
 

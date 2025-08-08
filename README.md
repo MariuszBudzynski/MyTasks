@@ -17,6 +17,8 @@ A modern, secure web application that allows users to manage their personal task
 * **Abstraction** via interfaces (`ITaskService`, `IUserService`)
 * *Local function/functions*
 * *Web API*
+* try to host it on Azure (free tier)
+* Microservise
 
 ### Frontend (SPA)
 

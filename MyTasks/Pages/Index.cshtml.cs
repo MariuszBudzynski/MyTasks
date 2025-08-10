@@ -12,9 +12,10 @@ namespace MyTasks.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-
+            //removed later
+            await Task.CompletedTask;
         }
     }
 }

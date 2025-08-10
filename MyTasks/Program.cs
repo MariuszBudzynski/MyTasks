@@ -21,6 +21,16 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/Login");
+        return;
+    }
+    await next();
+});
+
 app.MapRazorPages();
 
 await app.RunAsync();

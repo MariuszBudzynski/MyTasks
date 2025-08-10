@@ -1,7 +1,8 @@
+using MyTasks.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+ServisRegistration.Register(builder);
 
 var app = builder.Build();
 
@@ -22,4 +23,4 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-app.Run();
+await app.RunAsync();

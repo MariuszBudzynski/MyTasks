@@ -7,3 +7,8 @@
 /MyTasks/obj
 /MyTasks/.vs/ProjectEvaluation
 /MyTasks.Models/obj
+/MyTasks.Db.Operations/obj
+/MyTasks.DbOperations/bin/Debug/net8.0
+/MyTasks.Db.Operations/bin/Debug/net8.0
+/MyTasks.DbOperations/obj
+/MyTasks.Models/bin/Debug/net8.0

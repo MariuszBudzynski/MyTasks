@@ -5,6 +5,7 @@
 A modern, secure web application that allows users to manage their personal tasks. It includes authentication using JWT, a lightweight .NET backend, and a React-based frontend.
 
 ---
+(Concept)
 
 ## 🧱 Technologies
 
@@ -19,6 +20,7 @@ A modern, secure web application that allows users to manage their personal task
 * *Web API*
 * try to host it on Azure (free tier)
 * Microservise
+* Localizations
 
 ### Frontend (SPA)
 

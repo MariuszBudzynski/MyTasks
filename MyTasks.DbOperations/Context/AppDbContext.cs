@@ -17,6 +17,13 @@ namespace MyTasks.DbOperations.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
            => optionsBuilder.UseSqlite($"Data Source={_dbPath}");
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Place future constraints configuration here
+        }
+
         public required DbSet<LoginModel> Login { get; set; }
         public required DbSet<ProjectModel> Project { get; set; }
         public required DbSet<TaskCommentModel> TaskComment { get; set; }

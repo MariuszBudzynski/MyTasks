@@ -13,3 +13,6 @@
 /MyTasks.DbOperations/obj
 /MyTasks.Models/bin/Debug/net8.0
 /MyTasks.Repositories/obj
+/MyTasks.Repositories/bin/Debug/net8.0
+/MyTasks.Tests/bin/Debug/net8.0
+/MyTasks.Tests/obj

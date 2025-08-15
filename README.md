@@ -21,6 +21,7 @@ A modern, secure web application that allows users to manage their personal task
 * try to host it on Azure (free tier)
 * Microservise
 * Localizations
+* Unit Tests with FakeItEasy
 
 ### Frontend (SPA)
 

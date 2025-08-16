@@ -1,9 +1,15 @@
-﻿@page
+﻿@* add anti forgery later on when configuring autentication tokens *@
+@* add localization *@
+@* fix styling *@
+@page
 @model MyTasks.Pages.LoginModel
 @{
     ViewData["Title"] = "Login";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Login goes here</h1>
+    <h1 class="display-4">Login</h1>
+    <div id="react-login"></div>
 </div>
+
+<script type="module" src="~/react/login.js"></script>

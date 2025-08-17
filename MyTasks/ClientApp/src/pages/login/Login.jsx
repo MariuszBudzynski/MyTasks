@@ -29,14 +29,14 @@ const styles = {
     width: "100%",
   },
   button: {
+    gridColumn: "1 / 2",
     padding: "8px 12px",
     borderRadius: "4px",
     border: "none",
     backgroundColor: "#007bff",
     color: "#fff",
     cursor: "pointer",
-    width: "200px",
-    marginLeft: "auto",
+    width: "100%",
   },
 };
 

@@ -14,28 +14,19 @@ const styles = {
     backgroundColor: "#f9f9f9",
   },
   row: {
-    display: "flex",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  usernameRow: {
-    gap: "10px",
-  },
-  passwordRow: {
-    gap: "10px",
   },
   label: {
-    width: "200px",
-    display: "inline-block",
-    textAlign: "right",
+    textAlign: "left",
     fontWeight: "500",
   },
   input: {
-    flex: 1,
     padding: "6px 8px",
     borderRadius: "4px",
     border: "1px solid #ccc",
+    width: "100%",
   },
   button: {
     padding: "8px 12px",
@@ -54,12 +45,12 @@ export default function Login() {
 
   return (
     <div id="login-container" style={styles.container}>
-      <div style={{ ...styles.row, ...styles.usernameRow }}>
+      <div style={styles.row}>
         <label style={styles.label}>{t("username")}:</label>
         <input type="text" name="Username" style={styles.input} />
       </div>
 
-      <div style={{ ...styles.row, ...styles.passwordRow }}>
+      <div style={styles.row}>
         <label style={styles.label}>{t("password")}:</label>
         <input type="password" name="PasswordHash" style={styles.input} />
       </div>

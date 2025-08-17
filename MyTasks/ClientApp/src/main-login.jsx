@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./i18n";
 import Login from "./pages/login/Login"; // imports components
 
 // find <div id="react-login"> in Login.cshtml and render react

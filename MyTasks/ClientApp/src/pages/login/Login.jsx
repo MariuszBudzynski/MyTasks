@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const styles = {
   container: {
@@ -16,13 +17,19 @@ const styles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
   },
   usernameRow: {
     gap: "10px",
   },
   passwordRow: {
-    gap: "22px",
+    gap: "10px",
+  },
+  label: {
+    width: "200px",
+    display: "inline-block",
+    textAlign: "right",
+    fontWeight: "500",
   },
   input: {
     flex: 1,
@@ -37,21 +44,23 @@ const styles = {
     backgroundColor: "#007bff",
     color: "#fff",
     cursor: "pointer",
-    width: "269px",
+    width: "200px",
     marginLeft: "auto",
   },
 };
 
 export default function Login() {
+  const { t } = useTranslation();
+
   return (
     <div id="login-container" style={styles.container}>
       <div style={{ ...styles.row, ...styles.usernameRow }}>
-        <label>User Name:</label>
+        <label style={styles.label}>{t("username")}:</label>
         <input type="text" name="Username" style={styles.input} />
       </div>
 
       <div style={{ ...styles.row, ...styles.passwordRow }}>
-        <label>Password:</label>
+        <label style={styles.label}>{t("password")}:</label>
         <input type="password" name="PasswordHash" style={styles.input} />
       </div>
 
@@ -62,7 +71,7 @@ export default function Login() {
           console.log("Login clicked");
         }}
       >
-        Login
+        {t("login")}
       </button>
     </div>
   );

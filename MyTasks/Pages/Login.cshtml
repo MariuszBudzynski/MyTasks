@@ -6,9 +6,14 @@
     ViewData["Title"] = "Login";
 }
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery;
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
+}
+
 <div class="text-center">
     <h1 class="display-4">Login</h1>
-    <div id="react-login"></div>
+    <div id="react-login" data-csrf-token="@tokens.RequestToken"></div>
 </div>
 
 <script type="module" src="~/react/login.js"></script>

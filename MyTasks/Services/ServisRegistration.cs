@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyTasks.DbOperations.Context;
 using MyTasks.DbOperations.Interface;
 using MyTasks.DbOperations.Repository;
@@ -14,7 +15,15 @@ namespace MyTasks.Services
             var dbPath = Path.Combine(projectFolder, relativePath);
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
+            builder.Services.AddRazorPages()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.ConfigureFilter(new AutoValidateAntiforgeryTokenAttribute());
+                });
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                options.UseSqlite($"Data Source={dbPath}"));

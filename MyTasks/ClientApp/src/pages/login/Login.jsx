@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const styles = {
@@ -43,25 +43,58 @@ const styles = {
 export default function Login() {
   const { t } = useTranslation();
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const csrfToken = document
+    .getElementById("react-login")
+    .getAttribute("data-csrf-token");
+
+  const handleLogin = async () => {
+    const response = await fetch("/Login?handler=Login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Login success!");
+    } else {
+      console.log("Login failed!");
+    }
+  };
+
   return (
     <div id="login-container" style={styles.container}>
       <div style={styles.row}>
         <label style={styles.label}>{t("username")}:</label>
-        <input type="text" name="Username" style={styles.input} />
+        <input
+          type="text"
+          name="Username"
+          style={styles.input}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
       </div>
 
       <div style={styles.row}>
         <label style={styles.label}>{t("password")}:</label>
-        <input type="password" name="PasswordHash" style={styles.input} />
+        <input
+          type="password"
+          name="PasswordHash"
+          style={styles.input}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </div>
 
-      <button
-        type="button"
-        style={styles.button}
-        onClick={() => {
-          console.log("Login clicked");
-        }}
-      >
+      <button type="button" style={styles.button} onClick={handleLogin}>
         {t("login")}
       </button>
     </div>

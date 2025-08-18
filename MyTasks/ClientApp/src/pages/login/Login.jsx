@@ -50,6 +50,11 @@ export default function Login() {
     .getElementById("react-login")
     .getAttribute("data-csrf-token");
 
+  // Fetch pattern for Razor Pages:
+  // /PageName?handler=HandlerName
+  // - PageName = name of the .cshtml page (without extension)
+  // - HandlerName = name from OnPostHandlerAsync / OnGetHandlerAsync
+  //   e.g., OnPostLoginAsync → handler=Login ASP "cuts" the OnPost and Async by convention
   const handleLogin = async () => {
     const response = await fetch("/Login?handler=Login", {
       method: "POST",

@@ -1,4 +1,4 @@
-﻿@* add anti forgery later on when configuring autentication tokens *@
+﻿@* add autentication tokens *@
 @page
 @model MyTasks.Pages.LoginModel
 @{
@@ -7,12 +7,14 @@
 }
 
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery;
+@* generates token for futher use *@
 @{
     var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
 }
 
 <div class="text-center">
     <h1 class="display-4">Login</h1>
+    @* convention to store token in custom atribute data-csrf-token *@
     <div id="react-login" data-csrf-token="@tokens.RequestToken"></div>
 </div>
 

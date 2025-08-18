@@ -19,6 +19,7 @@ namespace MyTasks.Services
             {
                 options.HeaderName = "X-CSRF-TOKEN";
             });
+            //global AntiforgeryToken aplication use
             builder.Services.AddRazorPages()
                 .AddRazorPagesOptions(options =>
                 {

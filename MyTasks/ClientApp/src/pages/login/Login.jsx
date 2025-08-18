@@ -46,6 +46,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  //we retrive this from Login.cshtml.cs that we set up by conventions
   const csrfToken = document
     .getElementById("react-login")
     .getAttribute("data-csrf-token");

@@ -30,6 +30,7 @@ A modern, secure web application that allows users to manage their personal task
 * **Axios** – for HTTP requests
 * **React Router** – for page navigation
 * **localStorage** – to store JWT token
+* ** AntiForgeryToken** - added support in project
 
 ---
 

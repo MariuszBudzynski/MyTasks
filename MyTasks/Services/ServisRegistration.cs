@@ -31,6 +31,7 @@ namespace MyTasks.Services
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                options.UseSqlite($"Data Source={dbPath}"));
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped<ILoginValidator, LoginValidator>();

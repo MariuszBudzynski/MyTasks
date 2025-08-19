@@ -1,17 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
+using MyTasks.Models.Models;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
 using MyTasks.Services.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using static MyTasks.Pages.LoginModel;
 
 namespace MyTasks.Services
 {
-    public class LoginValidator : PageModel, ILoginValidator
+    public class LoginValidator : ILoginValidator
     {
         private readonly ILoginRepository _loginRepository;
-        public LoginValidator(ILoginRepository loginRepository)
+        private readonly IConfiguration _config;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public LoginValidator(
+            ILoginRepository loginRepository,
+            IConfiguration config,
+            IHttpContextAccessor httpContextAccessor)
         {
+            _config = config;
             _loginRepository = loginRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IActionResult> ValidateLogin(LoginRequest request)
         {
@@ -20,20 +34,65 @@ namespace MyTasks.Services
                 var user = await _loginRepository.GetUserLoginDataByUserName(request.Username);
                 if (user == null)
                 {
-                    return NotFound(new { success = false, message = "User not found" });
+                    return new JsonResult(new { success = false, message = "User not found" }) { StatusCode = 404 };
                 }
 
                 if (request.Username == user.Username && request.Password == user.PasswordHash)
                 {
+                    var token = GenerateJwtToken(user);
+                    var cookieOptions = new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTimeOffset
+                                 .UtcNow
+                                 .AddMinutes(_config.GetValue<int>("Jwt:ExpireMinutes"))
+                    };
 
+                    var response = _httpContextAccessor.HttpContext?.Response;
+                    if (response == null)
+                    {
+                        return new JsonResult(new { success = false, message = "Unable to access HTTP response." }) { StatusCode = 500 };
+                    }
+
+                    response.Cookies.Append("AuthToken", token, cookieOptions);
+
+                    return new JsonResult(new { success = true });
                 }
+
+                return new JsonResult(new { success = false, message = "Invalid login" })
+                {
+                    StatusCode = 401
+                };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "Internal server error." });
+                return new JsonResult(new { success = false, message = "Internal server error." }) { StatusCode = 500 };
             }
+        }
 
-            return new JsonResult(new { success = true, message = "Token valid" });
+        private string GenerateJwtToken(LoginModel user)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("role", user.Type.ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(_config.GetValue<int>("Jwt:ExpireMinutes")),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

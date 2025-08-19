@@ -27,7 +27,7 @@ namespace MyTasks.DbOperations.Repository
         }
 
         public async Task<T?> GetByUserName<T>(string username)
-            where T : class, TEntity, IUsername
+            where T : class, TEntity, IUsername, IType
         {
             return await _dbSet.OfType<T>().FirstOrDefaultAsync(e => e.Username == username);
         }

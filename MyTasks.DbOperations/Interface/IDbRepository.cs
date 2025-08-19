@@ -10,6 +10,6 @@ namespace MyTasks.DbOperations.Interface
         Task<TEntity?> GetById(Guid Id);
         Task UpdateById(Guid Id);
         Task<T?> GetByUserName<T>(string username)
-            where T : class, TEntity, IUsername;
+            where T : class, TEntity, IUsername, IType;
     }
 }

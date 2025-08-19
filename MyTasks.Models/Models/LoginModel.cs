@@ -2,7 +2,7 @@
 
 namespace MyTasks.Models.Models
 {
-    public class LoginModel : BaseModel, IUsername
+    public class LoginModel : BaseModel, IUsername, IType
     {
         public override Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;

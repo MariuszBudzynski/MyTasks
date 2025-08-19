@@ -21,7 +21,6 @@ namespace MyTasks.Pages
 
         public async Task<IActionResult> OnPostLoginAsync([FromBody]LoginRequest request)
         {
-            //implement validtion logic later
             return await _loginValidator.ValidateLogin(request);
         }
 

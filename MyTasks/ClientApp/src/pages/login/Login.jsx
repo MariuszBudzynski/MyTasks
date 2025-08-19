@@ -63,6 +63,7 @@ export default function Login() {
         "Content-Type": "application/json",
         "X-CSRF-TOKEN": csrfToken,
       },
+      credentials: "include", //sends and retrives cookie
       body: JSON.stringify({
         username,
         password,

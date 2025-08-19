@@ -13,11 +13,6 @@ namespace MyTasks.Pages
         {
             _loginValidator = loginValidator;
         }
-        public async Task OnGetAsync()
-        {
-            //removed later
-            await Task.CompletedTask;
-        }
 
         public async Task<IActionResult> OnPostLoginAsync([FromBody]LoginRequest request)
         {

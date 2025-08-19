@@ -1,6 +1,8 @@
-﻿namespace MyTasks.Models.Models
+﻿using MyTasks.Models.Interfaces;
+
+namespace MyTasks.Models.Models
 {
-    public class LoginModel : BaseModel
+    public class LoginModel : BaseModel, IUsername
     {
         public override Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;

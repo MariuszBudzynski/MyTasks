@@ -12,13 +12,14 @@ namespace MyTasks.Repositories.Repositories.LoginRepository
             _repository = repository;
         }
 
-        public async Task<LoginModel> GetUserLoginDataById(Guid Id)
+        public async Task<LoginModel?> GetUserLoginDataById(Guid Id)
         {
-            var user = await _repository.GetById(Id);
-            if (user == null)
-                throw new InvalidOperationException($"User with Id {Id} not found.");
+            return await _repository.GetById(Id);
+        }
 
-            return user;
+        public async Task<LoginModel?> GetUserLoginDataByUserName(string userName)
+        {
+            return await _repository.GetByUserName<LoginModel>(userName);
         }
     }
 }

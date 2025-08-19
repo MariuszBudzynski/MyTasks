@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyTasks.DbOperations\MyTasks.DbOperations.csproj" />
-    <ProjectReference Include="..\MyTasks\MyTasks.csproj" />
   </ItemGroup>
 
 </Project>

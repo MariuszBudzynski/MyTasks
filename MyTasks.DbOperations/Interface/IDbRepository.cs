@@ -1,4 +1,5 @@
-﻿using MyTasks.Models.Models;
+﻿using MyTasks.Models.Interfaces;
+using MyTasks.Models.Models;
 
 namespace MyTasks.DbOperations.Interface
 {
@@ -8,5 +9,7 @@ namespace MyTasks.DbOperations.Interface
         Task<ICollection<TEntity>> GetAll();
         Task<TEntity?> GetById(Guid Id);
         Task UpdateById(Guid Id);
+        Task<T?> GetByUserName<T>(string username)
+            where T : class, TEntity, IUsername;
     }
 }

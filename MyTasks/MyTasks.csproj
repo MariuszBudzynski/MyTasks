@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyTasks.DbOperations\MyTasks.DbOperations.csproj" />
+    <ProjectReference Include="..\MyTasks.Repositories\MyTasks.Repositories.csproj" />
   </ItemGroup>
 
   <ItemGroup>

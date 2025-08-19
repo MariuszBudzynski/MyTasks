@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyTasks.DbOperations.Context;
 using MyTasks.DbOperations.Interface;
+using MyTasks.Models.Interfaces;
 using MyTasks.Models.Models;
 
 namespace MyTasks.DbOperations.Repository
@@ -23,6 +24,12 @@ namespace MyTasks.DbOperations.Repository
         public async Task<TEntity?> GetById(Guid Id)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.Id == Id);
+        }
+
+        public async Task<T?> GetByUserName<T>(string username)
+            where T : class, TEntity, IUsername
+        {
+            return await _dbSet.OfType<T>().FirstOrDefaultAsync(e => e.Username == username);
         }
 
         public async Task UpdateById(Guid Id)

@@ -4,6 +4,7 @@ namespace MyTasks.Repositories.Interfaces.ILoginRepository
 {
     public interface ILoginRepository
     {
-        Task<LoginModel> GetUserLoginDataById(Guid Id);
+        Task<LoginModel?> GetUserLoginDataById(Guid Id);
+        Task<LoginModel?> GetUserLoginDataByUserName(string userName);
     }
 }

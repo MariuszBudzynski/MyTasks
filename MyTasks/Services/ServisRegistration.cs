@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using MyTasks.DbOperations.Context;
 using MyTasks.DbOperations.Interface;
 using MyTasks.DbOperations.Repository;
+using MyTasks.Repositories.Interfaces.ILoginRepository;
+using MyTasks.Repositories.Repositories.LoginRepository;
 
 namespace MyTasks.Services
 {
@@ -29,6 +31,7 @@ namespace MyTasks.Services
             builder.Services.AddDbContext<AppDbContext>(options =>
                options.UseSqlite($"Data Source={dbPath}"));
 
+            builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
         }
     }

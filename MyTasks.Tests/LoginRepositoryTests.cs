@@ -17,7 +17,7 @@ namespace MyTasks.Tests
             var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
             A.CallTo(() => fakeRepo.GetById(userId))
-                .ReturnsLazily(() => Task.FromResult(expectedUser!));
+            .Returns(Task.FromResult(expectedUser!));
 
             var sut = new LoginRepository(fakeRepo);
 
@@ -31,22 +31,61 @@ namespace MyTasks.Tests
         }
 
         [Fact]
-        public async Task GetUserLoginDataById_ShouldThrowException_WhenUserDoesNotExist()
+        public async Task GetUserLoginDataById_ShouldReturnNull_WhenUserDoesNotExists()
         {
             // Arrange
             var userId = Guid.NewGuid();
             var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
             A.CallTo(() => fakeRepo.GetById(userId))
+            .Returns(Task.FromResult<LoginModel?>(null));
+
+            var sut = new LoginRepository(fakeRepo);
+
+            // Act
+            var result = await sut.GetUserLoginDataById(userId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetUserLoginDataByUserName_ShouldReturnData_WhenUserExists()
+        {
+            // Arrange
+            var expectedUser = new LoginModel {Username = "testuser" };
+            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
+
+            A.CallTo(() => fakeRepo.GetByUserName<LoginModel>(expectedUser.Username))
+            .Returns(Task.FromResult(expectedUser!));
+
+            var sut = new LoginRepository(fakeRepo);
+
+            // Act
+            var result = await sut.GetUserLoginDataByUserName(expectedUser.Username);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(expectedUser.Username, result.Username);
+        }
+
+        [Fact]
+        public async Task GetUserLoginDataByUserName_ShouldReturnNull_WhenUserDoesNotExists()
+        {
+            // Arrange
+            var userName = "testUserName";
+            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
+
+            A.CallTo(() => fakeRepo.GetByUserName<LoginModel>(userName))
                 .Returns(Task.FromResult<LoginModel?>(null));
 
             var sut = new LoginRepository(fakeRepo);
 
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => sut.GetUserLoginDataById(userId));
+            // Act
+            var result = await sut.GetUserLoginDataByUserName(userName);
 
-            Assert.Equal($"User with Id {userId} not found.", ex.Message);
+            // Assert
+            Assert.Null(result);
         }
     }
 }

@@ -3,15 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
+using MyTasks.Services.Interfaces;
 
 namespace MyTasks.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly ILoginRepository _loginRepository;
-        public LoginModel(ILoginRepository loginRepository)
+        
+        private readonly ILoginValidator _loginValidator;
+        private readonly IConfiguration _config;
+
+        public LoginModel
+            (IConfiguration config,
+            ILoginValidator loginValidator)
         {
-            _loginRepository = loginRepository;
+           
+            _config = config;
+            _loginValidator = loginValidator;
         }
         public async Task OnGetAsync()
         {
@@ -19,24 +27,12 @@ namespace MyTasks.Pages
             await Task.CompletedTask;
         }
 
-        public async Task<IActionResult> OnPostLoginAsync([FromBody]LoginRequest request) 
+        public async Task<IActionResult> OnPostLoginAsync([FromBody]LoginRequest request)
         {
             //implement validtion logic later
-            try
-            {
-                var user = await _loginRepository.GetUserLoginDataByUserName(request.Username);
-                if (user == null)
-                {
-                    return NotFound(new { success = false, message = "User not found" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { success = false, message = "Internal server error." });
-            }
-
-            return new JsonResult(new { success = true, message = "Token valid" });
+            return await _loginValidator.ValidateLogin(request);
         }
+
         public record LoginRequest(string Username, string Password);
     }
 }

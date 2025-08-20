@@ -45,6 +45,7 @@ export default function Login() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   //we retrive this from Login.cshtml.cs that we set up by conventions
   const csrfToken = document
@@ -72,8 +73,10 @@ export default function Login() {
 
     if (response.ok) {
       console.log("Login success!");
+      setErrorMessage("");
     } else {
-      console.log("Login failed!");
+      const data = await response.json();
+      setErrorMessage(data.message || "Login failed");
     }
   };
 
@@ -100,6 +103,10 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+
+      {errorMessage && (
+        <div style={{ color: "red", textAlign: "center" }}>{errorMessage}</div>
+      )}
 
       <button type="button" style={styles.button} onClick={handleLogin}>
         {t("login")}

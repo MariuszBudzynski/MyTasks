@@ -1,6 +1,5 @@
 ﻿@* add autentication tokens *@
 @page
-@model MyTasks.Pages.LoginModel
 @{
     Layout = "_LayoutLogin";
     ViewData["Title"] = "Login";
@@ -18,4 +17,4 @@
     <div id="react-login" data-csrf-token="@tokens.RequestToken"></div>
 </div>
 
-<script type="module" src="~/react/login.js"></script>
+<script type="module" src="~/react/main.js"></script>

@@ -1,0 +1,13 @@
+﻿@page
+@model MyTasks.Pages.DashboardModel //change to proper model if not needed remove
+@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Dashboard</h1>
+	<div id="react-dashboard"></div>
+</div>
+
+<script type="module" src="~/react/main.js"></script>

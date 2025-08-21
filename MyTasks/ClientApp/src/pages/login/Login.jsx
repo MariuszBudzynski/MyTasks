@@ -74,6 +74,7 @@ export default function Login() {
     if (response.ok) {
       console.log("Login success!");
       setErrorMessage("");
+      window.location.href = "/Dashboard";
     } else {
       const data = await response.json();
       setErrorMessage(data.message || "Login failed");

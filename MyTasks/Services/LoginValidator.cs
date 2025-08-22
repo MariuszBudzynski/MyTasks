@@ -66,7 +66,7 @@ namespace MyTasks.Services
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { success = false, message = "Internal server error." }) { StatusCode = 500 };
+                return new JsonResult(new { success = false, message = $"Internal server error {ex.Message}." }) { StatusCode = 500 };
             }
         }
 

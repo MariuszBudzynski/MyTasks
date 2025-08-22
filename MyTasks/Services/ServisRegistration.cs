@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using MyTasks.DbOperations.Context;
 using MyTasks.DbOperations.Interface;
-using MyTasks.DbOperations.Repository;
+using MyTasks.DbOperations.Repositories;
+using MyTasks.Repositories.Interfaces.IDashboardRepository;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
+using MyTasks.Repositories.Repositories.DashboardRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
 using MyTasks.Services.Interfaces;
 
@@ -33,6 +35,8 @@ namespace MyTasks.Services
                options.UseSqlite($"Data Source={dbPath}"));
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped<ILoginValidator, LoginValidator>();
             builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));

@@ -4,7 +4,7 @@ using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Interfaces;
 using MyTasks.Models.Models;
 
-namespace MyTasks.DbOperations.Repository
+namespace MyTasks.DbOperations.Repositories
 {
     public class DbRepository<TEntity> : IDbRepository<TEntity> where TEntity : BaseModel
     {

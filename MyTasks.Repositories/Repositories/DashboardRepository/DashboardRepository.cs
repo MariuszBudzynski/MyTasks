@@ -32,7 +32,7 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
                 FullName: projects.FirstOrDefault()?.Owner?.FullName ?? "",
                 UserType: projects.FirstOrDefault()?.Owner?.LoginModel?.Type ?? Models.Models.UserType.Regular,
                 ProjectCount: projects.Count,
-                TaskCount: projects.Count,
+                TaskCount: projects.SelectMany(p => p.Tasks).Count(),
                 CompletedTasks: projects.SelectMany(p => p.Tasks).Count(t => t.IsCompleted),
                 PendingTasks: projects.SelectMany(p => p.Tasks).Count(t => t.IsCompleted),
                 Projects: projects.Select(p => new ProjectDto(

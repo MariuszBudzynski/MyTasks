@@ -11,11 +11,22 @@ namespace MyTasks.Tests
         {
             _sut = new DashboardRepository(A.Fake<IProjectRepository>());
         }
+
         [Fact]
         public async Task GetProjectsData_ShouldThrow_WhenUserNameIsEmpty()
         {
             //Arrange
             var userName = String.Empty;
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsData(userName));
+        }
+
+        [Fact]
+        public async Task GetProjectsData_ShouldThrow_WhenProjectsNotFound()
+        {
+            //Arrange
+            var userName = "RandomNotExistingUserName";
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsData(userName));

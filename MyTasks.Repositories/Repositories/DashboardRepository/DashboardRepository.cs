@@ -16,7 +16,7 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new ArgumentException("User name can't be empty");
+                throw new ArgumentException("User Name can't be empty");
             }
 
             var projects = await _projectRepository.GetProjectsWithTasksAndComments(userName);

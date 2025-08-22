@@ -8,21 +8,27 @@ namespace MyTasks.Tests
     //for tests use FakeItEasy
     public class LoginRepositoryTests
     {
+        private readonly IDbRepository<LoginModel> _fakeRepo;
+        private readonly LoginRepository _sut;
+
+        public LoginRepositoryTests()
+        {
+            _fakeRepo = A.Fake<IDbRepository<LoginModel>>();
+            _sut = new LoginRepository(_fakeRepo);
+        }
+
         [Fact]
         public async Task GetUserLoginDataById_ShouldReturnData_WhenUserExists()
         {
             // Arrange
             var userId = Guid.NewGuid();
             var expectedUser = new LoginModel { Id = userId, Username = "testuser" };
-            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
-            A.CallTo(() => fakeRepo.GetById(userId))
+            A.CallTo(() => _fakeRepo.GetById(userId))
             .Returns(Task.FromResult(expectedUser!));
 
-            var sut = new LoginRepository(fakeRepo);
-
             // Act
-            var result = await sut.GetUserLoginDataById(userId);
+            var result = await _sut.GetUserLoginDataById(userId);
 
             // Assert
             Assert.NotNull(result);
@@ -35,15 +41,12 @@ namespace MyTasks.Tests
         {
             // Arrange
             var userId = Guid.NewGuid();
-            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
-            A.CallTo(() => fakeRepo.GetById(userId))
+            A.CallTo(() => _fakeRepo.GetById(userId))
             .Returns(Task.FromResult<LoginModel?>(null));
 
-            var sut = new LoginRepository(fakeRepo);
-
             // Act
-            var result = await sut.GetUserLoginDataById(userId);
+            var result = await _sut.GetUserLoginDataById(userId);
 
             // Assert
             Assert.Null(result);
@@ -54,15 +57,12 @@ namespace MyTasks.Tests
         {
             // Arrange
             var expectedUser = new LoginModel {Username = "testuser" };
-            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
-            A.CallTo(() => fakeRepo.GetByUserName<LoginModel>(expectedUser.Username))
+            A.CallTo(() => _fakeRepo.GetByUserName<LoginModel>(expectedUser.Username))
             .Returns(Task.FromResult(expectedUser!));
 
-            var sut = new LoginRepository(fakeRepo);
-
             // Act
-            var result = await sut.GetUserLoginDataByUserName(expectedUser.Username);
+            var result = await _sut.GetUserLoginDataByUserName(expectedUser.Username);
 
             // Assert
             Assert.NotNull(result);
@@ -74,15 +74,12 @@ namespace MyTasks.Tests
         {
             // Arrange
             var userName = "testUserName";
-            var fakeRepo = A.Fake<IDbRepository<LoginModel>>();
 
-            A.CallTo(() => fakeRepo.GetByUserName<LoginModel>(userName))
+            A.CallTo(() => _fakeRepo.GetByUserName<LoginModel>(userName))
                 .Returns(Task.FromResult<LoginModel?>(null));
 
-            var sut = new LoginRepository(fakeRepo);
-
             // Act
-            var result = await sut.GetUserLoginDataByUserName(userName);
+            var result = await _sut.GetUserLoginDataByUserName(userName);
 
             // Assert
             Assert.Null(result);

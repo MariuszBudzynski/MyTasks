@@ -35,6 +35,7 @@ namespace MyTasks.Services
                options.UseSqlite($"Data Source={dbPath}"));
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddScoped<IJwtHelper, JwtHelper>();
             builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();

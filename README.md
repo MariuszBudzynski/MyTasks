@@ -9,7 +9,7 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 
 ---
 
-## 🧱 Technologies
+## 🧱 Technologies - Concept, aproach my change
 
 ### Backend
 

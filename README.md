@@ -1,72 +1,70 @@
-## 📄 Project Name: **MyTasks – Task Management Web App**
+## 📄 Project: **MyTasks – Task Management Web App**
 
 ### 🎯 Goal
 
-A modern, secure web application that allows users to manage their personal tasks. It includes authentication using JWT, a lightweight .NET backend, and a React-based frontend.
+A modern and secure web application that enables users to manage personal tasks.
+The project combines a **lightweight .NET backend** with a **React-based frontend**, and authentication is handled through **JWT**.
+
+*(Concept version – the description will be updated once the app is finished.)*
 
 ---
-(Concept - description will be redacted when app is finished)
 
-## 🧱 Technologies
+## 🧱 Technologies - Concept, aproach my change
 
-### Backend (API)
+### Backend
 
 * **.NET 8 Minimal API**
 * **Entity Framework Core** (SQLite)
 * **JWT Authentication**
 * **Reflection** (e.g., model mapping)
-* **Abstraction** via interfaces (`ITaskService`, `IUserService`)
-* *Local function/functions*
-* *Web API*
-* try to host it on Azure (free tier)
-* Microservise
-* Localizations
-* Unit Tests with FakeItEasy
+* **Abstraction** with interfaces (`ITaskService`, `IUserService`)
+* **Web API**
+* **Local functions** within services
+* **Localization** support (multi-language)
+* **Unit Tests** with FakeItEasy
+* Planned hosting on **Azure Free Tier**
+* Modular / **microservice-like** architecture
 
 ### Frontend (SPA)
 
 * **React** (Vite or Create React App)
-* **JavaScript (ES6+)** – **class-based** components or helpers where relevant
-* **Axios** – for HTTP requests
-* **React Router** – for page navigation
-* **localStorage** – to store JWT token
-* ** AntiForgeryToken** - added support in project
+* **JavaScript (ES6+)** – class-based helpers and models
+* **Axios** – HTTP requests
+* **React Router** – page navigation
+* **localStorage** – JWT storage
+* **AntiForgeryToken** support
 
 ---
 
 ## 🔐 Authentication Flow
 
 1. User logs in via the **Login Page**.
-2. On success, the backend returns a **JWT**.
-3. The JWT is saved in `localStorage`.
-4. React sends JWT in `Authorization` headers with each API call.
-5. Backend validates token and serves secured endpoints.
+2. On success, the backend issues a **JWT**.
+3. The token is stored in `localStorage`.
+4. React attaches the JWT in the `Authorization` header for each API request.
+5. The backend validates the token and grants access to protected endpoints.
 
 ---
 
 ## 📄 Pages
 
-### 1. **Dashboard**
+### 1. **Dashboard** (`/`)
 
-* URL: `/`
-* Shows a list of tasks for the logged-in user
-* Allows marking tasks as done
-* "Edit" button for each task
+* Displays the user’s task list
+* Mark tasks as complete
+* Edit task option
 
-### 2. **Create Task**
+### 2. **Create Task** (`/create`)
 
-* URL: `/create`
-* Form to add a new task (title, description, due date)
+* Form for adding new tasks (title, description, due date)
 
-### 3. **Edit Task**
+### 3. **Edit Task** (`/edit/:id`)
 
-* URL: `/edit/:id`
-* Allows updating task details
+* Update existing task details
 
-### 4. **Login**
+### 4. **Login** (`/login`)
 
-* URL: `/login`
-* Username and password form
+* Username & password form
 * On success → redirect to dashboard
 
 ---
@@ -75,27 +73,27 @@ A modern, secure web application that allows users to manage their personal task
 
 ### ✅ Task Management
 
-* CRUD operations on tasks
-* Mark as complete/incomplete
-* Filter tasks (e.g., active/done)
+* Full CRUD operations
+* Mark as complete / incomplete
+* Filter tasks (e.g., active / completed)
 
-### 🔐 Auth
+### 🔐 Authentication
 
 * JWT-based login
 * Protected routes in React
-* Backend validation using `[Authorize]` attribute
+* `[Authorize]` attribute in backend
 
 ### 🧠 Advanced Concepts
 
 * Reflection for DTO mapping
-* Abstraction in services and data access
-* JavaScript **classes** for helper logic (e.g., token manager, task model)
+* Abstraction in services and repositories
+* JavaScript **classes** for helper logic (`TokenManager`, `TaskModel`)
 
 ---
 
 ## 📁 Folder Structure (concept)
 
-### Backend
+### Backend (.NET)
 
 ```
 /MyTasks.API
@@ -118,8 +116,10 @@ A modern, secure web application that allows users to manage their personal task
 │   ├── /pages
 │   ├── /services        ← Axios API calls
 │   ├── /utils           ← Class-based helpers
-│   ├── /auth            ← TokenManager class etc.
+│   ├── /auth            ← TokenManager, JWT handling
 │   ├── App.jsx
 │   └── main.jsx
 └── package.json
 ```
+
+Chcesz żebym przygotował do tego też **short version** (np. 3–4 zdania czysto marketingowe), którą możesz wkleić na GitHub i LinkedIn, czy zostawiamy tylko tę pełną techniczną wersję?

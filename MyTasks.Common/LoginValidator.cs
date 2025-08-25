@@ -37,7 +37,11 @@ namespace MyTasks.Common
                     return new JsonResult(new { success = false, message = "User not found" }) { StatusCode = 404 };
                 }
 
-                if (request.Username == user.Username && request.Password == user.PasswordHash)
+                var passwordValidation = user.FakeUser
+                ? request.Password == user.PasswordHash  // plain text check
+                : PasswordHasher.VerifyPassword(user.PasswordHash, request.Password); // hashed check
+
+                if (request.Username == user.Username && passwordValidation)
                 {
                     var token = GenerateJwtToken(user);
                     var cookieOptions = new CookieOptions

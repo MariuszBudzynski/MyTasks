@@ -11,6 +11,7 @@ namespace MyTasks.Models.Models
 
         public Guid UserId { get; set; }
         public UserModel? User { get; set; }
+        public bool FakeUser { get; set; } = false;
     }
     public enum UserType
     {

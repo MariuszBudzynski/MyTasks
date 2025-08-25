@@ -19,8 +19,8 @@ namespace MyTasks.DbOperations.Context
             var adminUser = new UserModel { Id = adminUserId, FullName = "Admin User", LoginId = adminLoginId };
             var regularUser = new UserModel { Id = regularUserId, FullName = "Regular User", LoginId = regularLoginId };
 
-            var adminLogin = new LoginModel { Id = adminLoginId, Username = "admin", PasswordHash = "admin123", Type = UserType.Admin, UserId = adminUserId };
-            var regularLogin = new LoginModel { Id = regularLoginId, Username = "user", PasswordHash = "user123", Type = UserType.Regular, UserId = regularUserId };
+            var adminLogin = new LoginModel { Id = adminLoginId, Username = "admin", PasswordHash = "admin123", Type = UserType.Admin, UserId = adminUserId, FakeUser = true };
+            var regularLogin = new LoginModel { Id = regularLoginId, Username = "user", PasswordHash = "user123", Type = UserType.Regular, UserId = regularUserId, FakeUser = true };
 
             modelBuilder.Entity<UserModel>().HasData(adminUser, regularUser);
             modelBuilder.Entity<LoginModel>().HasData(adminLogin, regularLogin);

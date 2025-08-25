@@ -1,12 +1,22 @@
 ﻿@page
+@model MyTasks.Pages.DashboardModel
 @{
-	Layout = "_Layout";
-	ViewData["Title"] = "Dashboard";
+    Layout = "_Layout";
+    ViewData["Title"] = "Dashboard";
+}
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery;
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
 }
 
 <div class="text-center">
-	<h1 class="display-4">Dashboard</h1>
-	<div id="react-dashboard" data-dashboard='@Html.Raw(ViewData["DashboardData"])'></div>
+    <h1 class="display-4">Dashboard</h1>
+    <div id="react-dashboard" data-csrf-token="@tokens.RequestToken"></div>
 </div>
+
+<script id="dashboard-data" type="application/json">
+    @Html.Raw(ViewData["DashboardData"])
+</script>
 
 <script type="module" src="~/react/main.js"></script>

@@ -11,7 +11,7 @@ namespace MyTasks.DbOperations.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            // Place future constraints configuration here
+            modelBuilder.Seed();
         }
 
         public required DbSet<LoginModel> Login { get; set; }

@@ -9,7 +9,6 @@ using MyTasks.Repositories.Interfaces.IDashboardRepository;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
-using MyTasks.Services.Interfaces;
 
 namespace MyTasks.Services
 {

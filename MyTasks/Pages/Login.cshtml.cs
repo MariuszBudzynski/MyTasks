@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyTasks.Services.Interfaces;
+using MyTasks.Common.Interfaces;
+using MyTasks.Repositories.DTOS;
 
 namespace MyTasks.Pages
 {
@@ -18,7 +19,5 @@ namespace MyTasks.Pages
         {
             return await _loginValidator.ValidateLogin(request);
         }
-
-        public record LoginRequest(string Username, string Password);
     }
 }

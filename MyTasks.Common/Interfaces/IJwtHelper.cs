@@ -1,4 +1,4 @@
-﻿namespace MyTasks.Services.Interfaces
+﻿namespace MyTasks.Common.Interfaces
 {
     public interface IJwtHelper
     {

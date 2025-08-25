@@ -16,3 +16,5 @@
 /MyTasks.Repositories/bin/Debug/net8.0
 /MyTasks.Tests/bin/Debug/net8.0
 /MyTasks.Tests/obj
+/MyTasks.Common/obj
+/MyTasks.Common/bin/Debug/net8.0

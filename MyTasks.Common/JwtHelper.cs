@@ -1,7 +1,8 @@
-﻿using MyTasks.Services.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using MyTasks.Common.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace MyTasks.Services
+namespace MyTasks.Common
 {
     public class JwtHelper : IJwtHelper
     {

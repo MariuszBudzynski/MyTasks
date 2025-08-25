@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyTasks.Common.Interfaces;
 using MyTasks.Repositories.Interfaces.IDashboardRepository;
-using MyTasks.Services.Interfaces;
 using Newtonsoft.Json;
 
 namespace MyTasks.Pages

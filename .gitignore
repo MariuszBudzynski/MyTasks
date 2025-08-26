@@ -18,3 +18,5 @@
 /MyTasks.Tests/obj
 /MyTasks.Common/obj
 /MyTasks.Common/bin/Debug/net8.0
+/MyTasks.APIS/obj
+/MyTasks.APIS/bin/Debug/net8.0

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyTasks.APIS;
 using MyTasks.Common;
 using MyTasks.Common.Interfaces;
 using MyTasks.DbOperations.Context;
@@ -35,6 +36,13 @@ namespace MyTasks.Services
             builder.Services.AddDbContext<AppDbContext>(options =>
                options.UseSqlite($"Data Source={dbPath}"));
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services
+                .AddControllers()
+                .AddApplicationPart(typeof(UserDataController).Assembly);
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IJwtHelper, JwtHelper>();
             builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();

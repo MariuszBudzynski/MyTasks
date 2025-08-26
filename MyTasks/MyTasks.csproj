@@ -15,10 +15,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.14.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyTasks.APIS\MyTasks.APIS.csproj" />
     <ProjectReference Include="..\MyTasks.Common\MyTasks.Common.csproj" />
     <ProjectReference Include="..\MyTasks.DbOperations\MyTasks.DbOperations.csproj" />
     <ProjectReference Include="..\MyTasks.Repositories\MyTasks.Repositories.csproj" />

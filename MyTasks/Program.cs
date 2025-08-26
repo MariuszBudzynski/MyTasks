@@ -32,5 +32,7 @@ app.Use(async (context, next) =>
 });
 
 app.MapRazorPages();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 await app.RunAsync();

@@ -23,7 +23,18 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
 
             if (!projects.Any())
             {
-                throw new ArgumentException("Projects not found");
+                return new DashboardDto(
+                   UserId: Guid.Empty,
+                   Username: userName,
+                   FullName: string.Empty,
+                   UserType: Models.Models.UserType.Regular,
+                   ProjectCount: 0,
+                   TaskCount: 0,
+                   CompletedTasks: 0,
+                   PendingTasks: 0,
+                   Projects: new List<ProjectDto>(),
+                   Tasks: new List<TaskDto>()
+               );
             }
 
             return new DashboardDto(

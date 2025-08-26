@@ -24,6 +24,7 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 * **Unit Tests** with FakeItEasy
 * Planned hosting on **Azure Free Tier**
 * Modular / **microservice-like** architecture
+* users will be added via WEB API to simulate external system
 
 ### Frontend (SPA)
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyTasks.Repositories.DTOS;
 
-namespace MyTasks.APIS
+namespace MyTasks.API
 {
     [ApiController]
     [Route("api/[controller]")]

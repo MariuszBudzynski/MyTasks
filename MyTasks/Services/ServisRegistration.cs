@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyTasks.APIS;
+using MyTasks.API;
 using MyTasks.Common;
 using MyTasks.Common.Interfaces;
 using MyTasks.DbOperations.Context;

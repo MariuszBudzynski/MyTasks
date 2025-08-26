@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTasks.Tests", "..\MyTasks
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTasks.Common", "..\MyTasks.Common\MyTasks.Common.csproj", "{914C69F9-B165-4A8E-8330-6DDEBC492006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTasks.APIS", "..\MyTasks.APIS\MyTasks.APIS.csproj", "{379EF107-12BB-45DB-9A85-B42A2B91E17C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTasks.API", "..\MyTasks.APIS\MyTasks.API.csproj", "{379EF107-12BB-45DB-9A85-B42A2B91E17C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

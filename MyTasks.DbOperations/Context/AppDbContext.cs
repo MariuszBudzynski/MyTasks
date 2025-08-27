@@ -12,9 +12,9 @@ namespace MyTasks.DbOperations.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<UserModel>()
-       .HasOne(u => u.LoginModel)
-       .WithOne(l => l.User)
-       .OnDelete(DeleteBehavior.Cascade);
+           .HasOne(u => u.LoginModel)
+           .WithOne(l => l.User)
+           .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProjectModel>()
                .HasOne(p => p.Owner)

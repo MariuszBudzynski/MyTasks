@@ -6,6 +6,7 @@ namespace MyTasks.Repositories.Interfaces.IUserDataRepository
     {
         Task AddUserData(UserWithLoginDto data);
         Task UpdateUserData(Guid? userId, UserWithLoginDto data);
-        Task DeleteUserData(Guid? userId);
+        Task HardDeleteUserData(Guid? userId);
+        Task SoftDeleteUserData(Guid? userId);
     }
 }

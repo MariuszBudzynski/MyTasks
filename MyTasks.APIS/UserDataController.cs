@@ -59,7 +59,7 @@ namespace MyTasks.API
             }
         }
 
-        [HttpDelete("{userId:Guid}")]
+        [HttpDelete("hard/{userId:Guid}")]
         public async Task<IActionResult> HardDeleteUser(Guid? userId)
         {
             if (userId == null)
@@ -67,7 +67,29 @@ namespace MyTasks.API
 
             try
             {
-                await _repository.DeleteUserData(userId);
+                await _repository.HardDeleteUserData(userId);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("soft/{userId:Guid}")]
+        public async Task<IActionResult> SoftDeleteUser(Guid? userId)
+        {
+            if (userId == null)
+                return BadRequest("No User ID provided.");
+
+            try
+            {
+                await _repository.SoftDeleteUserData(userId);
                 return Ok();
             }
             catch (KeyNotFoundException ex)

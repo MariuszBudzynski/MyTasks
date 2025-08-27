@@ -56,7 +56,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             await _repository.UpdateUserData(userData);
         }
 
-        public async Task DeleteUserData(Guid? userId)
+        public async Task HardDeleteUserData(Guid? userId)
         {
             var userData = await _repository.GetUserAndLoginData(userId);
             if (userData == null)
@@ -65,6 +65,18 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             }
 
             await _repository.DeleteUserData(userData);
+        }
+
+        public async Task SoftDeleteUserData(Guid? userId)
+        {
+            var userData = await _repository.GetUserAndLoginData(userId);
+            if (userData == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+
+            userData.IsDeleted = true;
+            await _repository.UpdateUserData(userData);
         }
     }
 }

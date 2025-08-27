@@ -38,5 +38,22 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
             await _repository.AddUserAndLogin(user, login);
         }
+
+        public async Task UpdateUserData(Guid? userId, UserWithLoginDto data)
+        {
+            var hashedPassword = PasswordHasher.HashPassword(data.PasswordHash);
+
+            var userData = await _repository.GetUserAndLoginData(userId);
+            if (userData == null)
+            {
+                throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+
+            userData.FullName = data.FullName;
+            userData.LoginModel.Username = data.Username;
+            userData.LoginModel.PasswordHash = hashedPassword;
+            userData.LoginModel.Type = data.Type;
+            await _repository.UpdateUserData(userData);
+        }
     }
 }

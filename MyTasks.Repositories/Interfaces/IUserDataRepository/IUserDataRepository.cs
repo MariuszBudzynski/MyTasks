@@ -5,5 +5,6 @@ namespace MyTasks.Repositories.Interfaces.IUserDataRepository
     public interface IUserDataRepository
     {
         Task AddUserData(UserWithLoginDto data);
+        Task UpdateUserData(Guid? userId, UserWithLoginDto data);
     }
 }

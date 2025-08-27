@@ -10,26 +10,42 @@ namespace MyTasks.API
     public class UserDataController : ControllerBase
     {
         private readonly IUserDataRepository _repository;
+
         public UserDataController(IUserDataRepository repository)
         {
             _repository = repository;
         }
 
-        [HttpPatch("{id:Guid}")]
+        [HttpPatch("{userId:Guid}")]
         public async Task<IActionResult> PatchUser(Guid? userId, [FromBody] UserWithLoginDto data)
         {
-            //impelement later
-            await Task.CompletedTask;
-            return Ok();
+            if (userId == null)
+                return BadRequest("No User ID provided.");
+
+            if (data == null)
+                return BadRequest("Invalid data.");
+
+            try
+            {
+                await _repository.UpdateUserData(userId, data);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  $"An error occurred: {ex.Message}");
+            }
         }
 
         [HttpPut]
         public async Task<IActionResult> AddUser([FromBody] UserWithLoginDto data)
         {
             if (data == null)
-            {
                 return BadRequest("Invalid data.");
-            }
 
             try
             {
@@ -39,7 +55,7 @@ namespace MyTasks.API
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                            $"An error occurred: {ex.Message}");
+                                  $"An error occurred: {ex.Message}");
             }
         }
     }

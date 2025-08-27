@@ -6,6 +6,7 @@ using MyTasks.Common.Interfaces;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.DTOS;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
+using MyTasks.Repositories.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

@@ -10,15 +10,18 @@ namespace MyTasks.Repositories.DTOS
         public string FullName { get; init; } = string.Empty;
 
         // Login
+        [JsonIgnore]
         public Guid LoginId { get; init; }
 
         // Login data
         public string Username { get; init; } = string.Empty;
         public string PasswordHash { get; init; } = string.Empty;
         public UserType Type { get; init; }
+        [JsonIgnore]
         public bool FakeUser { get; init; } = false;
 
         // User
+        [JsonIgnore]
         public Guid UserId { get; init; }
     }
 }

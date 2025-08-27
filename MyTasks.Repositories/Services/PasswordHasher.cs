@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace MyTasks.Common
+namespace MyTasks.Repositories.Services
 {
     public static class PasswordHasher
     {

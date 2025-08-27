@@ -64,6 +64,11 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
             }
 
+            if (userData.LoginModel?.Type == UserType.Admin)
+            {
+                throw new InvalidOperationException("Cannot delete an Admin user.");
+            }
+
             await _repository.DeleteUserData(userData);
         }
 
@@ -73,6 +78,11 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
+            }
+
+            if (userData.LoginModel?.Type == UserType.Admin)
+            {
+                throw new InvalidOperationException("Cannot delete an Admin user.");
             }
 
             userData.IsDeleted = true;

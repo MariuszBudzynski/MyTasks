@@ -32,19 +32,27 @@ namespace MyTasks.Common
         {
             try
             {
-                var user = await _loginRepository.GetUserLoginDataByUserName(request.Username);
-                if (user == null)
+                var loginUser = await _loginRepository.GetUserLoginDataByUserName(request.Username);
+
+                if (loginUser == null)
+                {
+                    return new JsonResult(new { success = false, message = "Login data for user not found" }) { StatusCode = 404 };
+                }
+
+                var user = await _loginRepository.GetUserDataById(loginUser.UserId);
+
+                if (user == null )
                 {
                     return new JsonResult(new { success = false, message = "User not found" }) { StatusCode = 404 };
                 }
 
-                var passwordValidation = user.FakeUser
-                ? request.Password == user.PasswordHash  // plain text check
-                : PasswordHasher.VerifyPassword(user.PasswordHash, request.Password); // hashed check
+                var passwordValidation = loginUser.FakeUser
+                ? request.Password == loginUser.PasswordHash  // plain text check
+                : PasswordHasher.VerifyPassword(loginUser.PasswordHash, request.Password); // hashed check
 
-                if (request.Username == user.Username && passwordValidation && user.User?.IsDeleted == false)
+                if (request.Username == loginUser.Username && passwordValidation && !user.IsDeleted)
                 {
-                    var token = GenerateJwtToken(user);
+                    var token = GenerateJwtToken(loginUser);
                     var cookieOptions = new CookieOptions
                     {
                         HttpOnly = true,

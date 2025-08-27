@@ -6,5 +6,6 @@ namespace MyTasks.Repositories.Interfaces.ILoginRepository
     {
         Task<LoginModel?> GetUserLoginDataById(Guid Id);
         Task<LoginModel?> GetUserLoginDataByUserName(string userName);
+        Task<UserModel?> GetUserDataById(Guid Id);
     }
 }

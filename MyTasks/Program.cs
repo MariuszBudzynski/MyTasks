@@ -19,6 +19,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//JWT config
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.Use(async (context, next) =>

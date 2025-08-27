@@ -6,20 +6,30 @@ namespace MyTasks.Repositories.Repositories.LoginRepository
 {
     public class LoginRepository : ILoginRepository
     {
-        private readonly IDbRepository<LoginModel> _repository;
-        public LoginRepository(IDbRepository<LoginModel> repository)
+        private readonly IDbRepository<LoginModel> _loginRepository;
+        private readonly IDbRepository<UserModel> _userRepository;
+
+        public LoginRepository(
+            IDbRepository<LoginModel> repository,
+            IDbRepository<UserModel> userRepository)
         {
-            _repository = repository;
+            _loginRepository = repository;
+            _userRepository = userRepository;
         }
 
         public async Task<LoginModel?> GetUserLoginDataById(Guid Id)
         {
-            return await _repository.GetById(Id);
+            return await _loginRepository.GetById(Id);
+        }
+
+        public async Task<UserModel?> GetUserDataById(Guid Id)
+        {
+            return await _userRepository.GetById(Id);
         }
 
         public async Task<LoginModel?> GetUserLoginDataByUserName(string userName)
         {
-            return await _repository.GetByUserName<LoginModel>(userName);
+            return await _loginRepository.GetByUserName<LoginModel>(userName);
         }
     }
 }

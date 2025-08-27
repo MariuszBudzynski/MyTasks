@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyTasks.API;
 using MyTasks.Common;
 using MyTasks.Common.Interfaces;
@@ -12,6 +14,7 @@ using MyTasks.Repositories.Interfaces.IUserDataRepository;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
 using MyTasks.Repositories.Repositories.UserDataRepository;
+using System.Text;
 
 namespace MyTasks.Services
 {
@@ -28,6 +31,41 @@ namespace MyTasks.Services
             {
                 options.HeaderName = "X-CSRF-TOKEN";
             });
+
+            //JWT Autentication config
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            })
+            .AddJwtBearer("JwtBearer", options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = ctx =>
+                    {
+                        if (ctx.Request.Cookies.ContainsKey("AuthToken"))
+                        {
+                            ctx.Token = ctx.Request.Cookies["AuthToken"];
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
             //global AntiforgeryToken aplication use
             builder.Services.AddRazorPages()
                 .AddRazorPagesOptions(options =>

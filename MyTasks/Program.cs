@@ -34,8 +34,13 @@ app.Use(async (context, next) =>
 });
 
 app.MapRazorPages();
-app.UseSwagger();
-app.UseSwaggerUI();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.MapControllers();
 
 await app.RunAsync();

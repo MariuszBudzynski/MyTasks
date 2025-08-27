@@ -32,5 +32,11 @@ namespace MyTasks.DbOperations.Repositories
              _context.Update(user);
              await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteUserData(UserModel user)
+        {
+            _context.Remove(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

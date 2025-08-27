@@ -58,5 +58,27 @@ namespace MyTasks.API
                                   $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpDelete("{userId:Guid}")]
+        public async Task<IActionResult> HardDeleteUser(Guid? userId)
+        {
+            if (userId == null)
+                return BadRequest("No User ID provided.");
+
+            try
+            {
+                await _repository.DeleteUserData(userId);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  $"An error occurred: {ex.Message}");
+            }
+        }
     }
 }

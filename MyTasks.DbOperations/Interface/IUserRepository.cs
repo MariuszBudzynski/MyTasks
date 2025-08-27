@@ -7,5 +7,6 @@ namespace MyTasks.DbOperations.Interface
         Task AddUserAndLogin(UserModel user, LoginModel login);
         Task<UserModel?> GetUserAndLoginData(Guid? userId);
         Task UpdateUserData(UserModel user);
+        Task DeleteUserData(UserModel user);
     }
 }

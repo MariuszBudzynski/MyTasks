@@ -8,7 +8,7 @@
         public DateTime? DueDate { get; set; }
         public bool IsCompleted { get; set; }
 
-        public Guid ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
         public ProjectModel? Project { get; set; }
 
         public Guid? AssignedUserId { get; set; }

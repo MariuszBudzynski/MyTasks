@@ -9,8 +9,7 @@ namespace MyTasks.Pages
     {
         private readonly ILoginValidator _loginValidator;
         
-        public LoginModel
-            (ILoginValidator loginValidator)
+        public LoginModel (ILoginValidator loginValidator)
         {
             _loginValidator = loginValidator;
         }

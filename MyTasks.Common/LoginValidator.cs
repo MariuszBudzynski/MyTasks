@@ -42,7 +42,7 @@ namespace MyTasks.Common
                 ? request.Password == user.PasswordHash  // plain text check
                 : PasswordHasher.VerifyPassword(user.PasswordHash, request.Password); // hashed check
 
-                if (request.Username == user.Username && passwordValidation)
+                if (request.Username == user.Username && passwordValidation && user.User?.IsDeleted == false)
                 {
                     var token = GenerateJwtToken(user);
                     var cookieOptions = new CookieOptions

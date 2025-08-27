@@ -81,7 +81,7 @@ namespace MyTasks.DbOperations.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("OwnerId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -113,7 +113,7 @@ namespace MyTasks.DbOperations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("AuthorId")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Content")
@@ -123,7 +123,7 @@ namespace MyTasks.DbOperations.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("TaskItemId")
+                    b.Property<Guid>("TaskItemId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -187,7 +187,7 @@ namespace MyTasks.DbOperations.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
@@ -293,7 +293,9 @@ namespace MyTasks.DbOperations.Migrations
                 {
                     b.HasOne("MyTasks.Models.Models.UserModel", "Owner")
                         .WithMany("Projects")
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Owner");
                 });
@@ -302,11 +304,15 @@ namespace MyTasks.DbOperations.Migrations
                 {
                     b.HasOne("MyTasks.Models.Models.UserModel", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyTasks.Models.Models.TaskItemModel", "TaskItem")
                         .WithMany("Comments")
-                        .HasForeignKey("TaskItemId");
+                        .HasForeignKey("TaskItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
 
@@ -321,7 +327,9 @@ namespace MyTasks.DbOperations.Migrations
 
                     b.HasOne("MyTasks.Models.Models.ProjectModel", "Project")
                         .WithMany("Tasks")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AssignedUser");
 

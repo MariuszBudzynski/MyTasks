@@ -1,3 +1,4 @@
+using MyTasks.Repositories.Interfaces.IUserDataRepository;
 using MyTasks.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,5 +43,24 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
+
+// Minimal API Example with DI
+app.MapGet("/api/allUsers", async (IUserDataRepository repo) =>
+{
+    var userData = await repo.GetAllUserData();
+
+    if (!userData.Any())
+        return Results.NotFound("No users found.");
+
+    var results = userData.Select( u => new
+    {
+        u.Id,
+        u.LoginModel?.Username,
+        u.FullName,
+        u.IsDeleted,
+    });
+
+    return Results.Ok(results);
+});
 
 await app.RunAsync();

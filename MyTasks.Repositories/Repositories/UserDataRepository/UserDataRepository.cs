@@ -43,7 +43,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
         {
             var hashedPassword = PasswordHasher.HashPassword(data.PasswordHash);
 
-            var userData = await _repository.GetUserAndLoginData(userId);
+            var userData = await _repository.GetUserAndLoginDataByID(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -58,7 +58,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
         public async Task HardDeleteUserData(Guid? userId)
         {
-            var userData = await _repository.GetUserAndLoginData(userId);
+            var userData = await _repository.GetUserAndLoginDataByID(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -74,7 +74,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
         public async Task SoftDeleteUserData(Guid? userId)
         {
-            var userData = await _repository.GetUserAndLoginData(userId);
+            var userData = await _repository.GetUserAndLoginDataByID(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -87,6 +87,16 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
             userData.IsDeleted = true;
             await _repository.UpdateUserData(userData);
+        }
+
+        public async Task<ICollection<UserModel>> GetAllUserData()
+        {
+            var data = await _repository.GetAllUserAndLoginData();
+            if (!data.Any())
+            {
+                throw new InvalidOperationException("No data found");
+            }
+            return data;
         }
     }
 }

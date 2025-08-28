@@ -19,12 +19,18 @@ namespace MyTasks.DbOperations.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserModel?> GetUserAndLoginData(Guid? userId)
+        public async Task<UserModel?> GetUserAndLoginDataByID(Guid? userId)
         {
             return await _context.User
                 .Where(u => u.Id == userId)
                 .Include(u => u.LoginModel)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<ICollection<UserModel>> GetAllUserAndLoginData()
+        {
+            return await _context.User
+                .Include(u => u.LoginModel).ToListAsync();
         }
 
         public async Task UpdateUserData(UserModel user)

@@ -9,28 +9,56 @@ namespace MyTasks.API
     [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
-    public class UserDataController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserDataRepository _repository;
 
-        public UserDataController(IUserDataRepository repository)
+        public UsersController(IUserDataRepository repository)
         {
             _repository = repository;
         }
 
-        [HttpPatch("{userId:Guid}")]
-        public async Task<IActionResult> PatchUser(Guid? userId, [FromBody] UserWithLoginDto data)
+        // GET /api/users/{id}
+        [HttpGet("{userId:guid}")]
+        public async Task<IActionResult> Get(Guid userId)
         {
-            if (userId == null)
-                return BadRequest("No User ID provided.");
+            var user = await _repository.GetUserData(userId);
+            if (user == null)
+                return NotFound($"User with id {userId} not found.");
 
+            return Ok(user);
+        }
+
+        // POST /api/users
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] UserWithLoginDto data)
+        {
+            if (data == null)
+                return BadRequest("Invalid data.");
+
+            try
+            {
+                var newUser = await _repository.AddUserData(data);
+                return CreatedAtAction(nameof(Get), new { userId = newUser.Id }, newUser);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                                  $"An error occurred: {ex.Message}");
+            }
+        }
+
+        // PUT /api/users/{id}
+        [HttpPut("{userId:guid}")]
+        public async Task<IActionResult> Update(Guid userId, [FromBody] UserWithLoginDto data)
+        {
             if (data == null)
                 return BadRequest("Invalid data.");
 
             try
             {
                 await _repository.UpdateUserData(userId, data);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {
@@ -43,34 +71,14 @@ namespace MyTasks.API
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> AddUser([FromBody] UserWithLoginDto data)
+        // PATCH /api/users/{id}/deactivate (soft delete)
+        [HttpPatch("{userId:guid}/deactivate")]
+        public async Task<IActionResult> Deactivate(Guid userId)
         {
-            if (data == null)
-                return BadRequest("Invalid data.");
-
             try
             {
-                await _repository.AddUserData(data);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                                  $"An error occurred: {ex.Message}");
-            }
-        }
-
-        [HttpDelete("hard/{userId:Guid}")]
-        public async Task<IActionResult> HardDeleteUser(Guid? userId)
-        {
-            if (userId == null)
-                return BadRequest("No User ID provided.");
-
-            try
-            {
-                await _repository.HardDeleteUserData(userId);
-                return Ok();
+                await _repository.SoftDeleteUserData(userId);
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {
@@ -87,16 +95,14 @@ namespace MyTasks.API
             }
         }
 
-        [HttpDelete("soft/{userId:Guid}")]
-        public async Task<IActionResult> SoftDeleteUser(Guid? userId)
+        // DELETE /api/users/{id} (hard delete)
+        [HttpDelete("{userId:guid}")]
+        public async Task<IActionResult> Delete(Guid userId)
         {
-            if (userId == null)
-                return BadRequest("No User ID provided.");
-
             try
             {
-                await _repository.SoftDeleteUserData(userId);
-                return Ok();
+                await _repository.HardDeleteUserData(userId);
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {

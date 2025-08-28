@@ -47,17 +47,18 @@ app.MapControllers();
 // Minimal API Example with DI
 app.MapGet("/api/allUsers", async (IUserDataRepository repo) =>
 {
-    var userData = await repo.GetAllUserData();
+    var users = await repo.GetAllUserData();
 
-    if (!userData.Any())
+    if (!users.Any())
         return Results.NotFound("No users found.");
 
-    var results = userData.Select( u => new
+    var results = users.Select(u => new
     {
         u.Id,
-        u.LoginModel?.Username,
+        u.Username,
         u.FullName,
-        u.IsDeleted,
+        u.Type,
+        u.IsDeleted
     });
 
     return Results.Ok(results);

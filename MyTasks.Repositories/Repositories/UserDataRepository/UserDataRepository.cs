@@ -9,12 +9,13 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
     public class UserDataRepository : IUserDataRepository
     {
         private readonly IUserRepository _repository;
+
         public UserDataRepository(IUserRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task AddUserData(UserWithLoginDto data)
+        public async Task<UserResponseDto> AddUserData(UserWithLoginDto data)
         {
             var loginId = Guid.NewGuid();
             var userId = Guid.NewGuid();
@@ -37,6 +38,14 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             };
 
             await _repository.AddUserAndLogin(user, login);
+
+            return new UserResponseDto(
+                user.Id,
+                user.FullName,
+                login.Username,
+                login.Type,
+                user.IsDeleted
+            );
         }
 
         public async Task UpdateUserData(Guid? userId, UserWithLoginDto data)
@@ -53,6 +62,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             userData.LoginModel.Username = data.Username;
             userData.LoginModel.PasswordHash = hashedPassword;
             userData.LoginModel.Type = data.Type;
+
             await _repository.UpdateUserData(userData);
         }
 
@@ -89,14 +99,39 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             await _repository.UpdateUserData(userData);
         }
 
-        public async Task<ICollection<UserModel>> GetAllUserData()
+        public async Task<ICollection<UserResponseDto>> GetAllUserData()
         {
             var data = await _repository.GetAllUserAndLoginData();
+
             if (!data.Any())
             {
                 throw new InvalidOperationException("No data found");
             }
-            return data;
+
+            return data.Select(user => new UserResponseDto(
+                user.Id,
+                user.FullName,
+                user.LoginModel.Username,
+                user.LoginModel.Type,
+                user.IsDeleted
+            )).ToList();
+        }
+
+        public async Task<UserResponseDto?> GetUserData(Guid id)
+        {
+            var user = await _repository.GetUserById(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResponseDto(
+                user.Id,
+                user.FullName,
+                user.LoginModel.Username,
+                user.LoginModel.Type,
+                user.IsDeleted
+            );
         }
     }
 }

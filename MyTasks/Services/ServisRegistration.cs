@@ -79,7 +79,7 @@ namespace MyTasks.Services
 
             builder.Services
                 .AddControllers()
-                .AddApplicationPart(typeof(UserDataController).Assembly);
+                .AddApplicationPart(typeof(UsersController).Assembly);
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

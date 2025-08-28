@@ -1,14 +1,14 @@
-﻿using MyTasks.Models.Models;
-using MyTasks.Repositories.DTOS;
+﻿using MyTasks.Repositories.DTOS;
 
 namespace MyTasks.Repositories.Interfaces.IUserDataRepository
 {
     public interface IUserDataRepository
     {
-        Task AddUserData(UserWithLoginDto data);
+        Task<UserResponseDto> AddUserData(UserWithLoginDto data);
         Task UpdateUserData(Guid? userId, UserWithLoginDto data);
         Task HardDeleteUserData(Guid? userId);
         Task SoftDeleteUserData(Guid? userId);
-        Task<ICollection<UserModel>> GetAllUserData();
+        Task<ICollection<UserResponseDto>> GetAllUserData();
+        Task<UserResponseDto?> GetUserData(Guid id);
     }
 }

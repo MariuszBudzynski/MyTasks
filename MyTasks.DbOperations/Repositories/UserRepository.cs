@@ -18,6 +18,12 @@ namespace MyTasks.DbOperations.Repositories
             await _context.AddRangeAsync(user, login);
             await _context.SaveChangesAsync();
         }
+        public async Task<UserModel?> GetUserById(Guid id)
+        {
+            return await _context
+                .User.Where(u => u.Id == id)
+                .Include(u => u.LoginModel).FirstOrDefaultAsync();
+        }
 
         public async Task<UserModel?> GetUserAndLoginDataByID(Guid? userId)
         {

@@ -45,7 +45,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 // Minimal API Example with DI
-app.MapGet("/api/allUsers", async (IUserDataRepository repo) =>
+app.MapGet("/minimal-api/users", async (IUserDataRepository repo) =>
 {
     var users = await repo.GetAllUserData();
 

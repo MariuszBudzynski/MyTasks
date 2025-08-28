@@ -18,6 +18,13 @@ namespace MyTasks.API
             _repository = repository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _repository.GetAllUserData();
+            return Ok(users);
+        }
+
         // GET /api/users/{id}
         [HttpGet("{userId:guid}")]
         public async Task<IActionResult> Get(Guid userId)

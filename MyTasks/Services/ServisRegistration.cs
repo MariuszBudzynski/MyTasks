@@ -35,10 +35,10 @@ namespace MyTasks.Services
             //JWT Autentication config
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "JwtBearer";
-                options.DefaultChallengeScheme = "JwtBearer";
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer("JwtBearer", options =>
+            .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -50,11 +50,17 @@ namespace MyTasks.Services
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
 
                 options.Events = new JwtBearerEvents
                 {
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.Redirect("/Login");
+                        return Task.CompletedTask;
+                    },
                     OnMessageReceived = ctx =>
                     {
                         if (ctx.Request.Cookies.ContainsKey("AuthToken"))
@@ -70,6 +76,8 @@ namespace MyTasks.Services
             builder.Services.AddRazorPages()
                 .AddRazorPagesOptions(options =>
                 {
+                    options.Conventions.AuthorizeFolder("/");
+                    options.Conventions.AllowAnonymousToPage("/Login");
                     options.Conventions.ConfigureFilter(new AutoValidateAntiforgeryTokenAttribute());
                 });
 

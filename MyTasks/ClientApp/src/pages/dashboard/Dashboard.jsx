@@ -41,6 +41,7 @@ const styles = {
   },
   buttons: {
     display: "flex",
+    justifyContent: "center",
     gap: "10px",
     marginTop: "10px",
   },
@@ -112,7 +113,6 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* Projects Section */}
       <div style={styles.section}>
         <h3>{t("Projects")}</h3>
         <div style={styles.list}>
@@ -149,7 +149,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Tasks Section */}
       <div style={styles.section}>
         <h3>{t("Tasks")}</h3>
         <div style={styles.list}>

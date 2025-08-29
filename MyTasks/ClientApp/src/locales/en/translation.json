@@ -1,5 +1,18 @@
 {
   "username": "User Name",
   "password": "Password",
-  "login": "Login"
+  "login": "Login",
+  "welcome": "Welcome",
+  "projects": "Projects",
+  "tasks": "Tasks",
+  "completed": "Completed",
+  "edit": "Edit",
+  "delete": "Delete",
+  "no_projects": "No projects available",
+  "no_tasks": "No tasks available",
+  "guest": "Guest",
+  "loading": "Loading dashboard...",
+  "project": "Project",
+  "due": "Due",
+  "n_a": "N/A"
 }

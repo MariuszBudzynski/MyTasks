@@ -91,14 +91,14 @@ export default function Dashboard() {
   }, []);
 
   if (!dashboardData || Object.keys(dashboardData).length === 0) {
-    return <p style={{ textAlign: "center" }}>{t("Loading dashboard...")}</p>;
+    return <p style={{ textAlign: "center" }}>{t("loading")}</p>;
   }
 
   const projects = Array.isArray(dashboardData.Projects)
     ? dashboardData.Projects
     : [];
   const tasks = Array.isArray(dashboardData.Tasks) ? dashboardData.Tasks : [];
-  const username = dashboardData.Username ?? t("Guest");
+  const username = dashboardData.Username ?? t("guest");
   const projectCount = dashboardData.ProjectCount ?? projects.length;
   const taskCount = dashboardData.TaskCount ?? tasks.length;
 
@@ -106,15 +106,15 @@ export default function Dashboard() {
     <div style={styles.container}>
       <div style={styles.header}>
         <h2>
-          {t("Welcome")}, {username}
+          {t("welcome")}, {username}
         </h2>
         <p>
-          {t("Projects")}: {projectCount} | {t("Tasks")}: {taskCount}
+          {t("projects")}: {projectCount} | {t("tasks")}: {taskCount}
         </p>
       </div>
 
       <div style={styles.section}>
-        <h3>{t("Projects")}</h3>
+        <h3>{t("projects")}</h3>
         <div style={styles.list}>
           {projects.length > 0 ? (
             projects.map((p) => (
@@ -122,7 +122,7 @@ export default function Dashboard() {
                 <div style={styles.cardTitle}>{p.Name}</div>
                 <p style={styles.cardText}>{p.Description}</p>
                 <p style={styles.cardText}>
-                  {t("Tasks")}: {p.TaskCount} | {t("Completed")}:{" "}
+                  {t("tasks")}: {p.TaskCount} | {t("completed")}:{" "}
                   {p.CompletedTasks}
                 </p>
                 <div style={styles.buttons}>
@@ -130,7 +130,7 @@ export default function Dashboard() {
                     style={{ ...styles.button, ...styles.btnPrimary }}
                     onClick={() => console.log("Edit project", p.Id, csrfToken)}
                   >
-                    {t("Edit")}
+                    {t("edit")}
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.btnDanger }}
@@ -138,19 +138,19 @@ export default function Dashboard() {
                       console.log("Delete project", p.Id, csrfToken)
                     }
                   >
-                    {t("Delete")}
+                    {t("delete")}
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <p style={styles.empty}>{t("No projects available")}</p>
+            <p style={styles.empty}>{t("no_projects")}</p>
           )}
         </div>
       </div>
 
       <div style={styles.section}>
-        <h3>{t("Tasks")}</h3>
+        <h3>{t("tasks")}</h3>
         <div style={styles.list}>
           {tasks.length > 0 ? (
             tasks.map((task) => (
@@ -158,15 +158,15 @@ export default function Dashboard() {
                 <div style={styles.cardTitle}>{task.Title}</div>
                 <p style={styles.cardText}>{task.Description}</p>
                 <p style={styles.cardText}>
-                  {t("Project")}: {task.ProjectName ?? t("N/A")}
+                  {t("project")}: {task.ProjectName ?? t("n_a")}
                   <br />
-                  {t("Due")}: {task.DueDate ?? t("N/A")}
+                  {t("due")}: {task.DueDate ?? t("n_a")}
                   <br />
-                  {t("Completed")}: {task.IsCompleted ? "✅" : "❌"}
+                  {t("completed")}: {task.IsCompleted ? "✅" : "❌"}
                 </p>
                 {task.LastComment && (
                   <p style={styles.cardText}>
-                    💬 {task.LastComment} ({task.LastCommentAt ?? t("N/A")})
+                    💬 {task.LastComment} ({task.LastCommentAt ?? t("n_a")})
                   </p>
                 )}
                 <div style={styles.buttons}>
@@ -174,7 +174,7 @@ export default function Dashboard() {
                     style={{ ...styles.button, ...styles.btnPrimary }}
                     onClick={() => console.log("Edit task", task.Id, csrfToken)}
                   >
-                    {t("Edit")}
+                    {t("edit")}
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.btnDanger }}
@@ -182,13 +182,13 @@ export default function Dashboard() {
                       console.log("Delete task", task.Id, csrfToken)
                     }
                   >
-                    {t("Delete")}
+                    {t("delete")}
                   </button>
                 </div>
               </div>
             ))
           ) : (
-            <p style={styles.empty}>{t("No tasks available")}</p>
+            <p style={styles.empty}>{t("no_tasks")}</p>
           )}
         </div>
       </div>

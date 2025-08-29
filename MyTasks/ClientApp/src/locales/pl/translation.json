@@ -1,5 +1,18 @@
 {
   "username": "Nazwa użytkownika",
   "password": "Hasło",
-  "login": "Zaloguj"
+  "login": "Zaloguj",
+  "welcome": "Witaj",
+  "projects": "Projekty",
+  "tasks": "Zadania",
+  "completed": "Ukończone",
+  "edit": "Edytuj",
+  "delete": "Usuń",
+  "no_projects": "Brak dostępnych projektów",
+  "no_tasks": "Brak dostępnych zadań",
+  "guest": "Gość",
+  "loading": "Ładowanie pulpitu...",
+  "project": "Projekt",
+  "due": "Termin",
+  "n_a": "Brak"
 }

@@ -1,4 +1,5 @@
-﻿using MyTasks.DbOperations.Interface;
+﻿using Microsoft.EntityFrameworkCore;
+using MyTasks.DbOperations.Interface;
 using MyTasks.Repositories.DTOS;
 using MyTasks.Repositories.Interfaces.IDashboardRepository;
 
@@ -19,7 +20,8 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
                 throw new ArgumentException("User Name can't be empty");
             }
 
-            var projects = await _projectRepository.GetProjectsWithTasksAndComments(userName);
+            var projectsQuery = await _projectRepository.GetProjectsWithTasksAndComments(userName);
+            var projects = await projectsQuery.ToListAsync();
 
             if (!projects.Any())
             {

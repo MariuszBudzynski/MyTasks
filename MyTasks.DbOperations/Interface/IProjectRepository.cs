@@ -4,6 +4,6 @@ namespace MyTasks.DbOperations.Interface
 {
     public interface IProjectRepository
     {
-        Task<ICollection<ProjectModel>> GetProjectsWithTasksAndComments(string userName);
+        Task<IQueryable<ProjectModel>> GetProjectsWithTasksAndComments(string userName);
     }
 }

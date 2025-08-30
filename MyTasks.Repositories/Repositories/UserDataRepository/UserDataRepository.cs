@@ -1,4 +1,5 @@
-﻿using MyTasks.DbOperations.Interface;
+﻿using Microsoft.EntityFrameworkCore;
+using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.DTOS;
 using MyTasks.Repositories.Interfaces.IUserDataRepository;
@@ -101,20 +102,20 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
         public async Task<ICollection<UserResponseDto>> GetAllUserData()
         {
-            var data = await _repository.GetAllUserAndLoginData();
+            var data = _repository.GetAllUserAndLoginData();
 
-            if (!data.Any())
+            if (!await data.AnyAsync())
             {
                 throw new InvalidOperationException("No data found");
             }
 
-            return data.Select(user => new UserResponseDto(
+            return await  data.Select(user => new UserResponseDto(
                 user.Id,
                 user.FullName,
                 user.LoginModel.Username,
                 user.LoginModel.Type,
                 user.IsDeleted
-            )).ToList();
+            )).ToListAsync();
         }
 
         public async Task<UserResponseDto?> GetUserData(Guid id)

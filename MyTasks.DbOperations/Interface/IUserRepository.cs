@@ -8,7 +8,7 @@ namespace MyTasks.DbOperations.Interface
         Task<UserModel?> GetUserAndLoginDataByID(Guid? userId);
         Task UpdateUserData(UserModel user);
         Task DeleteUserData(UserModel user);
-        Task<ICollection<UserModel>> GetAllUserAndLoginData();
+        IQueryable<UserModel> GetAllUserAndLoginData();
         Task<UserModel?> GetUserById(Guid id);
     }
 }

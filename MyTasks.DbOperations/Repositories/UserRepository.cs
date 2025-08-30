@@ -33,10 +33,11 @@ namespace MyTasks.DbOperations.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<ICollection<UserModel>> GetAllUserAndLoginData()
+        public IQueryable<UserModel> GetAllUserAndLoginData()
         {
-            return await _context.User
-                .Include(u => u.LoginModel).ToListAsync();
+            return _context.User
+                .Include(u => u.LoginModel)
+                .AsQueryable();
         }
 
         public async Task UpdateUserData(UserModel user)

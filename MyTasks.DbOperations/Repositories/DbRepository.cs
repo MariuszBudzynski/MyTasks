@@ -16,9 +16,9 @@ namespace MyTasks.DbOperations.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
-        public async Task<ICollection<TEntity>> GetAll()
+        public IQueryable<TEntity> GetAll()
         {
-            return await _dbSet.ToListAsync();
+            return _dbSet.AsQueryable();
         }
 
         public async Task<TEntity?> GetById(Guid Id)

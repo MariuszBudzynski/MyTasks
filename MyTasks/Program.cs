@@ -45,6 +45,14 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 
+//Logout
+app.MapPost("/logout", (HttpResponse response) =>
+{
+    response.Cookies.Delete("AuthToken");
+    response.Redirect("/Login");
+    return Results.Empty;
+});
+
 // Minimal API Example with DI
 app.MapGet("/minimal-api/users", async (IUserDataRepository repo) =>
 {

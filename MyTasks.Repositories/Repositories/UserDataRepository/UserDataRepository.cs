@@ -112,8 +112,8 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             return await  data.Select(user => new UserResponseDto(
                 user.Id,
                 user.FullName,
-                user.LoginModel.Username,
-                user.LoginModel.Type,
+                user.LoginModel != null ? user.LoginModel.Username : "",
+                user.LoginModel != null ? user.LoginModel.Type : UserType.Regular,
                 user.IsDeleted
             )).ToListAsync();
         }

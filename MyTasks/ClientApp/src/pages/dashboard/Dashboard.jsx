@@ -65,12 +65,48 @@ const styles = {
     fontStyle: "italic",
     color: "#666",
   },
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1000,
+  },
+  modal: {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    width: "400px",
+    maxWidth: "90%",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+  },
+  modalInput: {
+    width: "100%",
+    padding: "8px",
+    margin: "8px 0",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+  },
+  modalActions: {
+    display: "flex",
+    justifyContent: "flex-end",
+    gap: "10px",
+    marginTop: "10px",
+  },
 };
 
 export default function Dashboard() {
   const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState({});
   const [csrfToken, setCsrfToken] = useState(null);
+
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [newProject, setNewProject] = useState({ name: "", description: "" });
 
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
@@ -111,6 +147,21 @@ export default function Dashboard() {
         <p>
           {t("projects")}: {projectCount} | {t("tasks")}: {taskCount}
         </p>
+      </div>
+
+      <div style={styles.buttons}>
+        <button
+          style={{ ...styles.button, ...styles.btnPrimary }}
+          onClick={() => setShowProjectModal(true)}
+        >
+          ➕ {t("add_project")}
+        </button>
+        <button
+          style={{ ...styles.button, ...styles.btnPrimary }}
+          onClick={() => console.log("TODO: open task modal")}
+        >
+          ➕ {t("add_task")}
+        </button>
       </div>
 
       <div style={styles.section}>
@@ -192,6 +243,48 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {showProjectModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>{t("add_project")}</h3>
+            <input
+              type="text"
+              placeholder={t("project_name")}
+              value={newProject.name}
+              onChange={(e) =>
+                setNewProject({ ...newProject, name: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+            <textarea
+              placeholder={t("project_description")}
+              value={newProject.description}
+              onChange={(e) =>
+                setNewProject({ ...newProject, description: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={() => {
+                  console.log("Submit new project", newProject);
+                  setShowProjectModal(false);
+                }}
+              >
+                {t("ok")}
+              </button>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={() => setShowProjectModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

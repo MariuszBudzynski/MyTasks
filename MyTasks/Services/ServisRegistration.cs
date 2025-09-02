@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MyTasks.API;
+using MyTasks.API.Services;
+using MyTasks.API.Services.Interfaces;
 using MyTasks.Common;
 using MyTasks.Common.Interfaces;
 using MyTasks.DbOperations.Context;
@@ -94,6 +96,8 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<IProjecRepository, ProjecRepository>();
             builder.Services.AddScoped<IUserDataRepository, UserDataRepository>();
             builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();

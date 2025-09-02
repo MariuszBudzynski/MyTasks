@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyTasks.DbOperations.Interface;
-using MyTasks.Models.Models;
+using MyTasks.API.Services.Interfaces;
 using MyTasks.Repositories.DTOS;
-using MyTasks.Repositories.Interfaces.IProjecRepository;
 
 namespace MyTasks.API
 {
@@ -13,29 +11,23 @@ namespace MyTasks.API
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
-        private readonly IProjecRepository _projecRepository;
-        private readonly IUserOperationsRepository _userRepository;
+        private readonly IProjectService _projectService;
 
-        public ProjectController(
-            IProjecRepository projecRepository,
-            IUserOperationsRepository userRepository)
+        public ProjectController(IProjectService projectService)
         {
-            _projecRepository = projecRepository;
-            _userRepository = userRepository;
+            _projectService = projectService;
         }
 
-        // GET /api/project/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var project = await _projecRepository.GetById(id);
+            var project = await _projectService.GetProjectByIdAsync(id);
             if (project == null)
                 return NotFound();
 
             return Ok(project);
         }
 
-        // POST /api/project
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto data)
         {
@@ -44,44 +36,23 @@ namespace MyTasks.API
 
             var userIdClaim = User.FindFirst("userId")?.Value;
             if (userIdClaim == null)
-            {
                 return Forbid();
-            }
 
             if (!Guid.TryParse(userIdClaim, out var ownerId))
                 return BadRequest("Invalid user id in token.");
 
-            var user = await _userRepository.GetUserByIdAsync(ownerId);
-
-            if (user == null)
-                return BadRequest("User does not exist.");
-
             try
             {
-                var project = new ProjectModel
-                {
-                    Id = Guid.NewGuid(),
-                    Name = data.Name,
-                    Description = data.Description,
-                    OwnerId = ownerId,
-                    Owner = user,
-                };
-
-                await _projecRepository.AddProject(project);
-                return CreatedAtAction(
-                    nameof(GetById),
-                    new { id = project.Id },
-                    new ProjectResponseDto(
-                        project.Id,
-                        project.Name,
-                        project.Description,
-                        project.OwnerId ?? Guid.Empty)
-                );
+                var projectResponse = await _projectService.CreateProjectAsync(data, ownerId);
+                return CreatedAtAction(nameof(GetById), new { id = projectResponse.Id }, projectResponse);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                                  $"An error occurred: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
         }
     }

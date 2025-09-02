@@ -7,8 +7,8 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
 {
     public class DashboardRepository : IDashboardRepository
     {
-        private readonly IProjectRepository _projectRepository;
-        public DashboardRepository(IProjectRepository projectRepository)
+        private readonly IProjectOperationsRepository _projectRepository;
+        public DashboardRepository(IProjectOperationsRepository projectRepository)
         {
             _projectRepository = projectRepository;
         }
@@ -20,7 +20,7 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
                 throw new ArgumentException("User Name can't be empty");
             }
 
-            var projectsQuery = await _projectRepository.GetProjectsWithTasksAndComments(userName);
+            var projectsQuery = await _projectRepository.GetProjectsWithTasksAndCommentsAsync(userName);
             var projects = await projectsQuery.ToListAsync();
 
             if (!projects.Any())

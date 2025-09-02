@@ -24,7 +24,7 @@ namespace MyTasks.Tests
             var userId = Guid.NewGuid();
             var expectedUser = new LoginModel { Id = userId, Username = "testuser" };
 
-            A.CallTo(() => _fakeRepo.GetById(userId))
+            A.CallTo(() => _fakeRepo.GetByIdAsync(userId))
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
@@ -42,7 +42,7 @@ namespace MyTasks.Tests
             // Arrange
             var userId = Guid.NewGuid();
 
-            A.CallTo(() => _fakeRepo.GetById(userId))
+            A.CallTo(() => _fakeRepo.GetByIdAsync(userId))
             .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act
@@ -58,7 +58,7 @@ namespace MyTasks.Tests
             // Arrange
             var expectedUser = new LoginModel {Username = "testuser" };
 
-            A.CallTo(() => _fakeRepo.GetByUserName<LoginModel>(expectedUser.Username))
+            A.CallTo(() => _fakeRepo.GetByUserNameAsync<LoginModel>(expectedUser.Username))
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
@@ -75,7 +75,7 @@ namespace MyTasks.Tests
             // Arrange
             var userName = "testUserName";
 
-            A.CallTo(() => _fakeRepo.GetByUserName<LoginModel>(userName))
+            A.CallTo(() => _fakeRepo.GetByUserNameAsync<LoginModel>(userName))
                 .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act

@@ -9,9 +9,9 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 {
     public class UserDataRepository : IUserDataRepository
     {
-        private readonly IUserRepository _repository;
+        private readonly IUserOperationsRepository _repository;
 
-        public UserDataRepository(IUserRepository repository)
+        public UserDataRepository(IUserOperationsRepository repository)
         {
             _repository = repository;
         }
@@ -38,7 +38,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
                 UserId = userId,
             };
 
-            await _repository.AddUserAndLogin(user, login);
+            await _repository.AddUserAndLoginAsync(user, login);
 
             return new UserResponseDto(
                 user.Id,
@@ -53,7 +53,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
         {
             var hashedPassword = PasswordHasher.HashPassword(data.PasswordHash);
 
-            var userData = await _repository.GetUserAndLoginDataByID(userId);
+            var userData = await _repository.GetUserAndLoginDataByIDAsync(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -64,12 +64,12 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             userData.LoginModel.PasswordHash = hashedPassword;
             userData.LoginModel.Type = data.Type;
 
-            await _repository.UpdateUserData(userData);
+            await _repository.UpdateUserDataAsync(userData);
         }
 
         public async Task HardDeleteUserData(Guid? userId)
         {
-            var userData = await _repository.GetUserAndLoginDataByID(userId);
+            var userData = await _repository.GetUserAndLoginDataByIDAsync(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -80,12 +80,12 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
                 throw new InvalidOperationException("Cannot delete an Admin user.");
             }
 
-            await _repository.DeleteUserData(userData);
+            await _repository.DeleteUserDataAsync(userData);
         }
 
         public async Task SoftDeleteUserData(Guid? userId)
         {
-            var userData = await _repository.GetUserAndLoginDataByID(userId);
+            var userData = await _repository.GetUserAndLoginDataByIDAsync(userId);
             if (userData == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found.");
@@ -97,7 +97,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             }
 
             userData.IsDeleted = true;
-            await _repository.UpdateUserData(userData);
+            await _repository.UpdateUserDataAsync(userData);
         }
 
         public async Task<ICollection<UserResponseDto>> GetAllUserData()
@@ -120,7 +120,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
 
         public async Task<UserResponseDto?> GetUserData(Guid id)
         {
-            var user = await _repository.GetUserById(id);
+            var user = await _repository.GetUserByIdAsync(id);
             if (user == null)
             {
                 return null;

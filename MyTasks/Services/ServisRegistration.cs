@@ -10,9 +10,11 @@ using MyTasks.DbOperations.Interface;
 using MyTasks.DbOperations.Repositories;
 using MyTasks.Repositories.Interfaces.IDashboardRepository;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
+using MyTasks.Repositories.Interfaces.IProjecRepository;
 using MyTasks.Repositories.Interfaces.IUserDataRepository;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
+using MyTasks.Repositories.Repositories.ProjecRepository;
 using MyTasks.Repositories.Repositories.UserDataRepository;
 using System.Text;
 
@@ -92,11 +94,12 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IProjecRepository, ProjecRepository>();
             builder.Services.AddScoped<IUserDataRepository, UserDataRepository>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();
             builder.Services.AddScoped<IJwtHelper, JwtHelper>();
             builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IProjectOperationsRepository, ProjectOperationsRepository>();
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped<ILoginValidator, LoginValidator>();
             builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));

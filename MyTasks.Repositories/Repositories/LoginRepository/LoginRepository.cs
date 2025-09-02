@@ -19,17 +19,17 @@ namespace MyTasks.Repositories.Repositories.LoginRepository
 
         public async Task<LoginModel?> GetUserLoginDataById(Guid Id)
         {
-            return await _loginRepository.GetById(Id);
+            return await _loginRepository.GetByIdAsync(Id);
         }
 
         public async Task<UserModel?> GetUserDataById(Guid Id)
         {
-            return await _userRepository.GetById(Id);
+            return await _userRepository.GetByIdAsync(Id);
         }
 
         public async Task<LoginModel?> GetUserLoginDataByUserName(string userName)
         {
-            return await _loginRepository.GetByUserName<LoginModel>(userName);
+            return await _loginRepository.GetByUserNameAsync<LoginModel>(userName);
         }
     }
 }

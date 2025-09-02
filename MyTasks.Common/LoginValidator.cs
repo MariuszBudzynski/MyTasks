@@ -94,7 +94,8 @@ namespace MyTasks.Common
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("role", user.Type.ToString())
+                new Claim("role", user.Type.ToString()),
+                new Claim("userId", user.UserId.ToString())
             };
 
             var token = new JwtSecurityToken(

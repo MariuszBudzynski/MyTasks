@@ -7,11 +7,11 @@ namespace MyTasks.Tests
 {
     public class DashboardRepositoryTests
     {
-        private readonly IProjectRepository _fakeProjectRepo;
+        private readonly IProjectOperationsRepository _fakeProjectRepo;
         private readonly DashboardRepository _sut;
         public DashboardRepositoryTests()
         {
-            _fakeProjectRepo = A.Fake<IProjectRepository>();
+            _fakeProjectRepo = A.Fake<IProjectOperationsRepository>();
             _sut = new DashboardRepository(_fakeProjectRepo);
         }
 
@@ -95,7 +95,7 @@ namespace MyTasks.Tests
             };
 
             //fix tests after refactor is done
-            //A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndComments(userName))
+            //A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
             //    .Returns(Task.FromResult<ICollection<ProjectModel>>(fakeProjects));
 
             // Act

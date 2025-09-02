@@ -21,18 +21,24 @@ namespace MyTasks.DbOperations.Repositories
             return _dbSet.AsQueryable();
         }
 
-        public async Task<TEntity?> GetById(Guid Id)
+        public async Task AddEntityAsync(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<TEntity?> GetByIdAsync(Guid Id)
         {
             return await _dbSet.FirstOrDefaultAsync(e => e.Id == Id);
         }
 
-        public async Task<T?> GetByUserName<T>(string username)
+        public async Task<T?> GetByUserNameAsync<T>(string username)
             where T : class, TEntity, IUsername, IType
         {
             return await _dbSet.OfType<T>().FirstOrDefaultAsync(e => e.Username == username);
         }
 
-        public async Task UpdateById(Guid Id)
+        public async Task UpdateByIdAsync(Guid Id)
         {
             var entityToUpdate = await _dbSet.FirstOrDefaultAsync(e => e.Id == Id);
             if (entityToUpdate == null) return;
@@ -41,7 +47,7 @@ namespace MyTasks.DbOperations.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteById(Guid Id)
+        public async Task DeleteByIdAsync(Guid Id)
         {
             var entityToUpdate = await _dbSet.FirstOrDefaultAsync(e => e.Id == Id);
             if (entityToUpdate == null) return;

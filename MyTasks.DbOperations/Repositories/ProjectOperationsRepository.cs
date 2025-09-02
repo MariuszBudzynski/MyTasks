@@ -5,14 +5,14 @@ using MyTasks.Models.Models;
 
 namespace MyTasks.DbOperations.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectOperationsRepository : IProjectOperationsRepository
     {
         private readonly AppDbContext _context;
-        public ProjectRepository(AppDbContext context)
+        public ProjectOperationsRepository(AppDbContext context)
         {
             _context = context;
         }
-        public async Task<IQueryable<ProjectModel>> GetProjectsWithTasksAndComments(string userName)
+        public async Task<IQueryable<ProjectModel>> GetProjectsWithTasksAndCommentsAsync(string userName)
         {
             var userId = (await _context.Login.FirstOrDefaultAsync(l => l.Username == userName))?.UserId;
 

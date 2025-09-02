@@ -5,27 +5,27 @@ using MyTasks.Models.Models;
 
 namespace MyTasks.DbOperations.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserOperationsRepository : IUserOperationsRepository
     {
         private readonly AppDbContext _context;
-        public UserRepository(AppDbContext context)
+        public UserOperationsRepository(AppDbContext context)
         {
             _context = context;
         }
 
-        public async Task AddUserAndLogin(UserModel user, LoginModel login)
+        public async Task AddUserAndLoginAsync(UserModel user, LoginModel login)
         {
             await _context.AddRangeAsync(user, login);
             await _context.SaveChangesAsync();
         }
-        public async Task<UserModel?> GetUserById(Guid id)
+        public async Task<UserModel?> GetUserByIdAsync(Guid id)
         {
             return await _context
                 .User.Where(u => u.Id == id)
                 .Include(u => u.LoginModel).FirstOrDefaultAsync();
         }
 
-        public async Task<UserModel?> GetUserAndLoginDataByID(Guid? userId)
+        public async Task<UserModel?> GetUserAndLoginDataByIDAsync(Guid? userId)
         {
             return await _context.User
                 .Where(u => u.Id == userId)
@@ -40,13 +40,13 @@ namespace MyTasks.DbOperations.Repositories
                 .AsQueryable();
         }
 
-        public async Task UpdateUserData(UserModel user)
+        public async Task UpdateUserDataAsync(UserModel user)
         {
              _context.Update(user);
              await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUserData(UserModel user)
+        public async Task DeleteUserDataAsync(UserModel user)
         {
             _context.Remove(user);
             await _context.SaveChangesAsync();

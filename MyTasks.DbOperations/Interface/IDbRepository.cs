@@ -5,11 +5,12 @@ namespace MyTasks.DbOperations.Interface
 {
     public interface IDbRepository<TEntity> where TEntity : BaseModel
     {
-        Task DeleteById(Guid Id);
+        Task DeleteByIdAsync(Guid Id);
+        Task AddEntityAsync(TEntity entity);
         IQueryable<TEntity> GetAll();
-        Task<TEntity?> GetById(Guid Id);
-        Task UpdateById(Guid Id);
-        Task<T?> GetByUserName<T>(string username)
+        Task<TEntity?> GetByIdAsync(Guid Id);
+        Task UpdateByIdAsync(Guid Id);
+        Task<T?> GetByUserNameAsync<T>(string username)
             where T : class, TEntity, IUsername, IType;
     }
 }

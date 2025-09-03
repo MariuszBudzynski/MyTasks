@@ -14,5 +14,13 @@
   "loading": "Loading dashboard...",
   "project": "Project",
   "due": "Due",
-  "n_a": "N/A"
+  "n_a": "N/A",
+  "add_project": "Add Project",
+  "add_task": "Add Task",
+  "project_name": "Project Name",
+  "project_description": "Project Description",
+  "ok": "OK",
+  "cancel": "Cancel",
+  "error_name_required": "Name is required",
+  "error_description_required": "Description is required"
 }

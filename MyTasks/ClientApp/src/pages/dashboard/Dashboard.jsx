@@ -98,10 +98,11 @@ const styles = {
     gap: "10px",
     marginTop: "10px",
   },
-  error: {
+  errorText: {
     color: "red",
-    fontSize: "13px",
-    marginTop: "4px",
+    fontSize: "12px",
+    marginTop: "-5px",
+    marginBottom: "5px",
   },
 };
 
@@ -112,8 +113,8 @@ export default function Dashboard() {
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [newProject, setNewProject] = useState({ name: "", description: "" });
-  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({ name: false, description: false });
+  const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
@@ -135,12 +136,24 @@ export default function Dashboard() {
     }
   }, []);
 
-  const validate = (values) => {
-    const errs = {};
-    if (!values.name.trim()) errs.name = "Name is required";
-    if (!values.description.trim())
-      errs.description = "Description is required";
-    return errs;
+  if (!dashboardData || Object.keys(dashboardData).length === 0) {
+    return <p style={{ textAlign: "center" }}>{t("loading")}</p>;
+  }
+
+  const projects = Array.isArray(dashboardData.Projects)
+    ? dashboardData.Projects
+    : [];
+  const tasks = Array.isArray(dashboardData.Tasks) ? dashboardData.Tasks : [];
+  const username = dashboardData.Username ?? t("guest");
+  const projectCount = dashboardData.ProjectCount ?? projects.length;
+  const taskCount = dashboardData.TaskCount ?? tasks.length;
+
+  const validate = (project) => {
+    const newErrors = {};
+    if (!project.name.trim()) newErrors.name = t("error_name_required");
+    if (!project.description.trim())
+      newErrors.description = t("error_description_required");
+    return newErrors;
   };
 
   const handleSubmitProject = async () => {
@@ -167,32 +180,21 @@ export default function Dashboard() {
         }),
       });
 
-      if (response.ok) {
-        setShowProjectModal(false);
-        setNewProject({ name: "", description: "" });
-        window.location.reload();
-      } else {
-        const data = await response.json();
-        setSubmitError(data.message || "Failed to create project");
+      if (!response.ok) {
+        throw new Error("Failed to create project");
       }
+
+      setShowProjectModal(false);
+      setNewProject({ name: "", description: "" });
+      setTouched({ name: false, description: false });
+      setErrors({});
+      window.location.reload();
     } catch (err) {
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);
     }
   };
-
-  if (!dashboardData || Object.keys(dashboardData).length === 0) {
-    return <p style={{ textAlign: "center" }}>{t("loading")}</p>;
-  }
-
-  const projects = Array.isArray(dashboardData.Projects)
-    ? dashboardData.Projects
-    : [];
-  const tasks = Array.isArray(dashboardData.Tasks) ? dashboardData.Tasks : [];
-  const username = dashboardData.Username ?? t("guest");
-  const projectCount = dashboardData.ProjectCount ?? projects.length;
-  const taskCount = dashboardData.TaskCount ?? tasks.length;
 
   return (
     <div style={styles.container}>
@@ -311,12 +313,11 @@ export default function Dashboard() {
               onChange={(e) => {
                 setNewProject({ ...newProject, name: e.target.value });
                 setTouched((prev) => ({ ...prev, name: true }));
-                setErrors(validate({ ...newProject, name: e.target.value }));
               }}
               style={styles.modalInput}
             />
             {touched.name && errors.name && (
-              <div style={styles.error}>{errors.name}</div>
+              <div style={styles.errorText}>{errors.name}</div>
             )}
             <textarea
               placeholder={t("project_description")}
@@ -324,16 +325,13 @@ export default function Dashboard() {
               onChange={(e) => {
                 setNewProject({ ...newProject, description: e.target.value });
                 setTouched((prev) => ({ ...prev, description: true }));
-                setErrors(
-                  validate({ ...newProject, description: e.target.value })
-                );
               }}
               style={styles.modalInput}
             />
             {touched.description && errors.description && (
-              <div style={styles.error}>{errors.description}</div>
+              <div style={styles.errorText}>{errors.description}</div>
             )}
-            {submitError && <div style={styles.error}>{submitError}</div>}
+            {submitError && <div style={styles.errorText}>{submitError}</div>}
             <div style={styles.modalActions}>
               <button
                 style={{ ...styles.button, ...styles.btnPrimary }}

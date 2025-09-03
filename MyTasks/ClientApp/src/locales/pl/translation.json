@@ -14,5 +14,13 @@
   "loading": "Ładowanie pulpitu...",
   "project": "Projekt",
   "due": "Termin",
-  "n_a": "Brak"
+  "n_a": "Brak",
+  "add_project": "Dodaj projekt",
+  "add_task": "Dodaj zadanie",
+  "project_name": "Nazwa projektu",
+  "project_description": "Opis projektu",
+  "ok": "OK",
+  "cancel": "Anuluj",
+  "error_name_required": "Nazwa jest wymagana",
+  "error_description_required": "Opis jest wymagany"
 }

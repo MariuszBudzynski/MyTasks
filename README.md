@@ -6,6 +6,7 @@ A modern and secure web application that enables users to manage personal tasks.
 The project combines a **lightweight .NET backend** with a **React-based frontend**, and authentication is handled through **JWT**.
 
 *(Concept version – the description will be updated once the app is finished.)*
+**IMPORTANT** → The JWT key is empty because it is configured to be stored in User Secrets under "Jwt:Key".
 
 ---
 

@@ -98,6 +98,11 @@ const styles = {
     gap: "10px",
     marginTop: "10px",
   },
+  error: {
+    color: "red",
+    fontSize: "13px",
+    marginTop: "4px",
+  },
 };
 
 export default function Dashboard() {
@@ -107,92 +112,10 @@ export default function Dashboard() {
 
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [newProject, setNewProject] = useState({ name: "", description: "" });
-  const [errors, setErrors] = useState({ name: "", description: "" });
+  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({ name: false, description: false });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-
-  const validate = (p) => ({
-    name: p.name.trim() ? "" : t("required"),
-    description: p.description.trim() ? "" : t("required"),
-  });
-  const isValid =
-    !validate(newProject).name && !validate(newProject).description;
-
-  const handleChange = (field, value) => {
-    const next = { ...newProject, [field]: value };
-    setNewProject(next);
-    setTouched((x) => ({ ...x, [field]: true }));
-    setErrors(validate(next));
-  };
-
-  const handleSubmitProject = async () => {
-    const v = validate(newProject);
-    if (v.name || v.description) {
-      setTouched({ name: true, description: true });
-      setErrors(v);
-      return;
-    }
-    setSubmitting(true);
-    setSubmitError("");
-
-    try {
-      const res = await fetch("/api/project", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken ?? "",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          Name: newProject.name,
-          Description: newProject.description,
-        }),
-      });
-
-      if (!res.ok) {
-        const msg = (await res.text()) || t("error_saving");
-        setSubmitError(msg);
-        setSubmitting(false);
-        return;
-      }
-
-      const created = await res.json();
-      setDashboardData((prev) => {
-        const next = { ...prev };
-        const newCard = {
-          Id: created.id,
-          Name: created.name,
-          Description: created.description,
-          TaskCount: 0,
-          CompletedTasks: 0,
-        };
-        next.Projects = Array.isArray(prev.Projects)
-          ? [...prev.Projects, newCard]
-          : [newCard];
-        next.ProjectCount = (prev.ProjectCount ?? 0) + 1;
-        return next;
-      });
-
-      setShowProjectModal(false);
-      setNewProject({ name: "", description: "" });
-      setTouched({ name: false, description: false });
-      setErrors({ name: "", description: "" });
-    } catch (e) {
-      setSubmitError(t("error_saving"));
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleCancelProject = () => {
-    setShowProjectModal(false);
-    setNewProject({ name: "", description: "" });
-    setTouched({ name: false, description: false });
-    setErrors({ name: "", description: "" });
-    setSubmitError("");
-    setSubmitting(false);
-  };
 
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
@@ -211,6 +134,53 @@ export default function Dashboard() {
       }
     }
   }, []);
+
+  const validate = (values) => {
+    const errs = {};
+    if (!values.name.trim()) errs.name = "Name is required";
+    if (!values.description.trim())
+      errs.description = "Description is required";
+    return errs;
+  };
+
+  const handleSubmitProject = async () => {
+    const v = validate(newProject);
+    if (v.name || v.description) {
+      setTouched({ name: true, description: true });
+      setErrors(v);
+      return;
+    }
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/project", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: newProject.name,
+          description: newProject.description,
+        }),
+      });
+
+      if (response.ok) {
+        setShowProjectModal(false);
+        setNewProject({ name: "", description: "" });
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        setSubmitError(data.message || "Failed to create project");
+      }
+    } catch (err) {
+      setSubmitError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (!dashboardData || Object.keys(dashboardData).length === 0) {
     return <p style={{ textAlign: "center" }}>{t("loading")}</p>;
@@ -338,44 +308,43 @@ export default function Dashboard() {
               type="text"
               placeholder={t("project_name")}
               value={newProject.name}
-              onChange={(e) => handleChange("name", e.target.value)}
-              onBlur={() => setTouched((x) => ({ ...x, name: true }))}
+              onChange={(e) => {
+                setNewProject({ ...newProject, name: e.target.value });
+                setTouched((prev) => ({ ...prev, name: true }));
+                setErrors(validate({ ...newProject, name: e.target.value }));
+              }}
               style={styles.modalInput}
             />
             {touched.name && errors.name && (
-              <div style={{ color: "#dc3545", fontSize: 13 }}>
-                {errors.name}
-              </div>
+              <div style={styles.error}>{errors.name}</div>
             )}
             <textarea
               placeholder={t("project_description")}
               value={newProject.description}
-              onChange={(e) => handleChange("description", e.target.value)}
-              onBlur={() => setTouched((x) => ({ ...x, description: true }))}
+              onChange={(e) => {
+                setNewProject({ ...newProject, description: e.target.value });
+                setTouched((prev) => ({ ...prev, description: true }));
+                setErrors(
+                  validate({ ...newProject, description: e.target.value })
+                );
+              }}
               style={styles.modalInput}
             />
             {touched.description && errors.description && (
-              <div style={{ color: "#dc3545", fontSize: 13 }}>
-                {errors.description}
-              </div>
+              <div style={styles.error}>{errors.description}</div>
             )}
-            {submitError && (
-              <div style={{ color: "#dc3545", fontSize: 13, marginTop: 6 }}>
-                {submitError}
-              </div>
-            )}
+            {submitError && <div style={styles.error}>{submitError}</div>}
             <div style={styles.modalActions}>
               <button
                 style={{ ...styles.button, ...styles.btnPrimary }}
                 onClick={handleSubmitProject}
-                disabled={!isValid || submitting}
+                disabled={submitting}
               >
-                {submitting ? t("saving") : t("ok")}
+                {t("ok")}
               </button>
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
-                onClick={handleCancelProject}
-                disabled={submitting}
+                onClick={() => setShowProjectModal(false)}
               >
                 {t("cancel")}
               </button>

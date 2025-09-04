@@ -293,6 +293,14 @@ export default function Dashboard() {
                   >
                     {t("delete")}
                   </button>
+                  <button
+                    style={{ ...styles.button, ...styles.btnPrimary }}
+                    onClick={() =>
+                      console.log("Add comment to task", task.Id, csrfToken)
+                    }
+                  >
+                    ➕ {t("add_comment")}
+                  </button>
                 </div>
               </div>
             ))

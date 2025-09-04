@@ -7,6 +7,8 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 
 *(Concept version – the description will be updated once the app is finished.)*
 
+**IMPORTANT** → The JWT key is empty because it is configured to be stored in User Secrets under "Jwt:Key".
+
 ---
 
 ## 🧱 Technologies - Concept, aproach my change

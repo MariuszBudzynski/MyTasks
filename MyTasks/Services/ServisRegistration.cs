@@ -98,6 +98,7 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<ITaskItemService, TaskItemService>();
             builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProjectService, ProjectService>();

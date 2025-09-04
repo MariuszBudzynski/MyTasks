@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyTasks.Models.Models;
+using MyTasks.API.Services.Interfaces;
 using MyTasks.Repositories.DTOS;
-using MyTasks.Repositories.Interfaces.ITaskItemRepository;
 
 namespace MyTasks.API
 {
@@ -12,21 +11,21 @@ namespace MyTasks.API
     [Route("api/[controller]")]
     public class TaskItemController : ControllerBase
     {
-        //move buisnes logic to servis later
-        private readonly ITaskItemRepository _taskItemRepository;
-        public TaskItemController(ITaskItemRepository taskItemRepository)
+        private readonly ITaskItemService _taskItemService;
+
+        public TaskItemController(ITaskItemService taskItemService)
         {
-            _taskItemRepository = taskItemRepository;
+            _taskItemService = taskItemService;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var project = await _taskItemRepository.GetTaskItemtByIdAsync(id);
-            if (project == null)
+            var taskItem = await _taskItemService.GetByIdAsync(id);
+            if (taskItem == null)
                 return NotFound();
 
-            return Ok(project);
+            return Ok(taskItem);
         }
 
         [HttpPost]
@@ -44,32 +43,7 @@ namespace MyTasks.API
 
             try
             {
-                var taskItemId = Guid.NewGuid();
-
-                var taskItem = new TaskItemModel
-                {
-                    Id = taskItemId,
-                    Title = data.Title,
-                    Description = data.Description,
-                    DueDate = data.DueDate,
-                    IsCompleted = data.IsCompleted,
-                    ProjectId = data.ProjectId,
-                    AssignedUserId = ownerId
-                };
-
-                await _taskItemRepository.AddTaskItemAsync(taskItem);
-
-                var taskItemResponse = new TaskItemResponseDto(
-                    taskItemId,
-                    taskItem.Title,
-                    taskItem.Description,
-                    taskItem.DueDate,
-                    taskItem.IsCompleted,
-                    taskItem.ProjectId,
-                    taskItem.AssignedUserId
-                    );
-
-
+                var taskItemResponse = await _taskItemService.CreateAsync(data, ownerId);
 
                 return CreatedAtAction(nameof(GetById), new { id = taskItemResponse.Id }, taskItemResponse);
             }

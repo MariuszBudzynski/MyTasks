@@ -28,5 +28,6 @@
   "select_project": "Wybierz projekt",
   "error_title_required": "Tytuł jest wymagany",
   "error_project_required": "Projekt jest wymagany",
-  "add_comment": "Dodaj komentarz"
+  "add_comment": "Dodaj komentarz",
+  "no_project": "Brak projektu"
 }

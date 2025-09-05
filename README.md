@@ -124,5 +124,3 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 │   └── main.jsx
 └── package.json
 ```
-
-Chcesz żebym przygotował do tego też **short version** (np. 3–4 zdania czysto marketingowe), którą możesz wkleić na GitHub i LinkedIn, czy zostawiamy tylko tę pełną techniczną wersję?

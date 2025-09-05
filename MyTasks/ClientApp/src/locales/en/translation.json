@@ -22,5 +22,11 @@
   "ok": "OK",
   "cancel": "Cancel",
   "error_name_required": "Name is required",
-  "error_description_required": "Description is required"
+  "error_description_required": "Description is required",
+  "task_title": "Task Title",
+  "task_description": "Task Description",
+  "select_project": "Select Project",
+  "error_title_required": "Title is required",
+  "error_project_required": "Project is required",
+  "add_comment": "Add Comment"
 }

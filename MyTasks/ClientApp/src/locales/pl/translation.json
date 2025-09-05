@@ -22,5 +22,11 @@
   "ok": "OK",
   "cancel": "Anuluj",
   "error_name_required": "Nazwa jest wymagana",
-  "error_description_required": "Opis jest wymagany"
+  "error_description_required": "Opis jest wymagany",
+  "task_title": "Tytuł zadania",
+  "task_description": "Opis zadania",
+  "select_project": "Wybierz projekt",
+  "error_title_required": "Tytuł jest wymagany",
+  "error_project_required": "Projekt jest wymagany",
+  "add_comment": "Dodaj komentarz"
 }

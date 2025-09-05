@@ -11,17 +11,9 @@ const styles = {
     boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
     fontFamily: "Arial, sans-serif",
   },
-  header: {
-    marginBottom: "20px",
-    textAlign: "center",
-  },
-  section: {
-    marginTop: "30px",
-  },
-  list: {
-    display: "grid",
-    gap: "15px",
-  },
+  header: { marginBottom: "20px", textAlign: "center" },
+  section: { marginTop: "30px" },
+  list: { display: "grid", gap: "15px" },
   card: {
     backgroundColor: "#fff",
     padding: "15px",
@@ -29,16 +21,8 @@ const styles = {
     border: "1px solid #ddd",
     boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
   },
-  cardTitle: {
-    fontSize: "18px",
-    fontWeight: "600",
-    marginBottom: "8px",
-  },
-  cardText: {
-    fontSize: "14px",
-    marginBottom: "6px",
-    color: "#444",
-  },
+  cardTitle: { fontSize: "18px", fontWeight: "600", marginBottom: "8px" },
+  cardText: { fontSize: "14px", marginBottom: "6px", color: "#444" },
   buttons: {
     display: "flex",
     justifyContent: "center",
@@ -53,18 +37,9 @@ const styles = {
     fontSize: "14px",
     fontWeight: "500",
   },
-  btnPrimary: {
-    backgroundColor: "#007bff",
-    color: "#fff",
-  },
-  btnDanger: {
-    backgroundColor: "#dc3545",
-    color: "#fff",
-  },
-  empty: {
-    fontStyle: "italic",
-    color: "#666",
-  },
+  btnPrimary: { backgroundColor: "#007bff", color: "#fff" },
+  btnDanger: { backgroundColor: "#dc3545", color: "#fff" },
+  empty: { fontStyle: "italic", color: "#666" },
   modalOverlay: {
     position: "fixed",
     top: 0,
@@ -133,16 +108,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
-    if (dashboardEl) {
-      const csrfAttr = dashboardEl.getAttribute("data-csrf-token");
-      if (csrfAttr) setCsrfToken(csrfAttr);
-    }
+    if (dashboardEl)
+      setCsrfToken(dashboardEl.getAttribute("data-csrf-token") || null);
 
     const dashboardScript = document.getElementById("dashboard-data");
     if (dashboardScript) {
       try {
-        const parsed = JSON.parse(dashboardScript.textContent);
-        setDashboardData(parsed);
+        setDashboardData(JSON.parse(dashboardScript.textContent));
       } catch (e) {
         console.error("Error parsing dashboard data:", e);
       }
@@ -161,7 +133,7 @@ export default function Dashboard() {
   const projectCount = dashboardData.ProjectCount ?? projects.length;
   const taskCount = dashboardData.TaskCount ?? tasks.length;
 
-  const validate = (project) => {
+  const validateProject = (project) => {
     const newErrors = {};
     if (!project.name.trim()) newErrors.name = t("error_name_required");
     if (!project.description.trim())
@@ -170,7 +142,7 @@ export default function Dashboard() {
   };
 
   const handleSubmitProject = async () => {
-    const v = validate(newProject);
+    const v = validateProject(newProject);
     if (v.name || v.description) {
       setTouched({ name: true, description: true });
       setErrors(v);
@@ -187,16 +159,9 @@ export default function Dashboard() {
           "X-CSRF-TOKEN": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify({
-          name: newProject.name,
-          description: newProject.description,
-        }),
+        body: JSON.stringify(newProject),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to create project");
-      }
-
+      if (!response.ok) throw new Error("Failed to create project");
       setShowProjectModal(false);
       setNewProject({ name: "", description: "" });
       setTouched({ name: false, description: false });
@@ -225,16 +190,7 @@ export default function Dashboard() {
 
     setSubmittingTask(true);
     setSubmitTaskError("");
-
     try {
-      const body = {
-        title: newTask.title,
-        description: newTask.description,
-        projectId: newTask.projectId || null,
-        dueDate: newTask.dueDate || null,
-        isCompleted: newTask.isCompleted,
-      };
-
       const res = await fetch("/api/taskitem", {
         method: "POST",
         headers: {
@@ -242,13 +198,13 @@ export default function Dashboard() {
           "X-CSRF-TOKEN": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          ...newTask,
+          projectId: newTask.projectId || null,
+          dueDate: newTask.dueDate || null,
+        }),
       });
-
-      if (!res.ok) {
-        throw new Error("Failed to create task");
-      }
-
+      if (!res.ok) throw new Error("Failed to create task");
       setShowTaskModal(false);
       setNewTask({
         title: "",
@@ -381,6 +337,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Project Modal */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -391,7 +348,7 @@ export default function Dashboard() {
               value={newProject.name}
               onChange={(e) => {
                 setNewProject({ ...newProject, name: e.target.value });
-                setTouched((prev) => ({ ...prev, name: true }));
+                setTouched({ ...touched, name: true });
               }}
               style={styles.modalInput}
             />
@@ -403,7 +360,7 @@ export default function Dashboard() {
               value={newProject.description}
               onChange={(e) => {
                 setNewProject({ ...newProject, description: e.target.value });
-                setTouched((prev) => ({ ...prev, description: true }));
+                setTouched({ ...touched, description: true });
               }}
               style={styles.modalInput}
             />
@@ -430,25 +387,24 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Task Modal */}
       {showTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h3>{t("add_task")}</h3>
-
             <input
               type="text"
               placeholder={t("task_title")}
               value={newTask.title}
               onChange={(e) => {
                 setNewTask({ ...newTask, title: e.target.value });
-                setTouchedTask((prev) => ({ ...prev, title: true }));
+                setTouchedTask({ ...touchedTask, title: true });
               }}
               style={styles.modalInput}
             />
             {touchedTask.title && errorsTask.title && (
               <div style={styles.errorText}>{errorsTask.title}</div>
             )}
-
             <textarea
               placeholder={t("task_description")}
               value={newTask.description}
@@ -457,7 +413,6 @@ export default function Dashboard() {
               }
               style={styles.modalInput}
             />
-
             <input
               type="date"
               value={newTask.dueDate}
@@ -466,7 +421,6 @@ export default function Dashboard() {
               }
               style={styles.modalInput}
             />
-
             <select
               value={newTask.projectId}
               onChange={(e) =>
@@ -481,7 +435,6 @@ export default function Dashboard() {
                 </option>
               ))}
             </select>
-
             <div
               style={{
                 display: "flex",
@@ -500,11 +453,9 @@ export default function Dashboard() {
               />
               <label htmlFor="isCompleted">{t("completed")}</label>
             </div>
-
             {submitTaskError && (
               <div style={styles.errorText}>{submitTaskError}</div>
             )}
-
             <div style={styles.modalActions}>
               <button
                 style={{ ...styles.button, ...styles.btnPrimary }}

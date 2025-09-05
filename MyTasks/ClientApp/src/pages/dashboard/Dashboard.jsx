@@ -118,6 +118,19 @@ export default function Dashboard() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    projectId: "",
+    isCompleted: false,
+  });
+  const [touchedTask, setTouchedTask] = useState({ title: false });
+  const [errorsTask, setErrorsTask] = useState({});
+  const [submittingTask, setSubmittingTask] = useState(false);
+  const [submitTaskError, setSubmitTaskError] = useState("");
+
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
     if (dashboardEl) {
@@ -196,6 +209,64 @@ export default function Dashboard() {
     }
   };
 
+  const validateTask = (task) => {
+    const e = {};
+    if (!task.title.trim()) e.title = t("error_title_required");
+    return e;
+  };
+
+  const handleSubmitTask = async () => {
+    const v = validateTask(newTask);
+    if (v.title) {
+      setTouchedTask({ title: true });
+      setErrorsTask(v);
+      return;
+    }
+
+    setSubmittingTask(true);
+    setSubmitTaskError("");
+
+    try {
+      const body = {
+        title: newTask.title,
+        description: newTask.description,
+        projectId: newTask.projectId || null,
+        dueDate: newTask.dueDate || null,
+        isCompleted: newTask.isCompleted,
+      };
+
+      const res = await fetch("/api/taskitem", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create task");
+      }
+
+      setShowTaskModal(false);
+      setNewTask({
+        title: "",
+        description: "",
+        dueDate: "",
+        projectId: "",
+        isCompleted: false,
+      });
+      setTouchedTask({ title: false });
+      setErrorsTask({});
+      window.location.reload();
+    } catch (err) {
+      setSubmitTaskError(err.message || "Error");
+    } finally {
+      setSubmittingTask(false);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -203,7 +274,7 @@ export default function Dashboard() {
           {t("welcome")}, {username}
         </h2>
         <p>
-          {t("projects")}: {projectCount} | {t("tasks")}: {taskCount}
+          {t("projects")} : {projectCount} | {t("tasks")} : {taskCount}
         </p>
       </div>
 
@@ -216,7 +287,7 @@ export default function Dashboard() {
         </button>
         <button
           style={{ ...styles.button, ...styles.btnPrimary }}
-          onClick={() => console.log("TODO: open task modal")}
+          onClick={() => setShowTaskModal(true)}
         >
           ➕ {t("add_task")}
         </button>
@@ -231,7 +302,7 @@ export default function Dashboard() {
                 <div style={styles.cardTitle}>{p.Name}</div>
                 <p style={styles.cardText}>{p.Description}</p>
                 <p style={styles.cardText}>
-                  {t("tasks")}: {p.TaskCount} | {t("completed")}:{" "}
+                  {t("tasks")} : {p.TaskCount} | {t("completed")} :{" "}
                   {p.CompletedTasks}
                 </p>
                 <div style={styles.buttons}>
@@ -267,11 +338,11 @@ export default function Dashboard() {
                 <div style={styles.cardTitle}>{task.Title}</div>
                 <p style={styles.cardText}>{task.Description}</p>
                 <p style={styles.cardText}>
-                  {t("project")}: {task.ProjectName ?? t("n_a")}
+                  {t("project")} : {task.ProjectName ?? t("n_a")}
                   <br />
-                  {t("due")}: {task.DueDate ?? t("n_a")}
+                  {t("due")} : {task.DueDate ?? t("n_a")}
                   <br />
-                  {t("completed")}: {task.IsCompleted ? "✅" : "❌"}
+                  {t("completed")} : {task.IsCompleted ? "✅" : "❌"}
                 </p>
                 {task.LastComment && (
                   <p style={styles.cardText}>
@@ -351,6 +422,100 @@ export default function Dashboard() {
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
                 onClick={() => setShowProjectModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTaskModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>{t("add_task")}</h3>
+
+            <input
+              type="text"
+              placeholder={t("task_title")}
+              value={newTask.title}
+              onChange={(e) => {
+                setNewTask({ ...newTask, title: e.target.value });
+                setTouchedTask((prev) => ({ ...prev, title: true }));
+              }}
+              style={styles.modalInput}
+            />
+            {touchedTask.title && errorsTask.title && (
+              <div style={styles.errorText}>{errorsTask.title}</div>
+            )}
+
+            <textarea
+              placeholder={t("task_description")}
+              value={newTask.description}
+              onChange={(e) =>
+                setNewTask({ ...newTask, description: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+
+            <input
+              type="date"
+              value={newTask.dueDate}
+              onChange={(e) =>
+                setNewTask({ ...newTask, dueDate: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+
+            <select
+              value={newTask.projectId}
+              onChange={(e) =>
+                setNewTask({ ...newTask, projectId: e.target.value })
+              }
+              style={styles.modalInput}
+            >
+              <option value="">{t("no_project")}</option>
+              {projects.map((p) => (
+                <option key={p.Id} value={p.Id}>
+                  {p.Name}
+                </option>
+              ))}
+            </select>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                marginTop: "8px",
+              }}
+            >
+              <input
+                id="isCompleted"
+                type="checkbox"
+                checked={newTask.isCompleted}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, isCompleted: e.target.checked })
+                }
+              />
+              <label htmlFor="isCompleted">{t("completed")}</label>
+            </div>
+
+            {submitTaskError && (
+              <div style={styles.errorText}>{submitTaskError}</div>
+            )}
+
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={handleSubmitTask}
+                disabled={submittingTask}
+              >
+                {t("ok")}
+              </button>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={() => setShowTaskModal(false)}
               >
                 {t("cancel")}
               </button>

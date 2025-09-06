@@ -22,7 +22,7 @@ namespace MyTasks.Repositories.Repositories.ProjecRepository
             await _projectRepository.UpdateEntityAsync(project);
         }
 
-        public async Task<ProjectModel?> GetById(Guid id)
+        public async Task<ProjectModel?> GetByIdAsync(Guid id)
         {
             return await _projectRepository.GetByIdAsync(id);
         }

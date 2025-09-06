@@ -56,7 +56,7 @@ app.MapPost("/logout", (HttpResponse response) =>
 // Minimal API Example with DI
 app.MapGet("/minimal-api/users", async (IUserDataRepository repo) =>
 {
-    var users = await repo.GetAllUserData();
+    var users = await repo.GetAllUserDataAsync();
 
     if (!users.Any())
         return Results.NotFound("No users found.");

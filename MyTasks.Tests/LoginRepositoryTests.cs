@@ -28,7 +28,7 @@ namespace MyTasks.Tests
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
-            var result = await _sut.GetUserLoginDataById(userId);
+            var result = await _sut.GetUserLoginDataByIdAsync(userId);
 
             // Assert
             Assert.NotNull(result);
@@ -46,7 +46,7 @@ namespace MyTasks.Tests
             .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act
-            var result = await _sut.GetUserLoginDataById(userId);
+            var result = await _sut.GetUserLoginDataByIdAsync(userId);
 
             // Assert
             Assert.Null(result);
@@ -62,7 +62,7 @@ namespace MyTasks.Tests
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
-            var result = await _sut.GetUserLoginDataByUserName(expectedUser.Username);
+            var result = await _sut.GetUserLoginDataByUserNameAsync(expectedUser.Username);
 
             // Assert
             Assert.NotNull(result);
@@ -79,7 +79,7 @@ namespace MyTasks.Tests
                 .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act
-            var result = await _sut.GetUserLoginDataByUserName(userName);
+            var result = await _sut.GetUserLoginDataByUserNameAsync(userName);
 
             // Assert
             Assert.Null(result);

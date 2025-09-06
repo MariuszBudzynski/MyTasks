@@ -32,14 +32,14 @@ namespace MyTasks.Common
         {
             try
             {
-                var loginUser = await _loginRepository.GetUserLoginDataByUserName(request.Username);
+                var loginUser = await _loginRepository.GetUserLoginDataByUserNameAsync(request.Username);
 
                 if (loginUser == null)
                 {
                     return new JsonResult(new { success = false, message = "Login data for user not found" }) { StatusCode = 404 };
                 }
 
-                var user = await _loginRepository.GetUserDataById(loginUser.UserId);
+                var user = await _loginRepository.GetUserDataByIdAsync(loginUser.UserId);
 
                 if (user == null )
                 {

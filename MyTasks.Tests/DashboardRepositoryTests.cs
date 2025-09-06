@@ -22,7 +22,7 @@ namespace MyTasks.Tests
             var userName = String.Empty;
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsData(userName));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsDataAsync(userName));
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace MyTasks.Tests
             var userName = "RandomNotExistingUserName";
 
             // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsData(userName));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsDataAsync(userName));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace MyTasks.Tests
             //    .Returns(Task.FromResult<ICollection<ProjectModel>>(fakeProjects));
 
             // Act
-            var result = await _sut.GetProjectsData(userName);
+            var result = await _sut.GetProjectsDataAsync(userName);
 
             // Assert
             Assert.NotNull(result);

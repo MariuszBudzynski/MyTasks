@@ -4,6 +4,6 @@ namespace MyTasks.Repositories.Interfaces.IDashboardRepository
 {
     public interface IDashboardRepository
     {
-        Task<DashboardDto?> GetProjectsData(string userName);
+        Task<DashboardDto?> GetProjectsDataAsync(string userName);
     }
 }

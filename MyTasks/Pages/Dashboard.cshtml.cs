@@ -21,7 +21,7 @@ namespace MyTasks.Pages
 
             if (!string.IsNullOrEmpty(userName))
             {
-                var data = await _repository.GetProjectsData(userName);
+                var data = await _repository.GetProjectsDataAsync(userName);
                 ViewData["DashboardData"] = JsonConvert.SerializeObject(data);
             }
         }

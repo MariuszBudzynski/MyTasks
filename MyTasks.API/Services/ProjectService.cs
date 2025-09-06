@@ -43,7 +43,7 @@ namespace MyTasks.API.Services
 
         public async Task<ProjectModel?> GetProjectByIdAsync(Guid id)
         {
-            return await _projectRepository.GetById(id);
+            return await _projectRepository.GetByIdAsync(id);
         }
     }
 }

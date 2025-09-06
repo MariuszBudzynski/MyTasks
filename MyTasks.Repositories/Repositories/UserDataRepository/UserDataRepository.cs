@@ -16,7 +16,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             _repository = repository;
         }
 
-        public async Task<UserResponseDto> AddUserData(UserWithLoginDto data)
+        public async Task<UserResponseDto> AddUserDataAsync(UserWithLoginDto data)
         {
             var loginId = Guid.NewGuid();
             var userId = Guid.NewGuid();
@@ -49,7 +49,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             );
         }
 
-        public async Task UpdateUserData(Guid? userId, UserWithLoginDto data)
+        public async Task UpdateUserDataAsync(Guid? userId, UserWithLoginDto data)
         {
             var hashedPassword = PasswordHasher.HashPassword(data.PasswordHash);
 
@@ -67,7 +67,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             await _repository.UpdateUserDataAsync(userData);
         }
 
-        public async Task HardDeleteUserData(Guid? userId)
+        public async Task HardDeleteUserDataAsync(Guid? userId)
         {
             var userData = await _repository.GetUserAndLoginDataByIDAsync(userId);
             if (userData == null)
@@ -83,7 +83,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             await _repository.DeleteUserDataAsync(userData);
         }
 
-        public async Task SoftDeleteUserData(Guid? userId)
+        public async Task SoftDeleteUserDataAsync(Guid? userId)
         {
             var userData = await _repository.GetUserAndLoginDataByIDAsync(userId);
             if (userData == null)
@@ -100,7 +100,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             await _repository.UpdateUserDataAsync(userData);
         }
 
-        public async Task<ICollection<UserResponseDto>> GetAllUserData()
+        public async Task<ICollection<UserResponseDto>> GetAllUserDataAsync()
         {
             var data = _repository.GetAllUserAndLoginData();
 
@@ -118,7 +118,7 @@ namespace MyTasks.Repositories.Repositories.UserDataRepository
             )).ToListAsync();
         }
 
-        public async Task<UserResponseDto?> GetUserData(Guid id)
+        public async Task<UserResponseDto?> GetUserDataAsync(Guid id)
         {
             var user = await _repository.GetUserByIdAsync(id);
             if (user == null)

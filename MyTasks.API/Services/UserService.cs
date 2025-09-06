@@ -15,32 +15,32 @@ namespace MyTasks.API.Services
 
         public async Task<IEnumerable<UserResponseDto>> GetAllUsersAsync()
         {
-            return await _repository.GetAllUserData();
+            return await _repository.GetAllUserDataAsync();
         }
 
         public async Task<UserResponseDto?> GetUserByIdAsync(Guid userId)
         {
-            return await _repository.GetUserData(userId);
+            return await _repository.GetUserDataAsync(userId);
         }
 
         public async Task<UserResponseDto> CreateUserAsync(UserWithLoginDto data)
         {
-            return await _repository.AddUserData(data);
+            return await _repository.AddUserDataAsync(data);
         }
 
         public async Task UpdateUserAsync(Guid userId, UserWithLoginDto data)
         {
-            await _repository.UpdateUserData(userId, data);
+            await _repository.UpdateUserDataAsync(userId, data);
         }
 
         public async Task DeactivateUserAsync(Guid userId)
         {
-            await _repository.SoftDeleteUserData(userId);
+            await _repository.SoftDeleteUserDataAsync(userId);
         }
 
         public async Task DeleteUserAsync(Guid userId)
         {
-            await _repository.HardDeleteUserData(userId);
+            await _repository.HardDeleteUserDataAsync(userId);
         }
     }
 }

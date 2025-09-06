@@ -13,7 +13,7 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
             _projectRepository = projectRepository;
         }
 
-        public async Task<DashboardDto?> GetProjectsData(string userName)
+        public async Task<DashboardDto?> GetProjectsDataAsync(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {

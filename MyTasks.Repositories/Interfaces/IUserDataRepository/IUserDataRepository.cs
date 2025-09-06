@@ -4,11 +4,11 @@ namespace MyTasks.Repositories.Interfaces.IUserDataRepository
 {
     public interface IUserDataRepository
     {
-        Task<UserResponseDto> AddUserData(UserWithLoginDto data);
-        Task UpdateUserData(Guid? userId, UserWithLoginDto data);
-        Task HardDeleteUserData(Guid? userId);
-        Task SoftDeleteUserData(Guid? userId);
-        Task<ICollection<UserResponseDto>> GetAllUserData();
-        Task<UserResponseDto?> GetUserData(Guid id);
+        Task<UserResponseDto> AddUserDataAsync(UserWithLoginDto data);
+        Task UpdateUserDataAsync(Guid? userId, UserWithLoginDto data);
+        Task HardDeleteUserDataAsync(Guid? userId);
+        Task SoftDeleteUserDataAsync(Guid? userId);
+        Task<ICollection<UserResponseDto>> GetAllUserDataAsync();
+        Task<UserResponseDto?> GetUserDataAsync(Guid id);
     }
 }

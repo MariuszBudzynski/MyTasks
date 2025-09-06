@@ -34,6 +34,13 @@ namespace MyTasks.API.Services
             );
         }
 
+        public async Task UpdateProjectAsync(UpdateProjectDto projectToUpdate, ProjectModel project, Guid projectId)
+        {
+           project.Name = projectToUpdate.Name;
+           project.Description = projectToUpdate.Description;
+           await _projectRepository.UpdateProject(project);
+        }
+
         public async Task<ProjectModel?> GetProjectByIdAsync(Guid id)
         {
             return await _projectRepository.GetById(id);

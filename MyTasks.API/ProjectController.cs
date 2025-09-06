@@ -28,6 +28,18 @@ namespace MyTasks.API
             return Ok(project);
         }
 
+        [HttpPut("{projectId:guid}")]
+        public async Task<IActionResult> Update(Guid projectId, [FromBody] UpdateProjectDto data)
+        {
+            if (data == null) return BadRequest();
+
+            var project = await _projectService.GetProjectByIdAsync(projectId);
+            if (project == null) return NotFound();
+
+            await _projectService.UpdateProjectAsync(data, project, projectId);
+            return NoContent();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProjectDto data)
         {

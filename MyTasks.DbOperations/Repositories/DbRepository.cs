@@ -16,6 +16,12 @@ namespace MyTasks.DbOperations.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
+        public async Task UpdateEntityAsync(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public IQueryable<TEntity> GetAll()
         {
             return _dbSet.AsQueryable();

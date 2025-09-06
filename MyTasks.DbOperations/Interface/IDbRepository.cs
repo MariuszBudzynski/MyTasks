@@ -10,6 +10,7 @@ namespace MyTasks.DbOperations.Interface
         IQueryable<TEntity> GetAll();
         Task<TEntity?> GetByIdAsync(Guid Id);
         Task UpdateByIdAsync(Guid Id);
+        Task UpdateEntityAsync(TEntity entity);
         Task<T?> GetByUserNameAsync<T>(string username)
             where T : class, TEntity, IUsername, IType;
     }

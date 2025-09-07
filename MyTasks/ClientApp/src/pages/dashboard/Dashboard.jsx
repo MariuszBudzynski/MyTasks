@@ -402,7 +402,7 @@ export default function Dashboard() {
                       console.log("Add comment to task", task.Id, csrfToken)
                     }
                   >
-                    ➕ {t("add_comment")}
+                    {t("add_comment")}
                   </button>
                 </div>
               </div>

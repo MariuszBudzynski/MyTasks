@@ -93,6 +93,20 @@ export default function Dashboard() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  const [showEditProjectModal, setShowEditProjectModal] = useState(false);
+  const [editProject, setEditProject] = useState({
+    id: "",
+    name: "",
+    description: "",
+  });
+  const [editTouched, setEditTouched] = useState({
+    name: false,
+    description: false,
+  });
+  const [editErrors, setEditErrors] = useState({});
+  const [submittingEdit, setSubmittingEdit] = useState(false);
+  const [submitEditError, setSubmitEditError] = useState("");
+
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [newTask, setNewTask] = useState({
     title: "",
@@ -171,6 +185,68 @@ export default function Dashboard() {
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const openEditProjectModal = (project) => {
+    setEditProject({
+      id: project.Id,
+      name: project.Name ?? "",
+      description: project.Description ?? "",
+    });
+    setEditTouched({ name: false, description: false });
+    setEditErrors({});
+    setSubmitEditError("");
+    setShowEditProjectModal(true);
+  };
+
+  const validateEditProject = (project) => {
+    const newErrors = {};
+    if (!project.name.trim()) newErrors.name = t("error_name_required");
+    if (!project.description.trim())
+      newErrors.description = t("error_description_required");
+    return newErrors;
+  };
+
+  const handleUpdateProject = async () => {
+    const v = validateEditProject(editProject);
+    if (v.name || v.description) {
+      setEditTouched({ name: true, description: true });
+      setEditErrors(v);
+      return;
+    }
+
+    setSubmittingEdit(true);
+    setSubmitEditError("");
+
+    try {
+      const res = await fetch(`/api/project/${editProject.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: editProject.name,
+          description: editProject.description,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => null);
+        throw new Error(text || "Failed to update project");
+      }
+
+      setShowEditProjectModal(false);
+      setEditProject({ id: "", name: "", description: "" });
+      setEditTouched({ name: false, description: false });
+      setEditErrors({});
+      window.location.reload();
+    } catch (err) {
+      setSubmitEditError(err.message || "Error");
+    } finally {
+      setSubmittingEdit(false);
     }
   };
 
@@ -264,7 +340,7 @@ export default function Dashboard() {
                 <div style={styles.buttons}>
                   <button
                     style={{ ...styles.button, ...styles.btnPrimary }}
-                    onClick={() => console.log("Edit project", p.Id, csrfToken)}
+                    onClick={() => openEditProjectModal(p)}
                   >
                     {t("edit")}
                   </button>
@@ -379,6 +455,60 @@ export default function Dashboard() {
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
                 onClick={() => setShowProjectModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Project Modal */}
+      {showEditProjectModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>
+              {t("edit")}&nbsp;{t("project")}
+            </h3>
+            <input
+              type="text"
+              placeholder={t("project_name")}
+              value={editProject.name}
+              onChange={(e) => {
+                setEditProject({ ...editProject, name: e.target.value });
+                setEditTouched((prev) => ({ ...prev, name: true }));
+              }}
+              style={styles.modalInput}
+            />
+            {editTouched.name && editErrors.name && (
+              <div style={styles.errorText}>{editErrors.name}</div>
+            )}
+            <textarea
+              placeholder={t("project_description")}
+              value={editProject.description}
+              onChange={(e) => {
+                setEditProject({ ...editProject, description: e.target.value });
+                setEditTouched((prev) => ({ ...prev, description: true }));
+              }}
+              style={styles.modalInput}
+            />
+            {editTouched.description && editErrors.description && (
+              <div style={styles.errorText}>{editErrors.description}</div>
+            )}
+            {submitEditError && (
+              <div style={styles.errorText}>{submitEditError}</div>
+            )}
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={handleUpdateProject}
+                disabled={submittingEdit}
+              >
+                {t("ok")}
+              </button>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={() => setShowEditProjectModal(false)}
               >
                 {t("cancel")}
               </button>

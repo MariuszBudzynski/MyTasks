@@ -13,11 +13,13 @@ using MyTasks.DbOperations.Repositories;
 using MyTasks.Repositories.Interfaces.IDashboardRepository;
 using MyTasks.Repositories.Interfaces.ILoginRepository;
 using MyTasks.Repositories.Interfaces.IProjecRepository;
+using MyTasks.Repositories.Interfaces.ITaskCommentRepository;
 using MyTasks.Repositories.Interfaces.ITaskItemRepository;
 using MyTasks.Repositories.Interfaces.IUserDataRepository;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 using MyTasks.Repositories.Repositories.LoginRepository;
 using MyTasks.Repositories.Repositories.ProjecRepository;
+using MyTasks.Repositories.Repositories.TaskCommentRepository;
 using MyTasks.Repositories.Repositories.TaskItemRepository;
 using MyTasks.Repositories.Repositories.UserDataRepository;
 using System.Text;
@@ -98,6 +100,8 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<ITaskCommentService, TaskCommentService>();
+            builder.Services.AddScoped<ITaskCommentRepository, TaskCommentRepository>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
             builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
             builder.Services.AddScoped<IUserService, UserService>();

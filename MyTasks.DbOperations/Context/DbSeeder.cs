@@ -7,7 +7,7 @@ namespace MyTasks.DbOperations.Context
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            var staticDate = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+            var staticDate = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
             // --- USERS ---
             var adminUserId = Guid.Parse("11111111-1111-1111-1111-111111111111");

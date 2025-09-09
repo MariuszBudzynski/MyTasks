@@ -120,6 +120,12 @@ export default function Dashboard() {
   const [submittingTask, setSubmittingTask] = useState(false);
   const [submitTaskError, setSubmitTaskError] = useState("");
 
+  const [showAddCommentModal, setShowAddCommentModal] = useState(false);
+  const [commentTaskId, setCommentTaskId] = useState(null);
+  const [newComment, setNewComment] = useState("");
+  const [commentError, setCommentError] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
     if (dashboardEl)
@@ -299,6 +305,39 @@ export default function Dashboard() {
     }
   };
 
+  const handleSubmitComment = async () => {
+    if (!newComment.trim()) {
+      setCommentError(t("error_content_required"));
+      return;
+    }
+    setSubmittingComment(true);
+    setCommentError("");
+    try {
+      const res = await fetch("/api/taskcomment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          content: newComment,
+          createdAt: new Date().toISOString(),
+          taskItemId: commentTaskId,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to create comment");
+      setShowAddCommentModal(false);
+      setNewComment("");
+      setCommentTaskId(null);
+      window.location.reload();
+    } catch (err) {
+      setCommentError(err.message || "Error");
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -398,9 +437,10 @@ export default function Dashboard() {
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.btnPrimary }}
-                    onClick={() =>
-                      console.log("Add comment to task", task.Id, csrfToken)
-                    }
+                    onClick={() => {
+                      setCommentTaskId(task.Id);
+                      setShowAddCommentModal(true);
+                    }}
                   >
                     {t("add_comment")}
                   </button>
@@ -413,7 +453,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Project Modal */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -463,7 +502,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Edit Project Modal */}
       {showEditProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -517,7 +555,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Task Modal */}
       {showTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -558,31 +595,13 @@ export default function Dashboard() {
               }
               style={styles.modalInput}
             >
-              <option value="">{t("no_project")}</option>
+              <option value="">{t("select_project")}</option>
               {projects.map((p) => (
                 <option key={p.Id} value={p.Id}>
                   {p.Name}
                 </option>
               ))}
             </select>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                marginTop: "8px",
-              }}
-            >
-              <input
-                id="isCompleted"
-                type="checkbox"
-                checked={newTask.isCompleted}
-                onChange={(e) =>
-                  setNewTask({ ...newTask, isCompleted: e.target.checked })
-                }
-              />
-              <label htmlFor="isCompleted">{t("completed")}</label>
-            </div>
             {submitTaskError && (
               <div style={styles.errorText}>{submitTaskError}</div>
             )}
@@ -597,6 +616,36 @@ export default function Dashboard() {
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
                 onClick={() => setShowTaskModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddCommentModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>{t("add_comment")}</h3>
+            <textarea
+              placeholder={t("comment_content")}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              style={styles.modalInput}
+            />
+            {commentError && <div style={styles.errorText}>{commentError}</div>}
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={handleSubmitComment}
+                disabled={submittingComment}
+              >
+                {t("ok")}
+              </button>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={() => setShowAddCommentModal(false)}
               >
                 {t("cancel")}
               </button>

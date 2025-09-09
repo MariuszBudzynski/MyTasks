@@ -29,5 +29,7 @@
   "error_title_required": "Title is required",
   "error_project_required": "Project is required",
   "add_comment": "Add Comment",
-  "no_project": "No project"
+  "no_project": "No project",
+  "comment_content": "Comment Content",
+  "error_content_required": "Comment content is required"
 }

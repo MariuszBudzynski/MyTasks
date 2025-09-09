@@ -29,5 +29,7 @@
   "error_title_required": "Tytuł jest wymagany",
   "error_project_required": "Projekt jest wymagany",
   "add_comment": "Dodaj komentarz",
-  "no_project": "Brak projektu"
+  "no_project": "Brak projektu",
+  "comment_content": "Treść komentarza",
+  "error_content_required": "Treść komentarza jest wymagana"
 }

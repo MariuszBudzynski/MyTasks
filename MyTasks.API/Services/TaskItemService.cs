@@ -14,6 +14,21 @@ namespace MyTasks.Services
             _taskItemRepository = taskItemRepository;
         }
 
+        public async Task<TaskItemModel?> GetTaskItemById(Guid id)
+        {
+            return await _taskItemRepository.GetTaskItemtByIdAsync(id);
+        }
+
+        public async Task UpdateTaskItemtAsync(UpdateTaskItemDto taskItemToUpdate, TaskItemModel taskItem, Guid taskItemId)
+        {
+            taskItem.Title = taskItemToUpdate.Title;
+            taskItem.Description = taskItemToUpdate.Description;
+            taskItem.DueDate= taskItemToUpdate.DueDate;
+            taskItem.IsCompleted = taskItemToUpdate.IsCompleted;
+            taskItem.ProjectId = taskItemToUpdate.ProjectId;
+            await _taskItemRepository.UpdateTaskItemAsync(taskItem);
+        }
+
         public async Task<TaskItemResponseDto?> GetByIdAsync(Guid id)
         {
             var taskItem = await _taskItemRepository.GetTaskItemtByIdAsync(id);

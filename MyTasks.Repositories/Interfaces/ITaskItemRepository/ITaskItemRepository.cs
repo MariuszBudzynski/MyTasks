@@ -6,5 +6,6 @@ namespace MyTasks.Repositories.Interfaces.ITaskItemRepository
     {
         Task AddTaskItemAsync(TaskItemModel taskItem);
         Task<TaskItemModel?> GetTaskItemtByIdAsync(Guid id);
+        Task UpdateTaskItemAsync(TaskItemModel taskItem);
     }
 }

@@ -12,6 +12,11 @@ namespace MyTasks.Repositories.Repositories.TaskItemRepository
             _taskItemRepository = taskItemRepository;
         }
 
+        public async Task UpdateTaskItemAsync(TaskItemModel taskItem)
+        {
+            await _taskItemRepository.UpdateEntityAsync(taskItem);
+        }
+
         public async Task AddTaskItemAsync(TaskItemModel taskItem)
         {
             await _taskItemRepository.AddEntityAsync(taskItem);

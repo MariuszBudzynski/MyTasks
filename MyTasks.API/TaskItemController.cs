@@ -28,6 +28,18 @@ namespace MyTasks.API
             return Ok(taskItem);
         }
 
+        [HttpPut("{taskItemId:guid}")]
+        public async Task<IActionResult> Update(Guid taskItemId, [FromBody] UpdateTaskItemDto data)
+        {
+            if (data == null) return BadRequest();
+
+            var taskItems = await _taskItemService.GetTaskItemById(taskItemId);
+            if (taskItems == null) return NotFound();
+
+            await _taskItemService.UpdateTaskItemtAsync(data, taskItems, taskItemId);
+            return NoContent();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTaskItemDto data)
         {

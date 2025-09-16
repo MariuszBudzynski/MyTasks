@@ -279,6 +279,7 @@ export default function Dashboard() {
     const e = {};
     if (!task.title.trim()) e.title = t("error_title_required");
     if (!task.dueDate) e.dueDate = t("error_due_date_required");
+    if (!task.projectId) e.projectId = t("error_project_required");
     return e;
   };
 
@@ -294,7 +295,7 @@ export default function Dashboard() {
   const handleSubmitTask = async () => {
     const v = validateTask(newTask);
     if (v.title || v.dueDate) {
-      setTouchedTask({ title: true, dueDate: true });
+      setTouchedTask({ title: true, dueDate: true, projectId: true });
       setErrorsTask(v);
       return;
     }
@@ -700,8 +701,8 @@ export default function Dashboard() {
                 </option>
               ))}
             </select>
-            {submitTaskError && (
-              <div style={styles.errorText}>{submitTaskError}</div>
+            {touchedTask.projectId && errorsTask.projectId && (
+              <div style={styles.errorText}>{errorsTask.projectId}</div>
             )}
             <div style={styles.modalActions}>
               <button

@@ -23,9 +23,8 @@ namespace MyTasks.Services
         {
             taskItem.Title = taskItemToUpdate.Title;
             taskItem.Description = taskItemToUpdate.Description;
-            taskItem.DueDate= taskItemToUpdate.DueDate;
             taskItem.IsCompleted = taskItemToUpdate.IsCompleted;
-            taskItem.ProjectId = taskItemToUpdate.ProjectId;
+            taskItem.DueDate = taskItemToUpdate.DueDate ?? DateTime.MinValue;
             await _taskItemRepository.UpdateTaskItemAsync(taskItem);
         }
 

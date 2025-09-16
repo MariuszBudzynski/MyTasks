@@ -4,6 +4,5 @@
         string Title,
         string? Description,
         DateTime? DueDate,
-        bool IsCompleted,
-        Guid? ProjectId);
+        bool IsCompleted);
 }

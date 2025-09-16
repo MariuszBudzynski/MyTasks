@@ -751,20 +751,6 @@ export default function Dashboard() {
               }
               style={styles.modalInput}
             />
-            <select
-              value={editTask.projectId}
-              onChange={(e) =>
-                setEditTask({ ...editTask, projectId: e.target.value })
-              }
-              style={styles.modalInput}
-            >
-              <option value="">{t("select_project")}</option>
-              {projects.map((p) => (
-                <option key={p.Id} value={p.Id}>
-                  {p.Name}
-                </option>
-              ))}
-            </select>
             <label>
               <input
                 type="checkbox"

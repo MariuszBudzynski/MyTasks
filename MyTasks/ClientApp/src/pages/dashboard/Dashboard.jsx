@@ -120,6 +120,20 @@ export default function Dashboard() {
   const [submittingTask, setSubmittingTask] = useState(false);
   const [submitTaskError, setSubmitTaskError] = useState("");
 
+  const [showEditTaskModal, setShowEditTaskModal] = useState(false);
+  const [editTask, setEditTask] = useState({
+    id: "",
+    title: "",
+    description: "",
+    dueDate: "",
+    projectId: "",
+    isCompleted: false,
+  });
+  const [editTouchedTask, setEditTouchedTask] = useState({ title: false });
+  const [editErrorsTask, setEditErrorsTask] = useState({});
+  const [submittingEditTask, setSubmittingEditTask] = useState(false);
+  const [submitEditTaskError, setSubmitEditTaskError] = useState("");
+
   const [showAddCommentModal, setShowAddCommentModal] = useState(false);
   const [commentTaskId, setCommentTaskId] = useState(null);
   const [newComment, setNewComment] = useState("");
@@ -305,6 +319,62 @@ export default function Dashboard() {
     }
   };
 
+  const openEditTaskModal = (task) => {
+    setEditTask({
+      id: task.Id,
+      title: task.Title ?? "",
+      description: task.Description ?? "",
+      dueDate: task.DueDate ?? "",
+      projectId: task.ProjectId ?? "",
+      isCompleted: task.IsCompleted ?? false,
+    });
+    setEditTouchedTask({ title: false });
+    setEditErrorsTask({});
+    setSubmitEditTaskError("");
+    setShowEditTaskModal(true);
+  };
+
+  const handleUpdateTask = async () => {
+    const v = validateTask(editTask);
+    if (v.title) {
+      setEditTouchedTask({ title: true });
+      setEditErrorsTask(v);
+      return;
+    }
+
+    setSubmittingEditTask(true);
+    setSubmitEditTaskError("");
+    try {
+      const res = await fetch(`/api/taskitem/${editTask.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+        body: JSON.stringify(editTask),
+      });
+      if (!res.ok) throw new Error("Failed to update task");
+
+      setShowEditTaskModal(false);
+      setEditTask({
+        id: "",
+        title: "",
+        description: "",
+        dueDate: "",
+        projectId: "",
+        isCompleted: false,
+      });
+      setEditTouchedTask({ title: false });
+      setEditErrorsTask({});
+      window.location.reload();
+    } catch (err) {
+      setSubmitEditTaskError(err.message || "Error");
+    } finally {
+      setSubmittingEditTask(false);
+    }
+  };
+
   const handleSubmitComment = async () => {
     if (!newComment.trim()) {
       setCommentError(t("error_content_required"));
@@ -340,6 +410,7 @@ export default function Dashboard() {
 
   return (
     <div style={styles.container}>
+      {/* HEADER AND BUTTONS */}
       <div style={styles.header}>
         <h2>
           {t("welcome")}, {username}
@@ -364,6 +435,7 @@ export default function Dashboard() {
         </button>
       </div>
 
+      {/* PROJECTS LIST */}
       <div style={styles.section}>
         <h3>{t("projects")}</h3>
         <div style={styles.list}>
@@ -400,6 +472,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* TASKS LIST */}
       <div style={styles.section}>
         <h3>{t("tasks")}</h3>
         <div style={styles.list}>
@@ -423,7 +496,7 @@ export default function Dashboard() {
                 <div style={styles.buttons}>
                   <button
                     style={{ ...styles.button, ...styles.btnPrimary }}
-                    onClick={() => console.log("Edit task", task.Id, csrfToken)}
+                    onClick={() => openEditTaskModal(task)}
                   >
                     {t("edit")}
                   </button>
@@ -453,6 +526,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* MODALS (PROJECT, EDIT PROJECT, TASK, ADD COMMENT) */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -616,6 +690,88 @@ export default function Dashboard() {
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
                 onClick={() => setShowTaskModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NEW EDIT TASK MODAL */}
+      {showEditTaskModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>
+              {t("edit")}&nbsp;{t("task")}
+            </h3>
+            <input
+              type="text"
+              placeholder={t("task_title")}
+              value={editTask.title}
+              onChange={(e) => {
+                setEditTask({ ...editTask, title: e.target.value });
+                setEditTouchedTask({ title: true });
+              }}
+              style={styles.modalInput}
+            />
+            {editTouchedTask.title && editErrorsTask.title && (
+              <div style={styles.errorText}>{editErrorsTask.title}</div>
+            )}
+            <textarea
+              placeholder={t("task_description")}
+              value={editTask.description}
+              onChange={(e) =>
+                setEditTask({ ...editTask, description: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+            <input
+              type="date"
+              value={editTask.dueDate}
+              onChange={(e) =>
+                setEditTask({ ...editTask, dueDate: e.target.value })
+              }
+              style={styles.modalInput}
+            />
+            <select
+              value={editTask.projectId}
+              onChange={(e) =>
+                setEditTask({ ...editTask, projectId: e.target.value })
+              }
+              style={styles.modalInput}
+            >
+              <option value="">{t("select_project")}</option>
+              {projects.map((p) => (
+                <option key={p.Id} value={p.Id}>
+                  {p.Name}
+                </option>
+              ))}
+            </select>
+            <label>
+              <input
+                type="checkbox"
+                checked={editTask.isCompleted}
+                onChange={(e) =>
+                  setEditTask({ ...editTask, isCompleted: e.target.checked })
+                }
+              />
+              {t("completed")}
+            </label>
+            {submitEditTaskError && (
+              <div style={styles.errorText}>{submitEditTaskError}</div>
+            )}
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={handleUpdateTask}
+                disabled={submittingEditTask}
+              >
+                {t("ok")}
+              </button>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={() => setShowEditTaskModal(false)}
               >
                 {t("cancel")}
               </button>

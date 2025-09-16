@@ -31,5 +31,6 @@
   "add_comment": "Add Comment",
   "no_project": "No project",
   "comment_content": "Comment Content",
-  "error_content_required": "Comment content is required"
+  "error_content_required": "Comment content is required",
+  "task":  "Task"
 }

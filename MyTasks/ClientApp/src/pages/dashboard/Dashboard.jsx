@@ -217,7 +217,7 @@ export default function Dashboard() {
 
   const openEditProjectModal = (project) => {
     setEditProject({
-      id: project.Id,
+      id: project.Id ?? "",
       name: project.Name ?? "",
       description: project.Description ?? "",
     });
@@ -259,12 +259,10 @@ export default function Dashboard() {
           description: editProject.description,
         }),
       });
-
       if (!res.ok) {
         const text = await res.text().catch(() => null);
         throw new Error(text || "Failed to update project");
       }
-
       setShowEditProjectModal(false);
       setEditProject({ id: "", name: "", description: "" });
       setEditTouched({ name: false, description: false });
@@ -338,7 +336,7 @@ export default function Dashboard() {
 
   const openEditTaskModal = (task) => {
     setEditTask({
-      id: task.Id,
+      id: task.Id ?? "",
       title: task.Title ?? "",
       description: task.Description ?? "",
       dueDate: task.DueDate ?? "",
@@ -370,11 +368,8 @@ export default function Dashboard() {
           "X-CSRF-TOKEN": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify({
-          ...editTask,
-        }),
+        body: JSON.stringify(editTask),
       });
-
       if (!res.ok) throw new Error("Failed to update task");
 
       setShowEditTaskModal(false);
@@ -431,6 +426,7 @@ export default function Dashboard() {
 
   return (
     <div style={styles.container}>
+      {/* HEADER */}
       <div style={styles.header}>
         <h2>
           {t("welcome")}, {username}
@@ -440,6 +436,7 @@ export default function Dashboard() {
         </p>
       </div>
 
+      {/* ACTION BUTTONS */}
       <div style={styles.buttons}>
         <button
           style={{ ...styles.button, ...styles.btnPrimary }}
@@ -455,6 +452,7 @@ export default function Dashboard() {
         </button>
       </div>
 
+      {/* PROJECTS LIST */}
       <div style={styles.section}>
         <h3>{t("projects")}</h3>
         <div style={styles.list}>
@@ -464,8 +462,8 @@ export default function Dashboard() {
                 <div style={styles.cardTitle}>{p.Name}</div>
                 <p style={styles.cardText}>{p.Description}</p>
                 <p style={styles.cardText}>
-                  {t("tasks")} : {p.TaskCount} | {t("completed")} :{" "}
-                  {p.CompletedTasks}
+                  {t("tasks")} : {p.TaskCount ?? 0} | {t("completed")} :{" "}
+                  {p.CompletedTasks ?? 0}
                 </p>
                 <div style={styles.buttons}>
                   <button
@@ -491,6 +489,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* TASKS LIST */}
       <div style={styles.section}>
         <h3>{t("tasks")}</h3>
         <div style={styles.list}>
@@ -544,6 +543,8 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* MODALS */}
+      {/* Add Project Modal */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -593,11 +594,12 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Edit Project Modal */}
       {showEditProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h3>
-              {t("edit")}&nbsp;{t("project")}
+              {t("edit")} {t("project")}
             </h3>
             <input
               type="text"
@@ -646,6 +648,7 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Add Task Modal */}
       {showTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -673,7 +676,7 @@ export default function Dashboard() {
             />
             <input
               type="date"
-              value={newTask.dueDate}
+              value={newTask.dueDate.split("T")[0] ?? ""}
               onChange={(e) => {
                 setNewTask({ ...newTask, dueDate: e.target.value });
                 setTouchedTask((prev) => ({ ...prev, dueDate: true }));
@@ -719,11 +722,12 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Edit Task Modal */}
       {showEditTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h3>
-              {t("edit")}&nbsp;{t("task")}
+              {t("edit")} {t("task")}
             </h3>
             <input
               type="text"
@@ -751,7 +755,7 @@ export default function Dashboard() {
             )}
             <input
               type="date"
-              value={editTask.dueDate}
+              value={editTask.dueDate.split("T")[0] ?? ""}
               onChange={(e) => {
                 setEditTask({ ...editTask, dueDate: e.target.value });
                 setEditTouchedTask((prev) => ({ ...prev, dueDate: true }));
@@ -768,7 +772,7 @@ export default function Dashboard() {
                 onChange={(e) =>
                   setEditTask({ ...editTask, isCompleted: e.target.checked })
                 }
-              />
+              />{" "}
               {t("completed")}
             </label>
             {submitEditTaskError && (
@@ -793,6 +797,7 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Add Comment Modal */}
       {showAddCommentModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>

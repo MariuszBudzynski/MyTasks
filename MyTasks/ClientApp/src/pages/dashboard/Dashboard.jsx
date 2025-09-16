@@ -129,7 +129,10 @@ export default function Dashboard() {
     projectId: "",
     isCompleted: false,
   });
-  const [editTouchedTask, setEditTouchedTask] = useState({ title: false });
+  const [editTouchedTask, setEditTouchedTask] = useState({
+    title: false,
+    description: false,
+  });
   const [editErrorsTask, setEditErrorsTask] = useState({});
   const [submittingEditTask, setSubmittingEditTask] = useState(false);
   const [submitEditTaskError, setSubmitEditTaskError] = useState("");
@@ -276,6 +279,14 @@ export default function Dashboard() {
     return e;
   };
 
+  const validateEditTask = (task) => {
+    const errors = {};
+    if (!task.title.trim()) errors.title = t("error_title_required");
+    if (!task.description.trim())
+      errors.description = t("error_description_required");
+    return errors;
+  };
+
   const handleSubmitTask = async () => {
     const v = validateTask(newTask);
     if (v.title) {
@@ -328,22 +339,23 @@ export default function Dashboard() {
       projectId: task.ProjectId ?? "",
       isCompleted: task.IsCompleted ?? false,
     });
-    setEditTouchedTask({ title: false });
+    setEditTouchedTask({ title: false, description: false });
     setEditErrorsTask({});
     setSubmitEditTaskError("");
     setShowEditTaskModal(true);
   };
 
   const handleUpdateTask = async () => {
-    const v = validateTask(editTask);
-    if (v.title) {
-      setEditTouchedTask({ title: true });
-      setEditErrorsTask(v);
+    const errors = validateEditTask(editTask);
+    if (errors.title || errors.description) {
+      setEditTouchedTask({ title: true, description: true });
+      setEditErrorsTask(errors);
       return;
     }
 
     setSubmittingEditTask(true);
     setSubmitEditTaskError("");
+
     try {
       const res = await fetch(`/api/taskitem/${editTask.id}`, {
         method: "PUT",
@@ -352,8 +364,11 @@ export default function Dashboard() {
           "X-CSRF-TOKEN": csrfToken,
         },
         credentials: "include",
-        body: JSON.stringify(editTask),
+        body: JSON.stringify({
+          ...editTask,
+        }),
       });
+
       if (!res.ok) throw new Error("Failed to update task");
 
       setShowEditTaskModal(false);
@@ -365,7 +380,7 @@ export default function Dashboard() {
         projectId: "",
         isCompleted: false,
       });
-      setEditTouchedTask({ title: false });
+      setEditTouchedTask({ title: false, description: false });
       setEditErrorsTask({});
       window.location.reload();
     } catch (err) {
@@ -698,7 +713,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* NEW EDIT TASK MODAL */}
       {showEditTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -711,7 +725,7 @@ export default function Dashboard() {
               value={editTask.title}
               onChange={(e) => {
                 setEditTask({ ...editTask, title: e.target.value });
-                setEditTouchedTask({ title: true });
+                setEditTouchedTask((prev) => ({ ...prev, title: true }));
               }}
               style={styles.modalInput}
             />
@@ -726,6 +740,9 @@ export default function Dashboard() {
               }
               style={styles.modalInput}
             />
+            {editTouchedTask.description && editErrorsTask.description && (
+              <div style={styles.errorText}>{editErrorsTask.description}</div>
+            )}
             <input
               type="date"
               value={editTask.dueDate}

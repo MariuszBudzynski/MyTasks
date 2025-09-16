@@ -37,7 +37,7 @@ namespace MyTasks.Services
                 taskItem.Id,
                 taskItem.Title,
                 taskItem.Description,
-                taskItem.DueDate,
+                taskItem.DueDate ?? DateTime.MinValue,
                 taskItem.IsCompleted,
                 taskItem.ProjectId,
                 taskItem.AssignedUserId

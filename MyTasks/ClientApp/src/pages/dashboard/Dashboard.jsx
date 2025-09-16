@@ -115,7 +115,10 @@ export default function Dashboard() {
     projectId: "",
     isCompleted: false,
   });
-  const [touchedTask, setTouchedTask] = useState({ title: false });
+  const [touchedTask, setTouchedTask] = useState({
+    title: false,
+    dueDate: false,
+  });
   const [errorsTask, setErrorsTask] = useState({});
   const [submittingTask, setSubmittingTask] = useState(false);
   const [submitTaskError, setSubmitTaskError] = useState("");
@@ -132,6 +135,7 @@ export default function Dashboard() {
   const [editTouchedTask, setEditTouchedTask] = useState({
     title: false,
     description: false,
+    dueDate: false,
   });
   const [editErrorsTask, setEditErrorsTask] = useState({});
   const [submittingEditTask, setSubmittingEditTask] = useState(false);
@@ -276,6 +280,7 @@ export default function Dashboard() {
   const validateTask = (task) => {
     const e = {};
     if (!task.title.trim()) e.title = t("error_title_required");
+    if (!task.dueDate) e.dueDate = t("error_due_date_required");
     return e;
   };
 
@@ -284,13 +289,14 @@ export default function Dashboard() {
     if (!task.title.trim()) errors.title = t("error_title_required");
     if (!task.description.trim())
       errors.description = t("error_description_required");
+    if (!task.dueDate) errors.dueDate = t("error_due_date_required");
     return errors;
   };
 
   const handleSubmitTask = async () => {
     const v = validateTask(newTask);
-    if (v.title) {
-      setTouchedTask({ title: true });
+    if (v.title || v.dueDate) {
+      setTouchedTask({ title: true, dueDate: true });
       setErrorsTask(v);
       return;
     }
@@ -320,7 +326,7 @@ export default function Dashboard() {
         projectId: "",
         isCompleted: false,
       });
-      setTouchedTask({ title: false });
+      setTouchedTask({ title: false, dueDate: false });
       setErrorsTask({});
       window.location.reload();
     } catch (err) {
@@ -339,7 +345,7 @@ export default function Dashboard() {
       projectId: task.ProjectId ?? "",
       isCompleted: task.IsCompleted ?? false,
     });
-    setEditTouchedTask({ title: false, description: false });
+    setEditTouchedTask({ title: false, description: false, dueDate: false });
     setEditErrorsTask({});
     setSubmitEditTaskError("");
     setShowEditTaskModal(true);
@@ -347,8 +353,8 @@ export default function Dashboard() {
 
   const handleUpdateTask = async () => {
     const errors = validateEditTask(editTask);
-    if (errors.title || errors.description) {
-      setEditTouchedTask({ title: true, description: true });
+    if (errors.title || errors.description || errors.dueDate) {
+      setEditTouchedTask({ title: true, description: true, dueDate: true });
       setEditErrorsTask(errors);
       return;
     }
@@ -380,7 +386,7 @@ export default function Dashboard() {
         projectId: "",
         isCompleted: false,
       });
-      setEditTouchedTask({ title: false, description: false });
+      setEditTouchedTask({ title: false, description: false, dueDate: false });
       setEditErrorsTask({});
       window.location.reload();
     } catch (err) {
@@ -425,7 +431,6 @@ export default function Dashboard() {
 
   return (
     <div style={styles.container}>
-      {/* HEADER AND BUTTONS */}
       <div style={styles.header}>
         <h2>
           {t("welcome")}, {username}
@@ -450,7 +455,6 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* PROJECTS LIST */}
       <div style={styles.section}>
         <h3>{t("projects")}</h3>
         <div style={styles.list}>
@@ -487,7 +491,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* TASKS LIST */}
       <div style={styles.section}>
         <h3>{t("tasks")}</h3>
         <div style={styles.list}>
@@ -541,7 +544,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* MODALS (PROJECT, EDIT PROJECT, TASK, ADD COMMENT) */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -672,11 +674,15 @@ export default function Dashboard() {
             <input
               type="date"
               value={newTask.dueDate}
-              onChange={(e) =>
-                setNewTask({ ...newTask, dueDate: e.target.value })
-              }
+              onChange={(e) => {
+                setNewTask({ ...newTask, dueDate: e.target.value });
+                setTouchedTask((prev) => ({ ...prev, dueDate: true }));
+              }}
               style={styles.modalInput}
             />
+            {touchedTask.dueDate && errorsTask.dueDate && (
+              <div style={styles.errorText}>{errorsTask.dueDate}</div>
+            )}
             <select
               value={newTask.projectId}
               onChange={(e) =>
@@ -746,11 +752,15 @@ export default function Dashboard() {
             <input
               type="date"
               value={editTask.dueDate}
-              onChange={(e) =>
-                setEditTask({ ...editTask, dueDate: e.target.value })
-              }
+              onChange={(e) => {
+                setEditTask({ ...editTask, dueDate: e.target.value });
+                setEditTouchedTask((prev) => ({ ...prev, dueDate: true }));
+              }}
               style={styles.modalInput}
             />
+            {editTouchedTask.dueDate && editErrorsTask.dueDate && (
+              <div style={styles.errorText}>{editErrorsTask.dueDate}</div>
+            )}
             <label>
               <input
                 type="checkbox"

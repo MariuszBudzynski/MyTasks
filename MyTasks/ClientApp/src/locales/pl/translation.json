@@ -31,6 +31,5 @@
   "add_comment": "Dodaj komentarz",
   "no_project": "Brak projektu",
   "comment_content": "Treść komentarza",
-  "error_content_required": "Treść komentarza jest wymagana",
-  "task": "Zadanie"
+  "error_content_required": "Treść komentarza jest wymagana"
 }

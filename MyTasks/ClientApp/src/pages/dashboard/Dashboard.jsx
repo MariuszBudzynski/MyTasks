@@ -278,6 +278,8 @@ export default function Dashboard() {
   const validateTask = (task) => {
     const e = {};
     if (!task.title.trim()) e.title = t("error_title_required");
+    if (!task.description.trim())
+      e.description = t("error_description_required");
     if (!task.dueDate) e.dueDate = t("error_due_date_required");
     if (!task.projectId) e.projectId = t("error_project_required");
     return e;
@@ -294,11 +296,14 @@ export default function Dashboard() {
 
   const handleSubmitTask = async () => {
     const v = validateTask(newTask);
-    if (v.title || v.dueDate) {
-      setTouchedTask({ title: true, dueDate: true, projectId: true });
-      setErrorsTask(v);
-      return;
-    }
+    setTouchedTask({
+      title: true,
+      description: true,
+      dueDate: true,
+      projectId: true,
+    });
+    setErrorsTask(v);
+    if (Object.keys(v).length > 0) return;
 
     setSubmittingTask(true);
     setSubmitTaskError("");
@@ -325,7 +330,12 @@ export default function Dashboard() {
         projectId: "",
         isCompleted: false,
       });
-      setTouchedTask({ title: false, dueDate: false });
+      setTouchedTask({
+        title: false,
+        dueDate: false,
+        description: false,
+        projectId: false,
+      });
       setErrorsTask({});
       window.location.reload();
     } catch (err) {
@@ -427,7 +437,6 @@ export default function Dashboard() {
 
   return (
     <div style={styles.container}>
-      {/* HEADER */}
       <div style={styles.header}>
         <h2>
           {t("welcome")}, {username}
@@ -437,7 +446,6 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* ACTION BUTTONS */}
       <div style={styles.buttons}>
         <button
           style={{ ...styles.button, ...styles.btnPrimary }}
@@ -453,7 +461,6 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* PROJECTS LIST */}
       <div style={styles.section}>
         <h3>{t("projects")}</h3>
         <div style={styles.list}>
@@ -490,7 +497,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* TASKS LIST */}
       <div style={styles.section}>
         <h3>{t("tasks")}</h3>
         <div style={styles.list}>
@@ -544,8 +550,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* MODALS */}
-      {/* Add Project Modal */}
       {showProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -556,23 +560,23 @@ export default function Dashboard() {
               value={newProject.name}
               onChange={(e) => {
                 setNewProject({ ...newProject, name: e.target.value });
-                setTouched({ ...touched, name: true });
+                setTouched((prev) => ({ ...prev, name: true }));
+                setErrors((prev) => ({ ...prev, name: "" }));
               }}
               style={styles.modalInput}
             />
-            {touched.name && errors.name && (
-              <div style={styles.errorText}>{errors.name}</div>
-            )}
+            {errors.name && <div style={styles.errorText}>{errors.name}</div>}
             <textarea
               placeholder={t("project_description")}
               value={newProject.description}
               onChange={(e) => {
                 setNewProject({ ...newProject, description: e.target.value });
-                setTouched({ ...touched, description: true });
+                setTouched((prev) => ({ ...prev, description: true }));
+                setErrors((prev) => ({ ...prev, description: "" }));
               }}
               style={styles.modalInput}
             />
-            {touched.description && errors.description && (
+            {errors.description && (
               <div style={styles.errorText}>{errors.description}</div>
             )}
             {submitError && <div style={styles.errorText}>{submitError}</div>}
@@ -595,7 +599,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Edit Project Modal */}
       {showEditProjectModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -609,10 +612,11 @@ export default function Dashboard() {
               onChange={(e) => {
                 setEditProject({ ...editProject, name: e.target.value });
                 setEditTouched((prev) => ({ ...prev, name: true }));
+                setEditErrors((prev) => ({ ...prev, name: "" }));
               }}
               style={styles.modalInput}
             />
-            {editTouched.name && editErrors.name && (
+            {editErrors.name && (
               <div style={styles.errorText}>{editErrors.name}</div>
             )}
             <textarea
@@ -621,10 +625,11 @@ export default function Dashboard() {
               onChange={(e) => {
                 setEditProject({ ...editProject, description: e.target.value });
                 setEditTouched((prev) => ({ ...prev, description: true }));
+                setEditErrors((prev) => ({ ...prev, description: "" }));
               }}
               style={styles.modalInput}
             />
-            {editTouched.description && editErrors.description && (
+            {editErrors.description && (
               <div style={styles.errorText}>{editErrors.description}</div>
             )}
             {submitEditError && (
@@ -649,49 +654,61 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Add Task Modal */}
       {showTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h3>{t("add_task")}</h3>
+
             <input
               type="text"
               placeholder={t("task_title")}
               value={newTask.title}
               onChange={(e) => {
                 setNewTask({ ...newTask, title: e.target.value });
-                setTouchedTask({ ...touchedTask, title: true });
+                setTouchedTask((prev) => ({ ...prev, title: true }));
+                setErrorsTask((prev) => ({ ...prev, title: "" }));
               }}
               style={styles.modalInput}
             />
             {touchedTask.title && errorsTask.title && (
               <div style={styles.errorText}>{errorsTask.title}</div>
             )}
+
             <textarea
               placeholder={t("task_description")}
               value={newTask.description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, description: e.target.value })
-              }
+              onChange={(e) => {
+                setNewTask({ ...newTask, description: e.target.value });
+                setTouchedTask((prev) => ({ ...prev, description: true }));
+                setErrorsTask((prev) => ({ ...prev, description: "" }));
+              }}
               style={styles.modalInput}
             />
+            {touchedTask.description && errorsTask.description && (
+              <div style={styles.errorText}>{errorsTask.description}</div>
+            )}
+
             <input
               type="date"
               value={newTask.dueDate.split("T")[0] ?? ""}
               onChange={(e) => {
                 setNewTask({ ...newTask, dueDate: e.target.value });
                 setTouchedTask((prev) => ({ ...prev, dueDate: true }));
+                setErrorsTask((prev) => ({ ...prev, dueDate: "" }));
               }}
               style={styles.modalInput}
             />
             {touchedTask.dueDate && errorsTask.dueDate && (
               <div style={styles.errorText}>{errorsTask.dueDate}</div>
             )}
+
             <select
               value={newTask.projectId}
-              onChange={(e) =>
-                setNewTask({ ...newTask, projectId: e.target.value })
-              }
+              onChange={(e) => {
+                setNewTask({ ...newTask, projectId: e.target.value });
+                setTouchedTask((prev) => ({ ...prev, projectId: true }));
+                setErrorsTask((prev) => ({ ...prev, projectId: "" }));
+              }}
               style={styles.modalInput}
             >
               <option value="">{t("select_project")}</option>
@@ -704,6 +721,7 @@ export default function Dashboard() {
             {touchedTask.projectId && errorsTask.projectId && (
               <div style={styles.errorText}>{errorsTask.projectId}</div>
             )}
+
             <div style={styles.modalActions}>
               <button
                 style={{ ...styles.button, ...styles.btnPrimary }}
@@ -723,7 +741,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Edit Task Modal */}
       {showEditTaskModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -798,7 +815,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Add Comment Modal */}
       {showAddCommentModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>

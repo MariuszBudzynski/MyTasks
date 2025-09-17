@@ -28,5 +28,24 @@ namespace MyTasks.DbOperations.Repositories
                                  .Include(p => p.Tasks)
                                     .ThenInclude(t => t.Comments);
         }
+
+        public async Task<ProjectModel?> GetProjectWithAdditionalDataByIdAsync(Guid projectId)
+        {
+            return await _context.Project
+                                 .Where(p => p.Id == projectId)
+                                .Include(p => p.Tasks)
+                                    .ThenInclude( t => t.Comments)
+                                .FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteProjectWithTasksAndCommentsByIdAsync(Guid projectId)
+        {
+            var project = await GetProjectWithAdditionalDataByIdAsync(projectId);
+
+            _context.Project.Remove(project);
+            _context.RemoveRange(project.Tasks);
+            _context.RemoveRange(project.Tasks.SelectMany(t => t.Comments));
+            await _context.SaveChangesAsync();   
+        }
     }
 }

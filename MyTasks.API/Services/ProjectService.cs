@@ -9,9 +9,12 @@ namespace MyTasks.API.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjecRepository _projectRepository;
-        public ProjectService(IProjecRepository projectRepository, IUserOperationsRepository userRepository)
+        private readonly IProjectOperationsRepository _projectOperationsRepository;
+        public ProjectService(IProjecRepository projectRepository,
+                              IProjectOperationsRepository projectOperationsRepository)
         {
             _projectRepository = projectRepository;
+            _projectOperationsRepository = projectOperationsRepository;
         }
 
         public async Task<ProjectResponseDto> CreateProjectAsync(CreateProjectDto data, Guid ownerId)
@@ -44,6 +47,11 @@ namespace MyTasks.API.Services
         public async Task<ProjectModel?> GetProjectByIdAsync(Guid id)
         {
             return await _projectRepository.GetByIdAsync(id);
+        }
+
+        public async Task DeleteProjectWithDataByIdAsync(Guid id)
+        {
+            await _projectOperationsRepository.DeleteProjectWithTasksAndCommentsByIdAsync(id);
         }
     }
 }

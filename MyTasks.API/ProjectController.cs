@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyTasks.API.Services;
 using MyTasks.API.Services.Interfaces;
 using MyTasks.Repositories.DTOS;
 
@@ -66,6 +67,13 @@ namespace MyTasks.API
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
             }
+        }
+
+        [HttpDelete("{projectId:guid}")]
+        public async Task<IActionResult> Delete(Guid projectId)
+        {
+            await _projectService.DeleteProjectWithDataByIdAsync(projectId);
+            return NoContent();
         }
     }
 }

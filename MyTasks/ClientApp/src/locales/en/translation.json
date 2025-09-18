@@ -33,5 +33,6 @@
   "comment_content": "Comment Content",
   "error_content_required": "Comment content is required",
   "task": "Task",
-  "error_due_date_required": "Date is required"
+  "error_due_date_required": "Date is required",
+  "deleteProjectConfirmation": "Are you sure you want to delete this project? This action is irreversible."
 }

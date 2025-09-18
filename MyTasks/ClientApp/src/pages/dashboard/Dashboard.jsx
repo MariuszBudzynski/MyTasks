@@ -147,6 +147,11 @@ export default function Dashboard() {
   const [commentError, setCommentError] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
 
+  const [showDeleteProjectModal, setShowDeleteProjectModal] = useState(false);
+  const [deleteProjectId, setDeleteProjectId] = useState(null);
+  const [deletingProject, setDeletingProject] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
     if (dashboardEl)
@@ -272,6 +277,39 @@ export default function Dashboard() {
       setSubmitEditError(err.message || "Error");
     } finally {
       setSubmittingEdit(false);
+    }
+  };
+
+  const handleDeleteProject = async () => {
+    if (!deleteProjectId) return;
+
+    const id = deleteProjectId;
+    setDeletingProject(true);
+    setDeleteError("");
+
+    try {
+      const res = await fetch(`/api/project/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => null);
+        throw new Error(text || "Failed to delete project");
+      }
+
+      setShowDeleteProjectModal(false);
+      setDeleteProjectId(null);
+
+      window.location.reload();
+    } catch (err) {
+      setDeleteError(err.message || "Error");
+    } finally {
+      setDeletingProject(false);
     }
   };
 
@@ -482,9 +520,10 @@ export default function Dashboard() {
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.btnDanger }}
-                    onClick={() =>
-                      console.log("Delete project", p.Id, csrfToken)
-                    }
+                    onClick={() => {
+                      setDeleteProjectId(p.Id);
+                      setShowDeleteProjectModal(true);
+                    }}
                   >
                     {t("delete")}
                   </button>
@@ -646,6 +685,41 @@ export default function Dashboard() {
               <button
                 style={{ ...styles.button, ...styles.btnDanger }}
                 onClick={() => setShowEditProjectModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteProjectModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>
+              {t("delete")} {t("project")}
+            </h3>
+            <p>{t("deleteProjectConfirmation")}</p>
+
+            {deleteError && <div style={styles.errorText}>{deleteError}</div>}
+
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={handleDeleteProject}
+                disabled={deletingProject}
+              >
+                {t("delete")}
+              </button>
+
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={() => {
+                  setShowDeleteProjectModal(false);
+                  setDeleteProjectId(null);
+                  setDeleteError("");
+                }}
+                disabled={deletingProject}
               >
                 {t("cancel")}
               </button>

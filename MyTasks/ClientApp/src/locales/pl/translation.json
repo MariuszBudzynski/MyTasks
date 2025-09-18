@@ -33,5 +33,6 @@
   "comment_content": "Treść komentarza",
   "error_content_required": "Treść komentarza jest wymagana",
   "task": "Zadanie",
-  "error_due_date_required":  "Data jest wymagana"
+  "error_due_date_required": "Data jest wymagana",
+  "deleteProjectConfirmation": "Czy na pewno chcesz usunąć ten projekt? Ta operacja jest nieodwracalna."
 }

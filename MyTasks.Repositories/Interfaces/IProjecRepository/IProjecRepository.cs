@@ -7,5 +7,6 @@ namespace MyTasks.Repositories.Interfaces.IProjecRepository
         Task AddProject(ProjectModel project);
         Task<ProjectModel?> GetByIdAsync(Guid id);
         Task UpdateProject(ProjectModel project);
+        Task DeleteProjectByIdAsync(Guid id);
     }
 }

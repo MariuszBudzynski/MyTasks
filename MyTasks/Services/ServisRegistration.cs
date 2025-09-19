@@ -100,6 +100,7 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<ITaskItemOperationsRepository, TaskItemOperationsRepository>();
             builder.Services.AddScoped<ITaskCommentService, TaskCommentService>();
             builder.Services.AddScoped<ITaskCommentRepository, TaskCommentRepository>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();

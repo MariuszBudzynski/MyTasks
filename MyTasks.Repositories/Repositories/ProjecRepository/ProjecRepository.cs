@@ -7,9 +7,11 @@ namespace MyTasks.Repositories.Repositories.ProjecRepository
     public class ProjecRepository : IProjecRepository
     {
         private readonly IDbRepository<ProjectModel> _projectRepository;
-        public ProjecRepository(IDbRepository<ProjectModel> projectRepository)
+        private readonly IProjectOperationsRepository _projectOperationsRepository;
+        public ProjecRepository(IDbRepository<ProjectModel> projectRepository, IProjectOperationsRepository projectOperationsRepository)
         {
             _projectRepository = projectRepository;
+            _projectOperationsRepository = projectOperationsRepository;
         }
 
         public async Task AddProject(ProjectModel project)
@@ -25,6 +27,11 @@ namespace MyTasks.Repositories.Repositories.ProjecRepository
         public async Task<ProjectModel?> GetByIdAsync(Guid id)
         {
             return await _projectRepository.GetByIdAsync(id);
+        }
+
+        public async Task DeleteProjectByIdAsync(Guid id)
+        {
+            await _projectOperationsRepository.DeleteProjectWithTasksAndCommentsByIdAsync(id);
         }
     }
 }

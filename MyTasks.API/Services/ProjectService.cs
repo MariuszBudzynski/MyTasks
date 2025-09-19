@@ -1,5 +1,4 @@
 ﻿using MyTasks.API.Services.Interfaces;
-using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.DTOS;
 using MyTasks.Repositories.Interfaces.IProjecRepository;
@@ -9,12 +8,9 @@ namespace MyTasks.API.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjecRepository _projectRepository;
-        private readonly IProjectOperationsRepository _projectOperationsRepository;
-        public ProjectService(IProjecRepository projectRepository,
-                              IProjectOperationsRepository projectOperationsRepository)
+        public ProjectService(IProjecRepository projectRepository)
         {
             _projectRepository = projectRepository;
-            _projectOperationsRepository = projectOperationsRepository;
         }
 
         public async Task<ProjectResponseDto> CreateProjectAsync(CreateProjectDto data, Guid ownerId)
@@ -51,7 +47,7 @@ namespace MyTasks.API.Services
 
         public async Task DeleteProjectWithDataByIdAsync(Guid id)
         {
-            await _projectOperationsRepository.DeleteProjectWithTasksAndCommentsByIdAsync(id);
+            await _projectRepository.DeleteProjectByIdAsync(id);
         }
     }
 }

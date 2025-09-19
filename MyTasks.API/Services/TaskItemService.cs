@@ -71,5 +71,10 @@ namespace MyTasks.Services
                 taskItem.AssignedUserId
             );
         }
+
+        public async Task DeleteTaskItemtWithDataByIdAsync(Guid id)
+        {
+            await _taskItemRepository.DeleteTaskItemtByIdAsync(id);
+        }
     }
 }

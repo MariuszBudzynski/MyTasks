@@ -9,5 +9,6 @@ namespace MyTasks.API.Services.Interfaces
         Task<TaskItemResponseDto?> GetByIdAsync(Guid id);
         Task<TaskItemModel?> GetTaskItemById(Guid id);
         Task UpdateTaskItemtAsync(UpdateTaskItemDto taskItemToUpdate, TaskItemModel taskItem, Guid taskItemId);
+        Task DeleteTaskItemtWithDataByIdAsync(Guid id);
     }
 }

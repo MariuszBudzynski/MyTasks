@@ -152,6 +152,11 @@ export default function Dashboard() {
   const [deletingProject, setDeletingProject] = useState(false);
   const [deleteError, setDeleteError] = useState("");
 
+  const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState(null);
+  const [deletingTask, setDeletingTask] = useState(false);
+  const [deleteTaskError, setDeleteTaskError] = useState("");
+
   useEffect(() => {
     const dashboardEl = document.getElementById("react-dashboard");
     if (dashboardEl)
@@ -310,6 +315,38 @@ export default function Dashboard() {
       setDeleteError(err.message || "Error");
     } finally {
       setDeletingProject(false);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!deleteTaskId) return;
+
+    setDeletingTask(true);
+    setDeleteTaskError("");
+
+    try {
+      const res = await fetch(`/api/taskitem/${deleteTaskId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
+        },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => null);
+        throw new Error(text || "Failed to delete task");
+      }
+
+      setShowDeleteTaskModal(false);
+      setDeleteTaskId(null);
+
+      window.location.reload();
+    } catch (err) {
+      setDeleteTaskError(err.message || "Error");
+    } finally {
+      setDeletingTask(false);
     }
   };
 
@@ -565,9 +602,10 @@ export default function Dashboard() {
                   </button>
                   <button
                     style={{ ...styles.button, ...styles.btnDanger }}
-                    onClick={() =>
-                      console.log("Delete task", task.Id, csrfToken)
-                    }
+                    onClick={() => {
+                      setDeleteTaskId(task.Id);
+                      setShowDeleteTaskModal(true);
+                    }}
                   >
                     {t("delete")}
                   </button>
@@ -720,6 +758,43 @@ export default function Dashboard() {
                   setDeleteError("");
                 }}
                 disabled={deletingProject}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteTaskModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3>
+              {t("delete")} {t("task")}
+            </h3>
+            <p>{t("deleteTaskConfirmation")}</p>
+
+            {deleteTaskError && (
+              <div style={styles.errorText}>{deleteTaskError}</div>
+            )}
+
+            <div style={styles.modalActions}>
+              <button
+                style={{ ...styles.button, ...styles.btnDanger }}
+                onClick={handleDeleteTask}
+                disabled={deletingTask}
+              >
+                {t("delete")}
+              </button>
+
+              <button
+                style={{ ...styles.button, ...styles.btnPrimary }}
+                onClick={() => {
+                  setShowDeleteTaskModal(false);
+                  setDeleteTaskId(null);
+                  setDeleteTaskError("");
+                }}
+                disabled={deletingTask}
               >
                 {t("cancel")}
               </button>

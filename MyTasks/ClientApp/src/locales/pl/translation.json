@@ -34,5 +34,6 @@
   "error_content_required": "Treść komentarza jest wymagana",
   "task": "Zadanie",
   "error_due_date_required": "Data jest wymagana",
-  "deleteProjectConfirmation": "Czy na pewno chcesz usunąć ten projekt? Ta operacja jest nieodwracalna."
+  "deleteProjectConfirmation": "Czy na pewno chcesz usunąć projekt? Ta operacja jest nieodwracalna.",
+  "deleteTaskConfirmation": "Czy na pewno chcesz usunąć zadanie? Ta operacja jest nieodwracalna."
 }

@@ -1,44 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    width: "400px",
-    margin: "50px auto",
-    padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
-  },
-  row: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    alignItems: "center",
-  },
-  label: {
-    textAlign: "left",
-    fontWeight: "500",
-  },
-  input: {
-    padding: "6px 8px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-    width: "100%",
-  },
-  button: {
-    gridColumn: "1 / 2",
-    padding: "8px 12px",
-    borderRadius: "4px",
-    border: "none",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    cursor: "pointer",
-    width: "100%",
-  },
-};
+import styles from "./Login.module.css";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -82,24 +44,24 @@ export default function Login() {
   };
 
   return (
-    <div id="login-container" style={styles.container}>
-      <div style={styles.row}>
-        <label style={styles.label}>{t("username")}:</label>
+    <div id="login-container" className={styles.container}>
+      <div className={styles.row}>
+        <label className={styles.label}>{t("username")}:</label>
         <input
           type="text"
           name="Username"
-          style={styles.input}
+          className={styles.input}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
 
-      <div style={styles.row}>
-        <label style={styles.label}>{t("password")}:</label>
+      <div className={styles.row}>
+        <label className={styles.label}>{t("password")}:</label>
         <input
           type="password"
           name="PasswordHash"
-          style={styles.input}
+          className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -109,7 +71,7 @@ export default function Login() {
         <div style={{ color: "red", textAlign: "center" }}>{errorMessage}</div>
       )}
 
-      <button type="button" style={styles.button} onClick={handleLogin}>
+      <button type="button" className={styles.button} onClick={handleLogin}>
         {t("login")}
       </button>
     </div>

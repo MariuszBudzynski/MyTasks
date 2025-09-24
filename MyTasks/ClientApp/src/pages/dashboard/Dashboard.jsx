@@ -1,85 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const styles = {
-  container: {
-    maxWidth: "900px",
-    margin: "40px auto",
-    padding: "20px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    fontFamily: "Arial, sans-serif",
-  },
-  header: { marginBottom: "20px", textAlign: "center" },
-  section: { marginTop: "30px" },
-  list: { display: "grid", gap: "15px" },
-  card: {
-    backgroundColor: "#fff",
-    padding: "15px",
-    borderRadius: "8px",
-    border: "1px solid #ddd",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
-  },
-  cardTitle: { fontSize: "18px", fontWeight: "600", marginBottom: "8px" },
-  cardText: { fontSize: "14px", marginBottom: "6px", color: "#444" },
-  buttons: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px",
-    marginTop: "10px",
-  },
-  button: {
-    padding: "6px 12px",
-    borderRadius: "5px",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "14px",
-    fontWeight: "500",
-  },
-  btnPrimary: { backgroundColor: "#007bff", color: "#fff" },
-  btnDanger: { backgroundColor: "#dc3545", color: "#fff" },
-  empty: { fontStyle: "italic", color: "#666" },
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1000,
-  },
-  modal: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "400px",
-    maxWidth: "90%",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-  },
-  modalInput: {
-    width: "100%",
-    padding: "8px",
-    margin: "8px 0",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  modalActions: {
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: "10px",
-    marginTop: "10px",
-  },
-  errorText: {
-    color: "red",
-    fontSize: "12px",
-    marginTop: "-5px",
-    marginBottom: "5px",
-  },
-};
+import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -511,8 +432,8 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
+    <div className={styles.container}>
+      <div className={styles.header}>
         <h2>
           {t("welcome")}, {username}
         </h2>
@@ -521,42 +442,43 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <div style={styles.buttons}>
+      <div className={styles.buttons}>
         <button
-          style={{ ...styles.button, ...styles.btnPrimary }}
+          className="btn btn-primary"
           onClick={() => setShowProjectModal(true)}
         >
           ➕ {t("add_project")}
         </button>
         <button
-          style={{ ...styles.button, ...styles.btnPrimary }}
+          className="btn btn-primary"
           onClick={() => setShowTaskModal(true)}
         >
           ➕ {t("add_task")}
         </button>
       </div>
 
-      <div style={styles.section}>
+      {/* Projekty */}
+      <div className={styles.section}>
         <h3>{t("projects")}</h3>
-        <div style={styles.list}>
+        <div className={styles.list}>
           {projects.length > 0 ? (
             projects.map((p) => (
-              <div key={p.Id} style={styles.card}>
-                <div style={styles.cardTitle}>{p.Name}</div>
-                <p style={styles.cardText}>{p.Description}</p>
-                <p style={styles.cardText}>
+              <div key={p.Id} className={styles.card}>
+                <div className={styles.cardTitle}>{p.Name}</div>
+                <p className={styles.cardText}>{p.Description}</p>
+                <p className={styles.cardText}>
                   {t("tasks")} : {p.TaskCount ?? 0} | {t("completed")} :{" "}
                   {p.CompletedTasks ?? 0}
                 </p>
-                <div style={styles.buttons}>
+                <div className={styles.buttons}>
                   <button
-                    style={{ ...styles.button, ...styles.btnPrimary }}
+                    className="btn btn-primary"
                     onClick={() => openEditProjectModal(p)}
                   >
                     {t("edit")}
                   </button>
                   <button
-                    style={{ ...styles.button, ...styles.btnDanger }}
+                    className="btn btn-danger"
                     onClick={() => {
                       setDeleteProjectId(p.Id);
                       setShowDeleteProjectModal(true);
@@ -568,20 +490,21 @@ export default function Dashboard() {
               </div>
             ))
           ) : (
-            <p style={styles.empty}>{t("no_projects")}</p>
+            <p className={styles.empty}>{t("no_projects")}</p>
           )}
         </div>
       </div>
 
-      <div style={styles.section}>
+      {/* Zadania */}
+      <div className={styles.section}>
         <h3>{t("tasks")}</h3>
-        <div style={styles.list}>
+        <div className={styles.list}>
           {tasks.length > 0 ? (
             tasks.map((task) => (
-              <div key={task.Id} style={styles.card}>
-                <div style={styles.cardTitle}>{task.Title}</div>
-                <p style={styles.cardText}>{task.Description}</p>
-                <p style={styles.cardText}>
+              <div key={task.Id} className={styles.card}>
+                <div className={styles.cardTitle}>{task.Title}</div>
+                <p className={styles.cardText}>{task.Description}</p>
+                <p className={styles.cardText}>
                   {t("project")} : {task.ProjectName ?? t("n_a")}
                   <br />
                   {t("due")} : {task.DueDate ?? t("n_a")}
@@ -589,19 +512,19 @@ export default function Dashboard() {
                   {t("completed")} : {task.IsCompleted ? "✅" : "❌"}
                 </p>
                 {task.LastComment && (
-                  <p style={styles.cardText}>
+                  <p className={styles.cardText}>
                     💬 {task.LastComment} ({task.LastCommentAt ?? t("n_a")})
                   </p>
                 )}
-                <div style={styles.buttons}>
+                <div className={styles.buttons}>
                   <button
-                    style={{ ...styles.button, ...styles.btnPrimary }}
+                    className="btn btn-primary"
                     onClick={() => openEditTaskModal(task)}
                   >
                     {t("edit")}
                   </button>
                   <button
-                    style={{ ...styles.button, ...styles.btnDanger }}
+                    className="btn btn-danger"
                     onClick={() => {
                       setDeleteTaskId(task.Id);
                       setShowDeleteTaskModal(true);
@@ -610,7 +533,7 @@ export default function Dashboard() {
                     {t("delete")}
                   </button>
                   <button
-                    style={{ ...styles.button, ...styles.btnPrimary }}
+                    className="btn btn-primary"
                     onClick={() => {
                       setCommentTaskId(task.Id);
                       setShowAddCommentModal(true);
@@ -622,14 +545,15 @@ export default function Dashboard() {
               </div>
             ))
           ) : (
-            <p style={styles.empty}>{t("no_tasks")}</p>
+            <p className={styles.empty}>{t("no_tasks")}</p>
           )}
         </div>
       </div>
 
+      {/* Modal dodawania projektu */}
       {showProjectModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>{t("add_project")}</h3>
             <input
               type="text"
@@ -640,9 +564,11 @@ export default function Dashboard() {
                 setTouched((prev) => ({ ...prev, name: true }));
                 setErrors((prev) => ({ ...prev, name: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
-            {errors.name && <div style={styles.errorText}>{errors.name}</div>}
+            {errors.name && (
+              <div className={styles.errorText}>{errors.name}</div>
+            )}
             <textarea
               placeholder={t("project_description")}
               value={newProject.description}
@@ -651,22 +577,24 @@ export default function Dashboard() {
                 setTouched((prev) => ({ ...prev, description: true }));
                 setErrors((prev) => ({ ...prev, description: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {errors.description && (
-              <div style={styles.errorText}>{errors.description}</div>
+              <div className={styles.errorText}>{errors.description}</div>
             )}
-            {submitError && <div style={styles.errorText}>{submitError}</div>}
-            <div style={styles.modalActions}>
+            {submitError && (
+              <div className={styles.errorText}>{submitError}</div>
+            )}
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={handleSubmitProject}
                 disabled={submitting}
               >
                 {t("ok")}
               </button>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={() => setShowProjectModal(false)}
               >
                 {t("cancel")}
@@ -676,9 +604,10 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Modal edycji projektu */}
       {showEditProjectModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>
               {t("edit")} {t("project")}
             </h3>
@@ -691,10 +620,10 @@ export default function Dashboard() {
                 setEditTouched((prev) => ({ ...prev, name: true }));
                 setEditErrors((prev) => ({ ...prev, name: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {editErrors.name && (
-              <div style={styles.errorText}>{editErrors.name}</div>
+              <div className={styles.errorText}>{editErrors.name}</div>
             )}
             <textarea
               placeholder={t("project_description")}
@@ -704,24 +633,24 @@ export default function Dashboard() {
                 setEditTouched((prev) => ({ ...prev, description: true }));
                 setEditErrors((prev) => ({ ...prev, description: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {editErrors.description && (
-              <div style={styles.errorText}>{editErrors.description}</div>
+              <div className={styles.errorText}>{editErrors.description}</div>
             )}
             {submitEditError && (
-              <div style={styles.errorText}>{submitEditError}</div>
+              <div className={styles.errorText}>{submitEditError}</div>
             )}
-            <div style={styles.modalActions}>
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={handleUpdateProject}
                 disabled={submittingEdit}
               >
                 {t("ok")}
               </button>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={() => setShowEditProjectModal(false)}
               >
                 {t("cancel")}
@@ -731,27 +660,27 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Modal usuwania projektu */}
       {showDeleteProjectModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>
               {t("delete")} {t("project")}
             </h3>
             <p>{t("deleteProjectConfirmation")}</p>
-
-            {deleteError && <div style={styles.errorText}>{deleteError}</div>}
-
-            <div style={styles.modalActions}>
+            {deleteError && (
+              <div className={styles.errorText}>{deleteError}</div>
+            )}
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={handleDeleteProject}
                 disabled={deletingProject}
               >
                 {t("delete")}
               </button>
-
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={() => {
                   setShowDeleteProjectModal(false);
                   setDeleteProjectId(null);
@@ -766,48 +695,11 @@ export default function Dashboard() {
         </div>
       )}
 
-      {showDeleteTaskModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <h3>
-              {t("delete")} {t("task")}
-            </h3>
-            <p>{t("deleteTaskConfirmation")}</p>
-
-            {deleteTaskError && (
-              <div style={styles.errorText}>{deleteTaskError}</div>
-            )}
-
-            <div style={styles.modalActions}>
-              <button
-                style={{ ...styles.button, ...styles.btnDanger }}
-                onClick={handleDeleteTask}
-                disabled={deletingTask}
-              >
-                {t("delete")}
-              </button>
-
-              <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
-                onClick={() => {
-                  setShowDeleteTaskModal(false);
-                  setDeleteTaskId(null);
-                  setDeleteTaskError("");
-                }}
-                disabled={deletingTask}
-              >
-                {t("cancel")}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Modal dodawania zadania */}
       {showTaskModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>{t("add_task")}</h3>
-
             <input
               type="text"
               placeholder={t("task_title")}
@@ -817,12 +709,11 @@ export default function Dashboard() {
                 setTouchedTask((prev) => ({ ...prev, title: true }));
                 setErrorsTask((prev) => ({ ...prev, title: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {touchedTask.title && errorsTask.title && (
-              <div style={styles.errorText}>{errorsTask.title}</div>
+              <div className={styles.errorText}>{errorsTask.title}</div>
             )}
-
             <textarea
               placeholder={t("task_description")}
               value={newTask.description}
@@ -831,12 +722,11 @@ export default function Dashboard() {
                 setTouchedTask((prev) => ({ ...prev, description: true }));
                 setErrorsTask((prev) => ({ ...prev, description: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {touchedTask.description && errorsTask.description && (
-              <div style={styles.errorText}>{errorsTask.description}</div>
+              <div className={styles.errorText}>{errorsTask.description}</div>
             )}
-
             <input
               type="date"
               value={newTask.dueDate.split("T")[0] ?? ""}
@@ -845,12 +735,11 @@ export default function Dashboard() {
                 setTouchedTask((prev) => ({ ...prev, dueDate: true }));
                 setErrorsTask((prev) => ({ ...prev, dueDate: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {touchedTask.dueDate && errorsTask.dueDate && (
-              <div style={styles.errorText}>{errorsTask.dueDate}</div>
+              <div className={styles.errorText}>{errorsTask.dueDate}</div>
             )}
-
             <select
               value={newTask.projectId}
               onChange={(e) => {
@@ -858,7 +747,7 @@ export default function Dashboard() {
                 setTouchedTask((prev) => ({ ...prev, projectId: true }));
                 setErrorsTask((prev) => ({ ...prev, projectId: "" }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             >
               <option value="">{t("select_project")}</option>
               {projects.map((p) => (
@@ -868,19 +757,21 @@ export default function Dashboard() {
               ))}
             </select>
             {touchedTask.projectId && errorsTask.projectId && (
-              <div style={styles.errorText}>{errorsTask.projectId}</div>
+              <div className={styles.errorText}>{errorsTask.projectId}</div>
             )}
-
-            <div style={styles.modalActions}>
+            {submitTaskError && (
+              <div className={styles.errorText}>{submitTaskError}</div>
+            )}
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={handleSubmitTask}
                 disabled={submittingTask}
               >
                 {t("ok")}
               </button>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={() => setShowTaskModal(false)}
               >
                 {t("cancel")}
@@ -890,9 +781,10 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Modal edycji zadania */}
       {showEditTaskModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>
               {t("edit")} {t("task")}
             </h3>
@@ -904,10 +796,10 @@ export default function Dashboard() {
                 setEditTask({ ...editTask, title: e.target.value });
                 setEditTouchedTask((prev) => ({ ...prev, title: true }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {editTouchedTask.title && editErrorsTask.title && (
-              <div style={styles.errorText}>{editErrorsTask.title}</div>
+              <div className={styles.errorText}>{editErrorsTask.title}</div>
             )}
             <textarea
               placeholder={t("task_description")}
@@ -915,10 +807,12 @@ export default function Dashboard() {
               onChange={(e) =>
                 setEditTask({ ...editTask, description: e.target.value })
               }
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {editTouchedTask.description && editErrorsTask.description && (
-              <div style={styles.errorText}>{editErrorsTask.description}</div>
+              <div className={styles.errorText}>
+                {editErrorsTask.description}
+              </div>
             )}
             <input
               type="date"
@@ -927,10 +821,10 @@ export default function Dashboard() {
                 setEditTask({ ...editTask, dueDate: e.target.value });
                 setEditTouchedTask((prev) => ({ ...prev, dueDate: true }));
               }}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
             {editTouchedTask.dueDate && editErrorsTask.dueDate && (
-              <div style={styles.errorText}>{editErrorsTask.dueDate}</div>
+              <div className={styles.errorText}>{editErrorsTask.dueDate}</div>
             )}
             <label>
               <input
@@ -943,18 +837,18 @@ export default function Dashboard() {
               {t("completed")}
             </label>
             {submitEditTaskError && (
-              <div style={styles.errorText}>{submitEditTaskError}</div>
+              <div className={styles.errorText}>{submitEditTaskError}</div>
             )}
-            <div style={styles.modalActions}>
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={handleUpdateTask}
                 disabled={submittingEditTask}
               >
                 {t("ok")}
               </button>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={() => setShowEditTaskModal(false)}
               >
                 {t("cancel")}
@@ -964,28 +858,66 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Modal dodawania komentarza */}
       {showAddCommentModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>{t("add_comment")}</h3>
             <textarea
               placeholder={t("comment_content")}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              style={styles.modalInput}
+              className={styles.modalInput}
             />
-            {commentError && <div style={styles.errorText}>{commentError}</div>}
-            <div style={styles.modalActions}>
+            {commentError && (
+              <div className={styles.errorText}>{commentError}</div>
+            )}
+            <div className={styles.modalActions}>
               <button
-                style={{ ...styles.button, ...styles.btnPrimary }}
+                className="btn btn-primary"
                 onClick={handleSubmitComment}
                 disabled={submittingComment}
               >
                 {t("ok")}
               </button>
               <button
-                style={{ ...styles.button, ...styles.btnDanger }}
+                className="btn btn-danger"
                 onClick={() => setShowAddCommentModal(false)}
+              >
+                {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal usuwania zadania */}
+      {showDeleteTaskModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>
+              {t("delete")} {t("task")}
+            </h3>
+            <p>{t("deleteTaskConfirmation")}</p>
+            {deleteTaskError && (
+              <div className={styles.errorText}>{deleteTaskError}</div>
+            )}
+            <div className={styles.modalActions}>
+              <button
+                className="btn btn-danger"
+                onClick={handleDeleteTask}
+                disabled={deletingTask}
+              >
+                {t("delete")}
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setShowDeleteTaskModal(false);
+                  setDeleteTaskId(null);
+                  setDeleteTaskError("");
+                }}
+                disabled={deletingTask}
               >
                 {t("cancel")}
               </button>

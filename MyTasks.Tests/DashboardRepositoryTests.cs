@@ -1,6 +1,7 @@
 ﻿using FakeItEasy;
 using MockQueryable;
 using MyTasks.DbOperations.Interface;
+using MyTasks.Models.Interfaces;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 
@@ -34,7 +35,36 @@ namespace MyTasks.Tests
             var userLoginId = Guid.NewGuid();
             var userName = "testuser";
 
-            var fakeProjects = new List<ProjectModel>
+            var fakeProjects = CreateFakeProjects(userId, userLoginId, userName);
+
+            var fakeProjectsAsQueryable = fakeProjects.BuildMock();
+
+            A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
+                .ReturnsLazily(() => Task.FromResult(fakeProjectsAsQueryable));
+
+            // Act
+            var result = await _sut.GetProjectsDataAsync(userName);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(userId, result.UserId);
+            Assert.Equal(userName, result.Username);
+            Assert.Equal("John Doe", result.FullName);
+            Assert.Equal(UserType.Regular, result.UserType);
+
+            Assert.Single(result.Projects);
+            Assert.Equal(2, result.TaskCount);
+            Assert.Equal(1, result.CompletedTasks);
+            Assert.Equal(1, result.PendingTasks);
+
+            Assert.Contains(result.Tasks, t => t.Title == "Task 1");
+            Assert.Contains(result.Tasks, t => t.Title == "Task 2");
+            Assert.Equal("Comment 1", result.Tasks.First(t => t.Title == "Task 1").LastComment);
+        }
+
+        private List<ProjectModel> CreateFakeProjects(Guid userId, Guid userLoginId, string userName)
+        {
+            return new List<ProjectModel>
             {
                 new ProjectModel
                 {
@@ -84,29 +114,6 @@ namespace MyTasks.Tests
                     }
                 }
             };
-            var fakeProjectsAsQueryable = fakeProjects.BuildMock();
-
-            A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
-                .ReturnsLazily(() => Task.FromResult(fakeProjectsAsQueryable));
-
-            // Act
-            var result = await _sut.GetProjectsDataAsync(userName);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(userId, result.UserId);
-            Assert.Equal(userName, result.Username);
-            Assert.Equal("John Doe", result.FullName);
-            Assert.Equal(UserType.Regular, result.UserType);
-
-            Assert.Single(result.Projects);
-            Assert.Equal(2, result.TaskCount);
-            Assert.Equal(1, result.CompletedTasks);
-            Assert.Equal(1, result.PendingTasks);
-
-            Assert.Contains(result.Tasks, t => t.Title == "Task 1");
-            Assert.Contains(result.Tasks, t => t.Title == "Task 2");
-            Assert.Equal("Comment 1", result.Tasks.First(t => t.Title == "Task 1").LastComment);
         }
     }
 }

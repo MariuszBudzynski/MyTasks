@@ -8,13 +8,15 @@ namespace MyTasks.Tests
     //for tests use FakeItEasy
     public class LoginRepositoryTests
     {
-        private readonly IDbRepository<LoginModel> _fakeRepo;
+        private readonly IDbRepository<LoginModel> _fakeLoginRepo;
+        private readonly IDbRepository<UserModel> _fakeUsernRepo;
         private readonly LoginRepository _sut;
 
         public LoginRepositoryTests()
         {
-            _fakeRepo = A.Fake<IDbRepository<LoginModel>>();
-            //_sut = new LoginRepository(_fakeRepo); //fix this later on
+            _fakeLoginRepo = A.Fake<IDbRepository<LoginModel>>();
+            _fakeUsernRepo = A.Fake<IDbRepository<UserModel>>();
+            _sut = new LoginRepository(_fakeLoginRepo, _fakeUsernRepo);
         }
 
         [Fact]
@@ -24,7 +26,7 @@ namespace MyTasks.Tests
             var userId = Guid.NewGuid();
             var expectedUser = new LoginModel { Id = userId, Username = "testuser" };
 
-            A.CallTo(() => _fakeRepo.GetByIdAsync(userId))
+            A.CallTo(() => _fakeLoginRepo.GetByIdAsync(userId))
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
@@ -42,7 +44,7 @@ namespace MyTasks.Tests
             // Arrange
             var userId = Guid.NewGuid();
 
-            A.CallTo(() => _fakeRepo.GetByIdAsync(userId))
+            A.CallTo(() => _fakeLoginRepo.GetByIdAsync(userId))
             .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act
@@ -58,7 +60,7 @@ namespace MyTasks.Tests
             // Arrange
             var expectedUser = new LoginModel {Username = "testuser" };
 
-            A.CallTo(() => _fakeRepo.GetByUserNameAsync<LoginModel>(expectedUser.Username))
+            A.CallTo(() => _fakeLoginRepo.GetByUserNameAsync<LoginModel>(expectedUser.Username))
             .Returns(Task.FromResult(expectedUser!));
 
             // Act
@@ -75,7 +77,7 @@ namespace MyTasks.Tests
             // Arrange
             var userName = "testUserName";
 
-            A.CallTo(() => _fakeRepo.GetByUserNameAsync<LoginModel>(userName))
+            A.CallTo(() => _fakeLoginRepo.GetByUserNameAsync<LoginModel>(userName))
                 .Returns(Task.FromResult<LoginModel?>(null));
 
             // Act

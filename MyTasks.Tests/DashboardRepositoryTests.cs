@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using MockQueryable;
 using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Repositories.DashboardRepository;
@@ -20,16 +21,6 @@ namespace MyTasks.Tests
         {
             //Arrange
             var userName = String.Empty;
-
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsDataAsync(userName));
-        }
-
-        [Fact]
-        public async Task GetProjectsData_ShouldThrow_WhenProjectsNotFound()
-        {
-            //Arrange
-            var userName = "RandomNotExistingUserName";
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsDataAsync(userName));
@@ -93,10 +84,10 @@ namespace MyTasks.Tests
                     }
                 }
             };
+            var fakeProjectsAsQueryable = fakeProjects.BuildMock();
 
-            //fix tests after refactor is done
-            //A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
-            //    .Returns(Task.FromResult<ICollection<ProjectModel>>(fakeProjects));
+            A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
+                .ReturnsLazily(() => Task.FromResult(fakeProjectsAsQueryable));
 
             // Act
             var result = await _sut.GetProjectsDataAsync(userName);

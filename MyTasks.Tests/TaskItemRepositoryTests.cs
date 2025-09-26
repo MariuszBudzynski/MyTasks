@@ -7,15 +7,15 @@ namespace MyTasks.Tests
 {
     public class TaskItemRepositoryTests
     {
-        private readonly IDbRepository<TaskItemModel> _taskItemFakeRepository;
-        private readonly ITaskItemOperationsRepository _taskItemFakeOperationsRepository;
+        private readonly IDbRepository<TaskItemModel> _fakeTaskItemRepository;
+        private readonly ITaskItemOperationsRepository _fakeTaskItemOperationsRepository;
         private readonly TaskItemRepository _sut;
 
         public TaskItemRepositoryTests()
         {
-            _taskItemFakeRepository = A.Fake<IDbRepository<TaskItemModel>>();
-            _taskItemFakeOperationsRepository = A.Fake<ITaskItemOperationsRepository>();
-            _sut = new TaskItemRepository(_taskItemFakeRepository, _taskItemFakeOperationsRepository);
+            _fakeTaskItemRepository = A.Fake<IDbRepository<TaskItemModel>>();
+            _fakeTaskItemOperationsRepository = A.Fake<ITaskItemOperationsRepository>();
+            _sut = new TaskItemRepository(_fakeTaskItemRepository, _fakeTaskItemOperationsRepository);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace MyTasks.Tests
             await _sut.AddTaskItemAsync(taskItem);
 
             // Assert
-            A.CallTo(() => _taskItemFakeRepository.AddEntityAsync(taskItem))
+            A.CallTo(() => _fakeTaskItemRepository.AddEntityAsync(taskItem))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -50,7 +50,7 @@ namespace MyTasks.Tests
             await _sut.UpdateTaskItemAsync(taskItem);
 
             // Assert
-            A.CallTo(() => _taskItemFakeRepository.UpdateEntityAsync(taskItem))
+            A.CallTo(() => _fakeTaskItemRepository.UpdateEntityAsync(taskItem))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -65,7 +65,7 @@ namespace MyTasks.Tests
                 Title = "Test Task"
             };
 
-            A.CallTo(() => _taskItemFakeRepository.GetByIdAsync(id))
+            A.CallTo(() => _fakeTaskItemRepository.GetByIdAsync(id))
                 .Returns(Task.FromResult<TaskItemModel?>(taskItem));
 
             // Act
@@ -87,7 +87,7 @@ namespace MyTasks.Tests
             await _sut.DeleteTaskItemtByIdAsync(id);
 
             // Assert
-            A.CallTo(() => _taskItemFakeOperationsRepository.DeleteTaskItemtWithCommentsByIdAsync(id))
+            A.CallTo(() => _fakeTaskItemOperationsRepository.DeleteTaskItemtWithCommentsByIdAsync(id))
                 .MustHaveHappenedOnceExactly();
         }
     }

@@ -86,5 +86,41 @@ namespace MyTasks.Tests
             // Assert
             Assert.Null(result);
         }
+
+        [Fact]
+        public async Task GetUserDataByIdAsync_ShouldReturnData_WhenUserExists()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var expectedUser = new UserModel { Id = userId, FullName = "John Doe" };
+
+            A.CallTo(() => _fakeUsernRepo.GetByIdAsync(userId))
+                .Returns(Task.FromResult(expectedUser!));
+
+            // Act
+            var result = await _sut.GetUserDataByIdAsync(userId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(expectedUser.Id, result.Id);
+            Assert.Equal(expectedUser.FullName, result.FullName);
+        }
+
+        [Fact]
+        public async Task GetUserDataByIdAsync_ShouldReturnNull_WhenUserDoesNotExist()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+
+            A.CallTo(() => _fakeUsernRepo.GetByIdAsync(userId))
+                .Returns(Task.FromResult<UserModel?>(null));
+
+            // Act
+            var result = await _sut.GetUserDataByIdAsync(userId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
     }
 }

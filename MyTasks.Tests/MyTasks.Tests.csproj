@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyTasks.API\MyTasks.API.csproj" />
     <ProjectReference Include="..\MyTasks.Common\MyTasks.Common.csproj" />
     <ProjectReference Include="..\MyTasks.DbOperations\MyTasks.DbOperations.csproj" />
     <ProjectReference Include="..\MyTasks.Repositories\MyTasks.Repositories.csproj" />

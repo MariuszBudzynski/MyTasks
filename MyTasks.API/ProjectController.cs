@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyTasks.API.Services;
 using MyTasks.API.Services.Interfaces;
 using MyTasks.Repositories.DTOS;
 

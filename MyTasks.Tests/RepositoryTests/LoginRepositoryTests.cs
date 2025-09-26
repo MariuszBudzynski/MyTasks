@@ -3,7 +3,7 @@ using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Repositories.LoginRepository;
 
-namespace MyTasks.Tests
+namespace MyTasks.Tests.RepositoryTests
 {
     //for tests use FakeItEasy
     public class LoginRepositoryTests

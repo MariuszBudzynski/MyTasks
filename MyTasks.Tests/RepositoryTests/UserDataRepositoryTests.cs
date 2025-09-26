@@ -5,7 +5,7 @@ using MyTasks.Models.Models;
 using MyTasks.Repositories.DTOS;
 using MyTasks.Repositories.Repositories.UserDataRepository;
 
-namespace MyTasks.Tests
+namespace MyTasks.Tests.RepositoryTests
 {
     public class UserDataRepositoryTests
     {

@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MockQueryable.FakeItEasy" Version="8.0.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
@@ -19,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MyTasks.Common\MyTasks.Common.csproj" />
     <ProjectReference Include="..\MyTasks.DbOperations\MyTasks.DbOperations.csproj" />
     <ProjectReference Include="..\MyTasks.Repositories\MyTasks.Repositories.csproj" />
   </ItemGroup>

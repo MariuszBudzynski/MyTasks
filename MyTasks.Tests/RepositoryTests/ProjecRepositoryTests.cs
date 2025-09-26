@@ -3,7 +3,7 @@ using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Repositories.ProjecRepository;
 
-namespace MyTasks.Tests
+namespace MyTasks.Tests.RepositoryTests
 {
     public class ProjecRepositoryTests
     {

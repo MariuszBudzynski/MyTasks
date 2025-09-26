@@ -5,7 +5,7 @@ using MyTasks.Models.Interfaces;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Repositories.DashboardRepository;
 
-namespace MyTasks.Tests
+namespace MyTasks.Tests.RepositoryTests
 {
     public class DashboardRepositoryTests
     {
@@ -21,7 +21,7 @@ namespace MyTasks.Tests
         public async Task GetProjectsData_ShouldThrow_WhenUserNameIsEmpty()
         {
             //Arrange
-            var userName = String.Empty;
+            var userName = string.Empty;
 
             // Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(() => _sut.GetProjectsDataAsync(userName));

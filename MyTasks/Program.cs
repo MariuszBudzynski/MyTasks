@@ -1,6 +1,5 @@
 using MyTasks.Repositories.Interfaces.IUserDataRepository;
 using MyTasks.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,4 +1,5 @@
-﻿using MyTasks.DbOperations.Interface;
+﻿using Microsoft.EntityFrameworkCore;
+using MyTasks.DbOperations.Interface;
 using MyTasks.Models.Models;
 using MyTasks.Repositories.Interfaces.IProjecRepository;
 
@@ -32,6 +33,11 @@ namespace MyTasks.Repositories.Repositories.ProjecRepository
         public async Task DeleteProjectByIdAsync(Guid id)
         {
             await _projectOperationsRepository.DeleteProjectWithTasksAndCommentsByIdAsync(id);
+        }
+
+        public async Task<ICollection<ProjectModel>> GetAllProjects()
+        {
+            return await _projectRepository.GetAll().ToListAsync();
         }
     }
 }

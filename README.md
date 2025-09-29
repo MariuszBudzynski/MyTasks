@@ -59,6 +59,8 @@ To run the Azure Functions project locally:
        "Functions:Worker:HostEndpoint": "127.0.0.1:9090"
      }
    }
-```
+
 3. Install the latest Azure Functions Core Tools
 4. Run the project in debug mode (func start or via Visual Studio)
+5. You should see output similar to: <img width="1117" height="376" alt="Function running preview" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
+6. Use the displayed link to trigger the function in your browser or via Postman.

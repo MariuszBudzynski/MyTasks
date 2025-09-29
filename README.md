@@ -2,59 +2,63 @@
 
 ### 🎯 Goal
 
-A modern and secure web application that enables users to manage personal tasks.
-The project combines a **lightweight .NET backend** with a **React-based frontend**, and authentication is handled through **JWT**.
+A modern and secure web application that enables users to manage personal tasks efficiently. The project combines a **lightweight .NET backend** with a **React-based frontend**, and uses **JWT authentication** for secure access.
 
-*(Concept version – the description will be updated once the app is finished.)*
+> 🧪 *This is a concept version — the description will be updated once the app is finalized.*
 
-**IMPORTANT** → The JWT key is empty because it is configured to be stored in User Secrets under "Jwt:Key".
+> ⚠️ **Note:** The JWT key is intentionally left empty. It is securely stored using User Secrets under the key `"Jwt:Key"`.
 
 ---
 
 ## 🧱 Technologies
 
-### Backend
+### 🔧 Backend
 
 - **.NET 8 Minimal API**
 - **Entity Framework Core** (SQLite)
 - **JWT Authentication**
-- **Abstraction via Interfaces**
+- **Interface-Based Abstraction**
 - **Web API Endpoints**
 - **Unit Testing** with FakeItEasy
 - **Razor Pages**
 - **SOLID Principles**
 - **Dependency Injection**
-- **Logging & Error Handling**
+- **Structured Logging & Error Handling**
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
 - **Local Functions**
 
-### Frontend (SPA)
+### 🎨 Frontend (SPA)
 
 - **React** (Vite)
 - **Hooks for State Management** (`useState`, `useEffect`)
-- **Localization** (multi-language support via `react-i18next`)
+- **Localization** via `react-i18next`
 - **JavaScript (ES6+)**
 - **AJAX / Fetch API** for HTTP requests
-- **Anti-Forgery Token** support (CSRF protection)
+- **CSRF Protection** (Anti-Forgery Token)
 - **Component-Based Architecture**
 - **Responsive Design** (CSS Modules, Flexbox/Grid)
 - **Form Handling & Validation**
 - **Error Handling & User Feedback**
 
-  ## 🧱 MyTasks.Functions config
-  1) Set MyTasks.Functions as startup project
-  2) it is reqired to have a local.settings.json with similar configuration
-     
-  {
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "Functions:Worker:HostEndpoint": "127.0.0.1:9090"
-  }
-}
-3) install latest Azure Functions Core tools
-4) run with debug
-5) you should see <img width="1117" height="376" alt="image" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
-6) use the link to fire up the function
+---
+
+## ⚙️ MyTasks.Functions Configuration
+
+To run the Azure Functions project locally:
+
+1. **Set `MyTasks.Functions` as the startup project** in your solution.
+2. Ensure you have a `local.settings.json` file with the following configuration:
+
+   ```json
+   {
+     "IsEncrypted": false,
+     "Values": {
+       "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+       "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+       "Functions:Worker:HostEndpoint": "127.0.0.1:9090"
+     }
+   }
+```
+3. Install the latest Azure Functions Core Tools
+4. Run the project in debug mode (func start or via Visual Studio)

@@ -7,12 +7,12 @@ using System.Text.Json;
 
 namespace MyTasks.Functions;
 
-public class GetAllProjects
+public class Functions
 {
-    private readonly ILogger<GetAllProjects> _logger;
+    private readonly ILogger<Functions> _logger;
     private readonly IProjecRepository _projectRepository;
 
-    public GetAllProjects(IProjecRepository projecRepository, ILogger<GetAllProjects> logger)
+    public Functions(IProjecRepository projecRepository, ILogger<Functions> logger)
     {
         _projectRepository = projecRepository;
         _logger = logger;

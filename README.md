@@ -27,6 +27,7 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 - **Logging & Error Handling**
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
+- **Local Functions**
 
 ### Frontend (SPA)
 
@@ -40,3 +41,20 @@ The project combines a **lightweight .NET backend** with a **React-based fronten
 - **Responsive Design** (CSS Modules, Flexbox/Grid)
 - **Form Handling & Validation**
 - **Error Handling & User Feedback**
+
+  ## 🧱 MyTasks.Functions config
+  1) Set MyTasks.Functions as startup project
+  2) it is reqired to have a local.settings.json with similar configuration
+     
+  {
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "Functions:Worker:HostEndpoint": "127.0.0.1:9090"
+  }
+}
+3) install latest Azure Functions Core tools
+4) run with debug
+5) you should see <img width="1117" height="376" alt="image" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
+6) use the link to fire up the function

@@ -7,7 +7,7 @@ A modern and secure web application that enables users to manage personal tasks 
 > 🧪 *This is a concept version — the description will be updated once the app is finalized.*
 
 > ⚠️ **Note:** The JWT key is intentionally left empty. It is securely stored using User Secrets under the key `"Jwt:Key"`.
->  Key example =>
+>  Key example (stored in MyTasks) =>
 
 ```
 {

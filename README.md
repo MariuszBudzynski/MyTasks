@@ -72,6 +72,3 @@ To run the Azure Functions project locally:
 4. Run the project in debug mode (func start or via Visual Studio)
 5. You should see output similar to: <img width="1117" height="376" alt="Function running preview" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
 6. Use the displayed link to trigger the function in your browser or via Postman.
-7. To test functions other than HttpTrigger Azurite needs to be run
-8. Go to  Azurite folder in solution and use this command "npx azurite". This will start the server emulation.
-9. Then 2 other functions will start running

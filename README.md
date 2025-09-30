@@ -34,6 +34,7 @@ A modern and secure web application that enables users to manage personal tasks 
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
 - **Local Functions**
+- **Azurite**
 
 ### 🎨 Frontend (SPA)
 
@@ -71,3 +72,6 @@ To run the Azure Functions project locally:
 4. Run the project in debug mode (func start or via Visual Studio)
 5. You should see output similar to: <img width="1117" height="376" alt="Function running preview" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
 6. Use the displayed link to trigger the function in your browser or via Postman.
+7. To test functions other than HttpTrigger Azurite needs to be run
+8. Update the local settings JSON to :  "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFeqCnbn...==;BlobEndpoint=http://127.0.0.1:10010/devstoreaccount1;",
+9. Go to  Azurite folder in solution and use this command npx azurite --blobPort 10010 --queuePort 10011 --tablePort 10012. This will start the server emulation.

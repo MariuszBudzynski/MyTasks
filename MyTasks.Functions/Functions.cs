@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MyTasks.Repositories.Interfaces.IProjecRepository;
 using System.Net;
 using System.Text.Json;
+using System.Collections.Concurrent;
 
 namespace MyTasks.Functions;
 
@@ -11,6 +12,9 @@ public class Functions
 {
     private readonly ILogger<Functions> _logger;
     private readonly IProjecRepository _projectRepository;
+
+    // Simulated in-memory queue
+    private static readonly ConcurrentQueue<string> _inMemoryQueue = new();
 
     public Functions(IProjecRepository projecRepository, ILogger<Functions> logger)
     {
@@ -31,18 +35,28 @@ public class Functions
             WriteIndented = true
         };
 
-
         var json = JsonSerializer.Serialize(data, jsonOptions);
         await response.WriteStringAsync(json);
 
         return response;
     }
 
-    //10 seconds
+    // TimerTrigger every 30 seconds – generates a random GUID, inserts it into the simulated queue,
+    // and immediately processes all messages in the queue
     [Function("TimerFunction")]
-    public void RunTimer([TimerTrigger("*/10 * * * * *")] TimerInfo timer)
+    public void RunTimer([TimerTrigger("*/30 * * * * *")] TimerInfo timer)
     {
-        _logger.LogInformation($"Timer triggered at: {DateTime.UtcNow}");
-    }
+        // Generate random GUID
+        string guidMessage = Guid.NewGuid().ToString();
+        _logger.LogInformation($"Timer triggered at: {DateTime.UtcNow}, enqueueing GUID: {guidMessage}");
 
+        // Enqueue GUID
+        _inMemoryQueue.Enqueue(guidMessage);
+
+        // Immediately process all messages in the simulated queue
+        while (_inMemoryQueue.TryDequeue(out var msg))
+        {
+            _logger.LogInformation($"Queue processed GUID: {msg}");
+        }
+    }
 }

@@ -73,5 +73,5 @@ To run the Azure Functions project locally:
 5. You should see output similar to: <img width="1117" height="376" alt="Function running preview" src="https://github.com/user-attachments/assets/d82cce60-89d7-4988-924e-0e1680d65374" />
 6. Use the displayed link to trigger the function in your browser or via Postman.
 7. To test functions other than HttpTrigger Azurite needs to be run
-8. Update the local settings JSON to :  "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFeqCnbn...==;BlobEndpoint=http://127.0.0.1:10010/devstoreaccount1;",
+8. Update the local settings JSON to :      "AzureWebJobsStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFeqCnbn...==;BlobEndpoint=http://127.0.0.1:10010/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10011/devstoreaccount1;TableEndpoint=http://127.0.0.1:10012/devstoreaccount1;",
 9. Go to  Azurite folder in solution and use this command npx azurite --blobPort 10010 --queuePort 10011 --tablePort 10012. This will start the server emulation.

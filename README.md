@@ -34,7 +34,6 @@ A modern and secure web application that enables users to manage personal tasks 
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
 - **Local Functions**
-- **Azurite**
 
 ### 🎨 Frontend (SPA)
 

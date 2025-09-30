@@ -37,4 +37,12 @@ public class Functions
 
         return response;
     }
+
+    //10 seconds
+    [Function("TimerFunction")]
+    public void RunTimer([TimerTrigger("*/10 * * * * *")] TimerInfo timer)
+    {
+        _logger.LogInformation($"Timer triggered at: {DateTime.UtcNow}");
+    }
+
 }

@@ -59,8 +59,8 @@ A modern and secure web application that enables users to manage personal tasks 
     - **user** / **user123**
 5. After login, the dashboard will appear:  
    ![Dashboard](https://github.com/user-attachments/assets/db1f1728-07a3-4d33-adb9-a803e194df54)
-6. The current version uses in-memory data. To switch to the built-in database, comment/uncomment the relevant lines in `ServiceRegistration` in `Program.cs`:  
-   ![Service Registration](https://github.com/user-attachments/assets/c3b0ac4f-f048-4773-8451-ac6b3484c553)
+6. By default, the application runs with in-memory data.
+  To enable the built-in database, open Program.cs, locate the ServiceRegistration, and set UseInMemory to false.
    
 ## 🛠 MyTasks Online Version
 

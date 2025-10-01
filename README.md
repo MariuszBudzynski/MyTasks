@@ -34,6 +34,7 @@ A modern and secure web application that enables users to manage personal tasks 
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
 - **Local Functions**
+- **In memory Db / SQL Lite db **
 
 ### 🎨 Frontend (SPA)
 
@@ -49,6 +50,15 @@ A modern and secure web application that enables users to manage personal tasks 
 - **Error Handling & User Feedback**
 
 ---
+##  🛠 MyTasks Local Setup
+1. Clone the repository
+2. Run the application.
+3. You will see the login page: <img width="643" height="351" alt="image" src="https://github.com/user-attachments/assets/dae3af77-73d7-4f6d-b501-8cc7ca846fc3" />
+4. Two test users are pre-configured:
+    - admin / admin123
+    - user / user123
+5. After login, the dashboard will appear: <img width="884" height="885" alt="image" src="https://github.com/user-attachments/assets/db1f1728-07a3-4d33-adb9-a803e194df54" />
+6. The current version uses in-memory data. To switch to the built-in database, comment/uncomment the relevant lines in ServiceRegistration in Program.cs: <img width="737" height="237" alt="image" src="https://github.com/user-attachments/assets/c3b0ac4f-f048-4773-8451-ac6b3484c553" />
 
 ## ⚙️ MyTasks.Functions Configuration
 

@@ -34,7 +34,7 @@ A modern and secure web application that enables users to manage personal tasks 
 - **Asynchronous Programming** (`async` / `await`)
 - **Data Validation & Error Responses**
 - **Local Functions**
-- **In memory Db / SQL Lite db **
+- **In memory Db / SQL Lite db**
 
 ### 🎨 Frontend (SPA)
 

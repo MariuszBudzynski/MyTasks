@@ -112,21 +112,30 @@ namespace MyTasks.Services
             builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped<ILoginValidator, LoginValidator>();
+            UseInMemory(builder, dbPath, true);
+        }
 
-            //Database
-            //builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
-            //builder.Services.AddScoped<IProjectOperationsRepository, ProjectOperationsRepository>();
-            //builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();
-            //builder.Services.AddScoped<ITaskItemOperationsRepository, TaskItemOperationsRepository>();
-            //builder.Services.AddDbContext<AppDbContext>(options =>
-            //   options.UseSqlite($"Data Source={dbPath}"));
-
-            //In Memory
-            builder.Services.AddSingleton<InMemoryDbContext>();
-            builder.Services.AddScoped(typeof(IDbRepository<>), typeof(InMemoryRepository<>));
-            builder.Services.AddScoped<IProjectOperationsRepository, InMemoryProjectOperationsRepository>();
-            builder.Services.AddScoped<ITaskItemOperationsRepository, InMemoryTaskItemOperationsRepository>();
-            builder.Services.AddScoped<IUserOperationsRepository, InMemoryUserOperationsRepository>();
+        private static void UseInMemory(WebApplicationBuilder builder,string dbPath, bool useInMemory = false)
+        {
+            if (useInMemory)
+            {
+                //In Memory
+                builder.Services.AddSingleton<InMemoryDbContext>();
+                builder.Services.AddScoped(typeof(IDbRepository<>), typeof(InMemoryRepository<>));
+                builder.Services.AddScoped<IProjectOperationsRepository, InMemoryProjectOperationsRepository>();
+                builder.Services.AddScoped<ITaskItemOperationsRepository, InMemoryTaskItemOperationsRepository>();
+                builder.Services.AddScoped<IUserOperationsRepository, InMemoryUserOperationsRepository>();
+            }
+            else
+            {
+                //Database
+                builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
+                builder.Services.AddScoped<IProjectOperationsRepository, ProjectOperationsRepository>();
+                builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();
+                builder.Services.AddScoped<ITaskItemOperationsRepository, TaskItemOperationsRepository>();
+                builder.Services.AddDbContext<AppDbContext>(options =>
+                   options.UseSqlite($"Data Source={dbPath}"));
+            }
         }
     }
 }

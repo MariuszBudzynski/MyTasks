@@ -12,7 +12,7 @@ namespace MyTasks.DbOperations.Repositories
         {
             _context = context;
         }
-        public async Task<IQueryable<ProjectModel>> GetProjectsWithTasksAndCommentsAsync(string userName)
+        public async Task<ICollection<ProjectModel>> GetProjectsWithTasksAndCommentsAsync(string userName)
         {
             var userId = (await _context.Login.FirstOrDefaultAsync(l => l.Username == userName))?.UserId;
 
@@ -21,12 +21,13 @@ namespace MyTasks.DbOperations.Repositories
                 throw new InvalidOperationException($"User '{userName}' does not exist.");
             }
 
-            return _context.Project
-                                 .Where(p => p.OwnerId == userId)
-                                 .Include(p => p.Owner)
-                                    .ThenInclude(o => o.LoginModel)
-                                 .Include(p => p.Tasks)
-                                    .ThenInclude(t => t.Comments);
+            return await _context.Project
+                         .Where(p => p.OwnerId == userId)
+                         .Include(p => p.Owner)
+                            .ThenInclude(o => o.LoginModel)
+                         .Include(p => p.Tasks)
+                            .ThenInclude(t => t.Comments)
+                         .ToListAsync();
         }
 
         public async Task<ProjectModel?> GetProjectWithAdditionalDataByIdAsync(Guid projectId)

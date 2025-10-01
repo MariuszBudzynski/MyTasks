@@ -4,7 +4,7 @@ namespace MyTasks.DbOperations.Interface
 {
     public interface IProjectOperationsRepository
     {
-        Task<IQueryable<ProjectModel>> GetProjectsWithTasksAndCommentsAsync(string userName);
+        Task<ICollection<ProjectModel>> GetProjectsWithTasksAndCommentsAsync(string userName);
         Task<ProjectModel?> GetProjectWithAdditionalDataByIdAsync(Guid projectId);
         Task DeleteProjectWithTasksAndCommentsByIdAsync(Guid projectId);
     }

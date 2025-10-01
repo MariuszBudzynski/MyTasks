@@ -20,8 +20,7 @@ namespace MyTasks.Repositories.Repositories.DashboardRepository
                 throw new ArgumentException("User Name can't be empty");
             }
 
-            var projectsQuery = await _projectRepository.GetProjectsWithTasksAndCommentsAsync(userName);
-            var projects = await projectsQuery.ToListAsync();
+            var projects = await _projectRepository.GetProjectsWithTasksAndCommentsAsync(userName);
 
             if (!projects.Any())
             {

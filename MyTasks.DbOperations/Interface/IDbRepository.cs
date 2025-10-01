@@ -7,7 +7,7 @@ namespace MyTasks.DbOperations.Interface
     {
         Task DeleteByIdAsync(Guid Id);
         Task AddEntityAsync(TEntity entity);
-        IQueryable<TEntity> GetAll();
+        Task<ICollection<TEntity>> GetAll();
         Task<TEntity?> GetByIdAsync(Guid Id);
         Task UpdateByIdAsync(Guid Id);
         Task UpdateEntityAsync(TEntity entity);

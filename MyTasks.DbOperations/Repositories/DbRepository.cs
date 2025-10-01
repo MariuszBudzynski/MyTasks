@@ -22,9 +22,9 @@ namespace MyTasks.DbOperations.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public IQueryable<TEntity> GetAll()
+        public async Task<ICollection<TEntity>> GetAll()
         {
-            return _dbSet.AsQueryable();
+            return await _dbSet.ToListAsync();
         }
 
         public async Task AddEntityAsync(TEntity entity)

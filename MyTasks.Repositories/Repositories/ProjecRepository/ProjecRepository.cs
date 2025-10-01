@@ -37,7 +37,7 @@ namespace MyTasks.Repositories.Repositories.ProjecRepository
 
         public async Task<ICollection<ProjectModel>> GetAllProjects()
         {
-            return await _projectRepository.GetAll().ToListAsync();
+            return await _projectRepository.GetAll();
         }
     }
 }

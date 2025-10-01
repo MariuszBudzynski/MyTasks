@@ -8,6 +8,7 @@ using MyTasks.API.Services.Interfaces;
 using MyTasks.Common;
 using MyTasks.Common.Interfaces;
 using MyTasks.DbOperations.Context;
+using MyTasks.DbOperations.InMemory;
 using MyTasks.DbOperations.Interface;
 using MyTasks.DbOperations.Repositories;
 using MyTasks.Repositories.Interfaces.IDashboardRepository;
@@ -89,8 +90,7 @@ namespace MyTasks.Services
                     options.Conventions.ConfigureFilter(new AutoValidateAntiforgeryTokenAttribute());
                 });
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlite($"Data Source={dbPath}"));
+
             builder.Services.AddHttpContextAccessor();
 
             builder.Services
@@ -100,7 +100,6 @@ namespace MyTasks.Services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<ITaskItemOperationsRepository, TaskItemOperationsRepository>();
             builder.Services.AddScoped<ITaskCommentService, TaskCommentService>();
             builder.Services.AddScoped<ITaskCommentRepository, TaskCommentRepository>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
@@ -109,13 +108,25 @@ namespace MyTasks.Services
             builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<IProjecRepository, ProjecRepository>();
             builder.Services.AddScoped<IUserDataRepository, UserDataRepository>();
-            builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();
             builder.Services.AddScoped<IJwtHelper, JwtHelper>();
             builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
-            builder.Services.AddScoped<IProjectOperationsRepository, ProjectOperationsRepository>();
             builder.Services.AddScoped<ILoginRepository, LoginRepository>();
             builder.Services.AddScoped<ILoginValidator, LoginValidator>();
-            builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
+
+            //Database
+            //builder.Services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
+            //builder.Services.AddScoped<IProjectOperationsRepository, ProjectOperationsRepository>();
+            //builder.Services.AddScoped<IUserOperationsRepository, UserOperationsRepository>();
+            //builder.Services.AddScoped<ITaskItemOperationsRepository, TaskItemOperationsRepository>();
+            //builder.Services.AddDbContext<AppDbContext>(options =>
+            //   options.UseSqlite($"Data Source={dbPath}"));
+
+            //In Memory
+            builder.Services.AddSingleton<InMemoryDbContext>();
+            builder.Services.AddScoped(typeof(IDbRepository<>), typeof(InMemoryRepository<>));
+            builder.Services.AddScoped<IProjectOperationsRepository, InMemoryProjectOperationsRepository>();
+            builder.Services.AddScoped<ITaskItemOperationsRepository, InMemoryTaskItemOperationsRepository>();
+            builder.Services.AddScoped<IUserOperationsRepository, InMemoryUserOperationsRepository>();
         }
     }
 }

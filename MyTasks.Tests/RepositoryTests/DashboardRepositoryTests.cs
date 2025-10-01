@@ -36,10 +36,8 @@ namespace MyTasks.Tests.RepositoryTests
 
             var fakeProjects = CreateFakeProjects(userId, userLoginId, userName);
 
-            var fakeProjectsAsQueryable = fakeProjects.BuildMock();
-
             A.CallTo(() => _fakeProjectRepo.GetProjectsWithTasksAndCommentsAsync(userName))
-                .ReturnsLazily(() => Task.FromResult(fakeProjectsAsQueryable));
+                .Returns(Task.FromResult((ICollection<ProjectModel>)fakeProjects));
 
             // Act
             var result = await _sut.GetProjectsDataAsync(userName);

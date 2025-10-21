@@ -61,14 +61,6 @@ A modern and secure web application that enables users to manage personal tasks 
    ![Dashboard](https://github.com/user-attachments/assets/db1f1728-07a3-4d33-adb9-a803e194df54)
 6. By default, the application runs with in-memory data.
   To enable the built-in database, open Program.cs, locate the ServiceRegistration, and set UseInMemory to false.
-   
-## 🛠 MyTasks Online Version
-
-1. **Application:** [https://mytaskapp-dzb0cyg2hfgcc0cq.polandcentral-01.azurewebsites.net/Login](https://mytaskapp-dzb0cyg2hfgcc0cq.polandcentral-01.azurewebsites.net/Login)  
-2. **Login credentials:** as provided above.  
-3. **Data handling:** The application uses a preset in-memory dataset, so it will reset to its original state if restarted.  
-4. **Availability:** Online version is available only until **31.10.2025**.  
-5. **Disclaimer:** I take no responsibility for any data added within the application.
 
 ## ⚙️ MyTasks.Functions Configuration
 
